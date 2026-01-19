@@ -154,6 +154,16 @@ export function FeaturedVisas() {
   return (
     <section className="py-16 bg-background">
       <div className="container">
+        {/* Section header */}
+        <div className="text-center mb-10">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
+            Featured VISA
+          </h2>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            Explore our most popular visa destinations and start your journey with ease
+          </p>
+        </div>
+
         {/* Search and filters */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-10">
           {/* Search */}

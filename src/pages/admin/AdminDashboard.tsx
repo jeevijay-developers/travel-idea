@@ -4,7 +4,7 @@ import { LayoutDashboard, Plane, FolderOpen, Globe, FileText, MessageSquare, Log
 import { Button } from "@/components/ui/button";
 import { SEO } from "@/components/seo";
 import { cn } from "@/lib/utils";
-import logo from "@/assets/logo.png";
+import logoWhite from "@/assets/logo-white.png";
 
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/admin/dashboard" },
@@ -37,7 +37,7 @@ export default function AdminDashboard() {
       
       {/* Mobile header */}
       <div className="lg:hidden flex items-center justify-between p-4 bg-primary">
-        <img src={logo} alt="Travel Idea" className="h-8" />
+        <img src={logoWhite} alt="Travel Idea" className="h-8" />
         <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(!sidebarOpen)} className="text-primary-foreground">
           {sidebarOpen ? <X /> : <Menu />}
         </Button>
@@ -50,7 +50,7 @@ export default function AdminDashboard() {
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}>
           <div className="p-6 hidden lg:block">
-            <img src={logo} alt="Travel Idea" className="h-10" />
+            <img src={logoWhite} alt="Travel Idea" className="h-10" />
           </div>
           <nav className="px-4 py-6 lg:py-0 space-y-1">
             {navItems.map((item) => (

@@ -4,7 +4,7 @@ import { Menu, X, Phone, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import logoDark from "@/assets/logo.png";
-import logoWhite from "@/assets/logo-white.png";
+
 
 const navigation = [
   { name: "VISA", href: "/visas" },

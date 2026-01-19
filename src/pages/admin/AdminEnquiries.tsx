@@ -38,15 +38,27 @@ export default function AdminEnquiries() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {enquiries.map((e) => (
-              <TableRow key={e.id}>
-                <TableCell className="font-medium">{e.name}</TableCell>
-                <TableCell>{e.email}</TableCell>
-                <TableCell>{e.destination || "-"}</TableCell>
-                <TableCell><Badge variant={e.status === "new" ? "default" : "secondary"}>{e.status}</Badge></TableCell>
-                <TableCell>{new Date(e.created_at).toLocaleDateString()}</TableCell>
+            {enquiries.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                  No enquiries yet. Enquiries will appear here when users submit the contact form.
+                </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              enquiries.map((e) => (
+                <TableRow key={e.id}>
+                  <TableCell className="font-medium">{e.name || "-"}</TableCell>
+                  <TableCell>{e.email || "-"}</TableCell>
+                  <TableCell>{e.destination || "-"}</TableCell>
+                  <TableCell>
+                    <Badge variant={e.status === "new" ? "default" : "secondary"}>
+                      {e.status || "new"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>{e.created_at ? new Date(e.created_at).toLocaleDateString() : "-"}</TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>

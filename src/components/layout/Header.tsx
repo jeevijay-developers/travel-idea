@@ -3,7 +3,8 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Phone, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import logo from "@/assets/logo.png";
+import logoDark from "@/assets/logo.png";
+import logoWhite from "@/assets/logo-white.png";
 
 const navigation = [
   { name: "VISA", href: "/visas" },
@@ -40,9 +41,9 @@ export function Header() {
       {/* Main navigation */}
       <nav className="bg-card/95 backdrop-blur-md border-b border-border shadow-sm">
         <div className="container flex items-center justify-between py-3">
-          {/* Logo */}
+          {/* Logo - dark version for light background */}
           <Link to="/" className="flex items-center">
-            <img src={logo} alt="Travel Idea" className="h-10 md:h-12" />
+            <img src={logoDark} alt="Travel Idea" className="h-10 md:h-12" />
           </Link>
 
           {/* Desktop navigation */}

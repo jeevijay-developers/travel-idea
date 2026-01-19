@@ -59,14 +59,11 @@ export default {
         },
         // Travel theme custom colors
         travel: {
-          teal: "hsl(var(--travel-teal))",
-          "teal-dark": "hsl(var(--travel-teal-dark))",
-          "teal-light": "hsl(var(--travel-teal-light))",
-          coral: "hsl(var(--travel-coral))",
-          "coral-dark": "hsl(var(--travel-coral-dark))",
-          gold: "hsl(var(--travel-gold))",
           navy: "hsl(var(--travel-navy))",
+          "navy-light": "hsl(var(--travel-navy-light))",
+          "navy-dark": "hsl(var(--travel-navy-dark))",
           sky: "hsl(var(--travel-sky))",
+          success: "hsl(var(--travel-success))",
         },
       },
       borderRadius: {

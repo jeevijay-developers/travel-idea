@@ -1,10 +1,7 @@
-import { HelmetProvider } from "react-helmet-async";
 import { Layout } from "@/components/layout";
 import { SEO } from "@/components/seo";
 import {
   HeroSection,
-  ExploreByCountry,
-  ExploreByBudget,
   FeaturedVisas,
   WhyChooseUs,
   Testimonials,
@@ -17,8 +14,6 @@ const Home = () => {
       <SEO />
       <Layout>
         <HeroSection />
-        <ExploreByCountry />
-        <ExploreByBudget />
         <FeaturedVisas />
         <WhyChooseUs />
         <Testimonials />

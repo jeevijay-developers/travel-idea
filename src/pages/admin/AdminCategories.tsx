@@ -113,19 +113,27 @@ export default function AdminCategories() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {categories.map((c) => (
-              <TableRow key={c.id}>
-                <TableCell className="font-medium">{c.name}</TableCell>
-                <TableCell>{c.slug}</TableCell>
-                <TableCell className="max-w-xs truncate">{c.description || "-"}</TableCell>
-                <TableCell>
-                  <div className="flex gap-1">
-                    <Button variant="ghost" size="icon" onClick={() => handleEdit(c)}><Pencil className="h-4 w-4" /></Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(c.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
-                  </div>
+            {categories.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
+                  No categories found. Click "Add Category" to create one.
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              categories.map((c) => (
+                <TableRow key={c.id}>
+                  <TableCell className="font-medium">{c.name || "-"}</TableCell>
+                  <TableCell>{c.slug || "-"}</TableCell>
+                  <TableCell className="max-w-xs truncate">{c.description || "-"}</TableCell>
+                  <TableCell>
+                    <div className="flex gap-1">
+                      <Button variant="ghost" size="icon" onClick={() => handleEdit(c)}><Pencil className="h-4 w-4" /></Button>
+                      <Button variant="ghost" size="icon" onClick={() => handleDelete(c.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>

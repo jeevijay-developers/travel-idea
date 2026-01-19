@@ -266,21 +266,29 @@ export default function AdminVisas() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {visas.map((v) => (
-              <TableRow key={v.id}>
-                <TableCell className="font-medium">{v.title}</TableCell>
-                <TableCell>{v.countries?.name}</TableCell>
-                <TableCell>{v.visa_type}</TableCell>
-                <TableCell>₹{v.price.toLocaleString()}</TableCell>
-                <TableCell>{v.processing_days}</TableCell>
-                <TableCell>
-                  <div className="flex gap-1">
-                    <Button variant="ghost" size="icon" onClick={() => handleEdit(v)}><Pencil className="h-4 w-4" /></Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(v.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
-                  </div>
+            {visas.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                  No visas found. Click "Add Visa" to create one.
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              visas.map((v) => (
+                <TableRow key={v.id}>
+                  <TableCell className="font-medium">{v.title || "-"}</TableCell>
+                  <TableCell>{v.countries?.name || "-"}</TableCell>
+                  <TableCell>{v.visa_type || "-"}</TableCell>
+                  <TableCell>₹{v.price?.toLocaleString() || "0"}</TableCell>
+                  <TableCell>{v.processing_days ?? "-"}</TableCell>
+                  <TableCell>
+                    <div className="flex gap-1">
+                      <Button variant="ghost" size="icon" onClick={() => handleEdit(v)}><Pencil className="h-4 w-4" /></Button>
+                      <Button variant="ghost" size="icon" onClick={() => handleDelete(v.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>

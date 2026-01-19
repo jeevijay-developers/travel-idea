@@ -120,20 +120,28 @@ export default function AdminCountries() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {countries.map((c) => (
-              <TableRow key={c.id}>
-                <TableCell className="font-medium">{c.name}</TableCell>
-                <TableCell>{c.code}</TableCell>
-                <TableCell>{c.slug}</TableCell>
-                <TableCell>{c.region || "-"}</TableCell>
-                <TableCell>
-                  <div className="flex gap-1">
-                    <Button variant="ghost" size="icon" onClick={() => handleEdit(c)}><Pencil className="h-4 w-4" /></Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(c.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
-                  </div>
+            {countries.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                  No countries found. Click "Add Country" to create one.
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              countries.map((c) => (
+                <TableRow key={c.id}>
+                  <TableCell className="font-medium">{c.name || "-"}</TableCell>
+                  <TableCell>{c.code || "-"}</TableCell>
+                  <TableCell>{c.slug || "-"}</TableCell>
+                  <TableCell>{c.region || "-"}</TableCell>
+                  <TableCell>
+                    <div className="flex gap-1">
+                      <Button variant="ghost" size="icon" onClick={() => handleEdit(c)}><Pencil className="h-4 w-4" /></Button>
+                      <Button variant="ghost" size="icon" onClick={() => handleDelete(c.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>

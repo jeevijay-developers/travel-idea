@@ -57,6 +57,7 @@ interface Visa {
   processing_days: number;
   is_fast: boolean;
   issued_recently: number;
+  short_description: string | null;
   countries: {
     name: string;
     slug: string;
@@ -90,6 +91,7 @@ export default function Visas() {
         processing_days,
         is_fast,
         issued_recently,
+        short_description,
         countries (
           name,
           slug
@@ -278,7 +280,7 @@ export default function Visas() {
 
                   {/* Content */}
                   <div className="p-4">
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center justify-between mb-1">
                       <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
                         {visa.countries?.name}
                       </h3>
@@ -287,7 +289,12 @@ export default function Visas() {
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between">
+                    {/* 2-line truncated description */}
+                    <p className="text-sm text-muted-foreground line-clamp-2 mb-3 min-h-[2.5rem]">
+                      {visa.short_description || `Get your ${visa.visa_type} for ${visa.countries?.name} with hassle-free processing.`}
+                    </p>
+
+                    <div className="flex items-center justify-between mb-3">
                       <div>
                         <p className="text-xl font-bold text-primary">₹{visa.price.toLocaleString()}</p>
                         {visa.additional_fees && (
@@ -301,6 +308,12 @@ export default function Visas() {
                         </div>
                         <p className="font-medium text-foreground">{visa.processing_days} days</p>
                       </div>
+                    </div>
+
+                    {/* View Details Button */}
+                    <div className="flex items-center justify-end text-sm font-medium text-primary group-hover:translate-x-1 transition-transform">
+                      View Details
+                      <ArrowRight className="h-4 w-4 ml-1" />
                     </div>
                   </div>
                 </Link>

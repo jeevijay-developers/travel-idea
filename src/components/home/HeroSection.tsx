@@ -27,7 +27,7 @@ export function HeroSection() {
 
       {/* Content */}
       <div className="container relative z-10 py-20">
-        <div className="max-w-3xl mx-auto text-center text-primary-foreground">
+        <div className="max-w-2xl text-left text-primary-foreground">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-foreground/10 backdrop-blur-sm rounded-full border border-primary-foreground/20 mb-8 animate-fade-in">
             <span className="w-2 h-2 bg-travel-success rounded-full animate-pulse" />
@@ -44,12 +44,12 @@ export function HeroSection() {
           </h1>
 
           {/* Subheadline */}
-          <p className="text-lg sm:text-xl text-primary-foreground/90 mb-10 max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: "0.2s" }}>
+          <p className="text-lg sm:text-xl text-primary-foreground/90 mb-10 max-w-xl animate-fade-in" style={{ animationDelay: "0.2s" }}>
             Get your visa hassle-free with expert guidance. We process visas for 100+ countries with fast turnaround and transparent pricing.
           </p>
 
           {/* Search bar */}
-          <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto mb-8 animate-fade-in" style={{ animationDelay: "0.3s" }}>
+          <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3 max-w-xl mb-8 animate-fade-in" style={{ animationDelay: "0.3s" }}>
             <div className="relative flex-1">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input
@@ -67,7 +67,7 @@ export function HeroSection() {
           </form>
 
           {/* Quick links */}
-          <div className="flex flex-wrap justify-center gap-3 animate-fade-in" style={{ animationDelay: "0.4s" }}>
+          <div className="flex flex-wrap gap-3 animate-fade-in" style={{ animationDelay: "0.4s" }}>
             <span className="text-sm text-primary-foreground/70">Popular:</span>
             {["Thailand", "Singapore", "Dubai", "Malaysia", "Vietnam"].map((country) => (
               <Link
@@ -81,7 +81,7 @@ export function HeroSection() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 pt-16 border-t border-primary-foreground/20 animate-fade-in" style={{ animationDelay: "0.5s" }}>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 pt-16 border-t border-primary-foreground/20 animate-fade-in max-w-2xl" style={{ animationDelay: "0.5s" }}>
             {[
               { value: "100+", label: "Countries" },
               { value: "50K+", label: "Visas Processed" },

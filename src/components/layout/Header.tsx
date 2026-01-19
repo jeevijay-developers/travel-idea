@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Phone, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import logo from "@/assets/logo.png";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -24,11 +25,11 @@ export function Header() {
       <div className="gradient-dark text-primary-foreground">
         <div className="container flex items-center justify-between py-2 text-sm">
           <div className="hidden items-center gap-6 md:flex">
-            <a href="tel:+919101197909" className="flex items-center gap-2 hover:text-travel-coral transition-colors">
+            <a href="tel:+919101197909" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
               <Phone className="h-3.5 w-3.5" />
               <span>+91 9101197909</span>
             </a>
-            <a href="mailto:b2b@travelidea.in" className="flex items-center gap-2 hover:text-travel-coral transition-colors">
+            <a href="mailto:b2b@travelidea.in" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
               <Mail className="h-3.5 w-3.5" />
               <span>b2b@travelidea.in</span>
             </a>
@@ -41,18 +42,10 @@ export function Header() {
 
       {/* Main navigation */}
       <nav className="bg-card/95 backdrop-blur-md border-b border-border shadow-sm">
-        <div className="container flex items-center justify-between py-4">
+        <div className="container flex items-center justify-between py-3">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg gradient-hero">
-              <span className="text-xl font-bold text-primary-foreground">T</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-display text-xl font-bold text-foreground">
-                Travel<span className="text-primary">Idea</span>
-              </span>
-              <span className="text-[10px] text-muted-foreground -mt-1">Stress-free travel</span>
-            </div>
+          <Link to="/" className="flex items-center">
+            <img src={logo} alt="Travel Idea" className="h-10 md:h-12" />
           </Link>
 
           {/* Desktop navigation */}
@@ -75,7 +68,7 @@ export function Header() {
 
           {/* CTA Button */}
           <div className="hidden lg:block">
-            <Button asChild className="gradient-accent border-0 hover:opacity-90 transition-opacity">
+            <Button asChild className="bg-primary hover:bg-primary/90">
               <Link to="/visas">Get Started</Link>
             </Button>
           </div>
@@ -115,7 +108,7 @@ export function Header() {
                 </Link>
               ))}
               <div className="pt-4">
-                <Button asChild className="w-full gradient-accent border-0">
+                <Button asChild className="w-full bg-primary hover:bg-primary/90">
                   <Link to="/visas" onClick={() => setMobileMenuOpen(false)}>
                     Get Started
                   </Link>

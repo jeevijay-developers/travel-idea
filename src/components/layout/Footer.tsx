@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 const footerLinks = {
   services: [
@@ -36,15 +37,8 @@ export function Footer() {
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           {/* Company Info */}
           <div className="lg:col-span-1">
-            <Link to="/" className="flex items-center gap-2 mb-6">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-foreground/10 border border-primary-foreground/20">
-                <span className="text-xl font-bold text-primary-foreground">T</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="font-display text-xl font-bold text-primary-foreground">
-                  TravelIdea
-                </span>
-              </div>
+            <Link to="/" className="inline-block mb-6">
+              <img src={logo} alt="Travel Idea" className="h-10" />
             </Link>
             <p className="text-primary-foreground/80 text-sm mb-6 leading-relaxed">
               Experience Travelidea Private Limited - Making stress-free travel possible at affordable pricing.
@@ -62,7 +56,7 @@ export function Footer() {
                 <a
                   key={social.name}
                   href={social.href}
-                  className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-foreground/10 hover:bg-primary transition-colors"
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors"
                   aria-label={social.name}
                 >
                   <social.icon className="h-4 w-4" />

@@ -10,7 +10,6 @@ const blogPosts = [
     excerpt: "Everything you need to know about applying for a Thailand e-visa, including requirements, processing times, and tips for a successful application.",
     category: "Visa Tips",
     date: "Jan 15, 2024",
-    image: "bg-gradient-to-br from-orange-400 to-red-500",
     slug: "thailand-evisa-guide-2024",
   },
   {
@@ -19,7 +18,6 @@ const blogPosts = [
     excerpt: "Discover beautiful countries you can visit without the hassle of visa applications. Perfect for spontaneous travelers.",
     category: "Destinations",
     date: "Jan 12, 2024",
-    image: "bg-gradient-to-br from-blue-400 to-purple-500",
     slug: "visa-free-destinations-indians",
   },
   {
@@ -28,14 +26,13 @@ const blogPosts = [
     excerpt: "Expert tips on documentation, cover letters, and common mistakes to avoid when applying for a Schengen visa.",
     category: "Visa Tips",
     date: "Jan 10, 2024",
-    image: "bg-gradient-to-br from-teal-400 to-cyan-500",
     slug: "schengen-visa-preparation-tips",
   },
 ];
 
 export function BlogPreview() {
   return (
-    <section className="py-20">
+    <section className="py-20 bg-muted/30">
       <div className="container">
         {/* Section header */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
@@ -65,8 +62,10 @@ export function BlogPreview() {
               className="group overflow-hidden rounded-xl bg-card border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-300 animate-fade-in"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              {/* Image placeholder */}
-              <div className={`h-48 ${post.image} opacity-80 group-hover:opacity-100 transition-opacity`} />
+              {/* Placeholder image */}
+              <div className="h-48 bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center">
+                <span className="text-4xl">📝</span>
+              </div>
 
               <div className="p-6">
                 {/* Category & date */}

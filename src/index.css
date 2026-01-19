@@ -2,119 +2,114 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Travel Idea - Vibrant Travel Theme Design System
-   Primary: Teal (ocean/travel inspired)
-   Accent: Coral/Orange (warmth, energy)
+/* Travel Idea - Clean Professional Theme
+   Primary: Deep Navy (#0F2854)
    All colors MUST be HSL.
 */
 
 @layer base {
   :root {
-    /* Vibrant Travel Theme - Light Mode */
+    /* Clean Professional Theme - Light Mode */
     --background: 0 0% 100%;
-    --foreground: 200 25% 15%;
+    --foreground: 220 25% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 200 25% 15%;
+    --card-foreground: 220 25% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 200 25% 15%;
+    --popover-foreground: 220 25% 15%;
 
-    /* Teal Primary - Ocean inspired */
-    --primary: 174 72% 40%;
+    /* Deep Navy Primary - #0F2854 */
+    --primary: 218 72% 19%;
     --primary-foreground: 0 0% 100%;
 
-    /* Light teal secondary */
-    --secondary: 174 45% 94%;
-    --secondary-foreground: 174 72% 30%;
+    /* Light navy secondary */
+    --secondary: 218 45% 96%;
+    --secondary-foreground: 218 72% 19%;
 
-    /* Muted grays with slight warmth */
-    --muted: 200 20% 96%;
-    --muted-foreground: 200 15% 45%;
+    /* Muted grays */
+    --muted: 220 20% 96%;
+    --muted-foreground: 220 15% 45%;
 
-    /* Coral/Orange accent */
-    --accent: 16 85% 60%;
+    /* Accent - Same as primary for minimal use */
+    --accent: 218 72% 19%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 200 20% 88%;
-    --input: 200 20% 88%;
-    --ring: 174 72% 40%;
+    --border: 220 20% 90%;
+    --input: 220 20% 90%;
+    --ring: 218 72% 19%;
 
     --radius: 0.75rem;
 
-    /* Custom travel theme tokens */
-    --travel-teal: 174 72% 40%;
-    --travel-teal-dark: 174 72% 30%;
-    --travel-teal-light: 174 45% 94%;
-    --travel-coral: 16 85% 60%;
-    --travel-coral-dark: 16 85% 50%;
-    --travel-gold: 40 90% 55%;
-    --travel-navy: 210 50% 20%;
+    /* Custom theme tokens */
+    --travel-navy: 218 72% 19%;
+    --travel-navy-light: 218 45% 96%;
+    --travel-navy-dark: 218 72% 12%;
     --travel-sky: 200 75% 55%;
+    --travel-success: 142 72% 40%;
 
     /* Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(174 72% 40%) 0%, hsl(200 75% 55%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(16 85% 60%) 0%, hsl(40 90% 55%) 100%);
-    --gradient-dark: linear-gradient(135deg, hsl(210 50% 20%) 0%, hsl(174 72% 30%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(218 72% 19%) 0%, hsl(218 72% 30%) 100%);
+    --gradient-dark: linear-gradient(135deg, hsl(218 72% 12%) 0%, hsl(218 72% 19%) 100%);
 
     /* Shadows */
-    --shadow-sm: 0 1px 2px 0 hsl(200 20% 15% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(200 20% 15% / 0.08), 0 2px 4px -2px hsl(200 20% 15% / 0.05);
-    --shadow-lg: 0 10px 15px -3px hsl(200 20% 15% / 0.1), 0 4px 6px -4px hsl(200 20% 15% / 0.08);
-    --shadow-xl: 0 20px 25px -5px hsl(200 20% 15% / 0.12), 0 8px 10px -6px hsl(200 20% 15% / 0.08);
-    --shadow-glow: 0 0 20px hsl(174 72% 40% / 0.3);
+    --shadow-sm: 0 1px 2px 0 hsl(220 20% 15% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(220 20% 15% / 0.08), 0 2px 4px -2px hsl(220 20% 15% / 0.05);
+    --shadow-lg: 0 10px 15px -3px hsl(220 20% 15% / 0.1), 0 4px 6px -4px hsl(220 20% 15% / 0.08);
+    --shadow-xl: 0 20px 25px -5px hsl(220 20% 15% / 0.12), 0 8px 10px -6px hsl(220 20% 15% / 0.08);
+    --shadow-glow: 0 0 20px hsl(218 72% 19% / 0.2);
 
     /* Sidebar */
-    --sidebar-background: 210 50% 20%;
+    --sidebar-background: 218 72% 12%;
     --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 174 72% 50%;
+    --sidebar-primary: 218 72% 30%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 50% 25%;
+    --sidebar-accent: 218 72% 19%;
     --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 210 50% 25%;
-    --sidebar-ring: 174 72% 50%;
+    --sidebar-border: 218 72% 25%;
+    --sidebar-ring: 218 72% 30%;
   }
 
   .dark {
-    --background: 210 50% 10%;
+    --background: 218 50% 8%;
     --foreground: 0 0% 98%;
 
-    --card: 210 50% 12%;
+    --card: 218 50% 10%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 210 50% 12%;
+    --popover: 218 50% 10%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 174 72% 50%;
-    --primary-foreground: 210 50% 10%;
+    --primary: 218 72% 50%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 50% 18%;
+    --secondary: 218 50% 15%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 210 50% 18%;
-    --muted-foreground: 200 15% 65%;
+    --muted: 218 50% 15%;
+    --muted-foreground: 220 15% 65%;
 
-    --accent: 16 85% 60%;
+    --accent: 218 72% 50%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 210 50% 20%;
-    --input: 210 50% 20%;
-    --ring: 174 72% 50%;
+    --border: 218 50% 18%;
+    --input: 218 50% 18%;
+    --ring: 218 72% 50%;
 
-    --sidebar-background: 210 50% 8%;
+    --sidebar-background: 218 50% 6%;
     --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 174 72% 50%;
+    --sidebar-primary: 218 72% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 50% 15%;
+    --sidebar-accent: 218 50% 12%;
     --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 210 50% 15%;
-    --sidebar-ring: 174 72% 50%;
+    --sidebar-border: 218 50% 12%;
+    --sidebar-ring: 218 72% 50%;
   }
 }
 
@@ -135,13 +130,9 @@
 }
 
 @layer utilities {
-  /* Travel-specific utility classes */
+  /* Theme utility classes */
   .gradient-hero {
     background: var(--gradient-hero);
-  }
-
-  .gradient-accent {
-    background: var(--gradient-accent);
   }
 
   .gradient-dark {

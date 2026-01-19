@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
-import { Phone, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
-import logo from "@/assets/logo.png";
+import { Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 
 const footerLinks = {
   services: [
@@ -32,49 +31,29 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="gradient-dark text-primary-foreground">
-      <div className="container py-16">
-        {/* Company Info */}
-        <div className="text-center mb-12">
-          <Link to="/" className="inline-block mb-6">
-            <img src={logo} alt="Travel Idea" className="h-12 mx-auto" />
-          </Link>
-          <p className="text-primary-foreground/80 text-sm max-w-md mx-auto leading-relaxed">
-            Experience Travelidea Private Limited - Making stress-free travel possible at affordable pricing.
+    <footer className="w-full bg-[#fcfdfd] text-gray-800 py-12 border-t border-gray-100">
+      <div className="container mx-auto px-6 lg:px-16 max-w-7xl">
+        
+        {/* Brand Header */}
+        <div className="mb-10">
+          <h2 className="text-3xl font-bold text-primary mb-3">Travelidea</h2>
+          <p className="text-base text-gray-800 font-medium">
+            Travelidea Private Limited: Simplifying global journeys.
           </p>
-          <div className="flex items-center justify-center gap-3 mt-4 mb-6">
-            <span className="px-3 py-1 text-xs font-medium bg-primary-foreground/10 rounded-full border border-primary-foreground/20">
-              ISO9001:2015
-            </span>
-            <span className="px-3 py-1 text-xs font-medium bg-primary-foreground/10 rounded-full border border-primary-foreground/20">
-              IATA Accredited
-            </span>
-          </div>
-          <div className="flex justify-center gap-3">
-            {socialLinks.map((social) => (
-              <a
-                key={social.name}
-                href={social.href}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors"
-                aria-label={social.name}
-              >
-                <social.icon className="h-4 w-4" />
-              </a>
-            ))}
-          </div>
         </div>
 
-        {/* Links Row - Visa Services, Company, Legal */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-          {/* Visa Services */}
-          <div className="text-center">
-            <h4 className="text-lg font-semibold mb-4">Visa Services</h4>
-            <ul className="space-y-2">
+        {/* Main Navigation Grid - 4 columns */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-16">
+          
+          {/* Column 1: Visa Services */}
+          <div>
+            <h3 className="text-xl font-semibold text-primary mb-6">Visa Services</h3>
+            <ul className="space-y-4 text-base">
               {footerLinks.services.map((link) => (
                 <li key={link.name}>
                   <Link
                     to={link.href}
-                    className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors"
+                    className="text-gray-700 hover:text-primary hover:underline transition-colors duration-200"
                   >
                     {link.name}
                   </Link>
@@ -83,15 +62,15 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Company */}
-          <div className="text-center">
-            <h4 className="text-lg font-semibold mb-4">Company</h4>
-            <ul className="space-y-2">
+          {/* Column 2: Company */}
+          <div>
+            <h3 className="text-xl font-semibold text-primary mb-6">Company</h3>
+            <ul className="space-y-4 text-base">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
                   <Link
                     to={link.href}
-                    className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors"
+                    className="text-gray-700 hover:text-primary hover:underline transition-colors duration-200"
                   >
                     {link.name}
                   </Link>
@@ -100,15 +79,15 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Legal */}
-          <div className="text-center">
-            <h4 className="text-lg font-semibold mb-4">Legal</h4>
-            <ul className="space-y-2">
+          {/* Column 3: Legal */}
+          <div>
+            <h3 className="text-xl font-semibold text-primary mb-6">Legal</h3>
+            <ul className="space-y-4 text-base">
               {footerLinks.legal.map((link) => (
                 <li key={link.name}>
                   <Link
                     to={link.href}
-                    className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors"
+                    className="text-gray-700 hover:text-primary hover:underline transition-colors duration-200"
                   >
                     {link.name}
                   </Link>
@@ -116,37 +95,57 @@ export function Footer() {
               ))}
             </ul>
           </div>
+
+          {/* Column 4: Contact */}
+          <div>
+            <h3 className="text-xl font-semibold text-primary mb-6">Contact</h3>
+            <ul className="space-y-5 text-base">
+              <li className="flex items-center group">
+                <Phone className="text-primary w-5 h-5 mr-3" />
+                <a 
+                  href="tel:+919101197909" 
+                  className="text-gray-700 hover:text-primary hover:underline transition-colors duration-200"
+                >
+                  +91 9101197909
+                </a>
+              </li>
+              <li className="flex items-center group">
+                <Mail className="text-primary w-5 h-5 mr-3" />
+                <a 
+                  href="mailto:b2b@travelidea.in" 
+                  className="text-gray-700 hover:text-primary hover:underline transition-colors duration-200"
+                >
+                  b2b@travelidea.in
+                </a>
+              </li>
+            </ul>
+          </div>
+
         </div>
 
-        {/* Contact Us Section - Full Width Row */}
-        <div className="border-t border-primary-foreground/10 pt-8">
-          <h4 className="text-lg font-semibold mb-6 text-center">Contact Us</h4>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8 text-sm">
-            <a href="tel:+919101197909" className="flex items-center gap-2 text-primary-foreground/70 hover:text-primary-foreground transition-colors">
-              <Phone className="h-4 w-4" />
-              <span>+91 9101197909</span>
-            </a>
-            <a href="mailto:b2b@travelidea.in" className="flex items-center gap-2 text-primary-foreground/70 hover:text-primary-foreground transition-colors">
-              <Mail className="h-4 w-4" />
-              <span>b2b@travelidea.in</span>
-            </a>
-            <div className="flex items-center gap-2 text-primary-foreground/70">
-              <MapPin className="h-4 w-4" />
-              <span>Head Office: Tezpur, Assam | Branch: Kolkata</span>
-            </div>
+        {/* Bottom Section - Social Icons and Copyright */}
+        <div className="flex flex-col items-center justify-center pt-4">
+          
+          {/* Social Icons */}
+          <div className="flex space-x-6 mb-6">
+            {socialLinks.map((social) => (
+              <a
+                key={social.name}
+                href={social.href}
+                aria-label={social.name}
+                className="text-primary/80 hover:text-primary text-xl transition-colors duration-200"
+              >
+                <social.icon className="h-5 w-5" />
+              </a>
+            ))}
           </div>
-          <div className="text-center mt-4 text-xs text-primary-foreground/60">
-            <p>+91 33 6651 3201/3202 (Kolkata)</p>
-          </div>
-        </div>
-      </div>
 
-      {/* Bottom bar */}
-      <div className="border-t border-primary-foreground/10">
-        <div className="container py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-primary-foreground/60">
-          <p>© {new Date().getFullYear()} Experience Travelidea Private Limited. All rights reserved.</p>
-          <p>Making stress-free travel possible at affordable pricing</p>
+          {/* Copyright Text */}
+          <p className="text-gray-800 text-base font-normal text-center">
+            © {new Date().getFullYear()} Travelidea. All Rights Reserved.
+          </p>
         </div>
+
       </div>
     </footer>
   );

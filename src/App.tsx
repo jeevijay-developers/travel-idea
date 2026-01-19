@@ -11,9 +11,18 @@ import About from "./pages/About";
 import WhyChooseUs from "./pages/WhyChooseUs";
 import Contact from "./pages/Contact";
 import Enquiry from "./pages/Enquiry";
+import Blog from "./pages/Blog";
+import BlogDetail from "./pages/BlogDetail";
+import FAQs from "./pages/FAQs";
+import TermsAndConditions from "./pages/TermsAndConditions";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import DashboardHome from "./pages/admin/DashboardHome";
+import AdminVisas from "./pages/admin/AdminVisas";
+import AdminCategories from "./pages/admin/AdminCategories";
+import AdminCountries from "./pages/admin/AdminCountries";
+import AdminBlog from "./pages/admin/AdminBlog";
 import AdminEnquiries from "./pages/admin/AdminEnquiries";
 import NotFound from "./pages/NotFound";
 
@@ -34,9 +43,18 @@ const App = () => (
             <Route path="/why-choose-us" element={<WhyChooseUs />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/enquiry" element={<Enquiry />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogDetail />} />
+            <Route path="/faqs" element={<FAQs />} />
+            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/admin" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />}>
               <Route index element={<DashboardHome />} />
+              <Route path="visas" element={<AdminVisas />} />
+              <Route path="categories" element={<AdminCategories />} />
+              <Route path="countries" element={<AdminCountries />} />
+              <Route path="blog" element={<AdminBlog />} />
               <Route path="enquiries" element={<AdminEnquiries />} />
             </Route>
             <Route path="*" element={<NotFound />} />

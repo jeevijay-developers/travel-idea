@@ -5,6 +5,7 @@ import {
   FeaturedVisas,
   WhyChooseUs,
   Testimonials,
+  FAQsSection,
   BlogPreview,
 } from "@/components/home";
 
@@ -17,6 +18,7 @@ const Home = () => {
         <FeaturedVisas />
         <WhyChooseUs />
         <Testimonials />
+        <FAQsSection />
         <BlogPreview />
       </Layout>
     </>

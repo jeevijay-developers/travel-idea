@@ -6,12 +6,9 @@ import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.png";
 
 const navigation = [
-  { name: "Home", href: "/" },
-  { name: "Visas", href: "/visas" },
+  { name: "VISA", href: "/visas" },
   { name: "About Us", href: "/about" },
-  { name: "Why Choose Us", href: "/why-choose-us" },
-  { name: "Blog", href: "/blog" },
-  { name: "FAQs", href: "/faqs" },
+  { name: "Blogs", href: "/blog" },
   { name: "Contact", href: "/contact" },
 ];
 

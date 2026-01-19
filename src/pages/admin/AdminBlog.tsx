@@ -9,6 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 
 interface BlogPost {
   id: string;
@@ -143,7 +144,11 @@ export default function AdminBlog() {
               </div>
               <div className="space-y-2">
                 <Label>Content</Label>
-                <Textarea rows={10} value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} placeholder="Full blog content..." />
+                <RichTextEditor 
+                  content={form.content} 
+                  onChange={(content) => setForm({ ...form, content })} 
+                  placeholder="Write your blog content here..."
+                />
               </div>
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -176,27 +181,35 @@ export default function AdminBlog() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {posts.map((p) => (
-              <TableRow key={p.id}>
-                <TableCell className="font-medium">{p.title}</TableCell>
-                <TableCell>{p.category || "-"}</TableCell>
-                <TableCell>
-                  <Badge variant={p.is_published ? "default" : "secondary"}>
-                    {p.is_published ? "Published" : "Draft"}
-                  </Badge>
+            {posts.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                  No blog posts found. Click "Add Post" to create one.
                 </TableCell>
-                <TableCell>{new Date(p.created_at).toLocaleDateString()}</TableCell>
-                <TableCell>
+              </TableRow>
+            ) : (
+              posts.map((p) => (
+                <TableRow key={p.id}>
+                  <TableCell className="font-medium">{p.title || "-"}</TableCell>
+                  <TableCell>{p.category || "-"}</TableCell>
+                  <TableCell>
+                    <Badge variant={p.is_published ? "default" : "secondary"}>
+                      {p.is_published ? "Published" : "Draft"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>{p.created_at ? new Date(p.created_at).toLocaleDateString() : "-"}</TableCell>
+                  <TableCell>
                   <div className="flex gap-1">
                     <Button variant="ghost" size="icon" onClick={() => togglePublish(p)} title={p.is_published ? "Unpublish" : "Publish"}>
                       {p.is_published ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </Button>
                     <Button variant="ghost" size="icon" onClick={() => handleEdit(p)}><Pencil className="h-4 w-4" /></Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(p.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
+                      <Button variant="ghost" size="icon" onClick={() => handleDelete(p.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>

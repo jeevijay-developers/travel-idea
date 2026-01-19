@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
+import logoDark from "@/assets/logo.png";
 
 const footerLinks = {
   services: [
@@ -34,9 +35,11 @@ export function Footer() {
     <footer className="w-full bg-[#fcfdfd] text-gray-800 py-12 border-t border-gray-100">
       <div className="container mx-auto px-6 lg:px-16 max-w-7xl">
         
-        {/* Brand Header */}
+        {/* Brand Header with Logo - dark logo on light background */}
         <div className="mb-10">
-          <h2 className="text-3xl font-bold text-primary mb-3">Travelidea</h2>
+          <Link to="/" className="inline-block mb-3">
+            <img src={logoDark} alt="Travel Idea" className="h-12" />
+          </Link>
           <p className="text-base text-gray-800 font-medium">
             Travelidea Private Limited: Simplifying global journeys.
           </p>

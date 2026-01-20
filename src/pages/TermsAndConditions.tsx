@@ -1,4 +1,5 @@
-import { Layout } from "@/components/layout";
+import { FileText } from "lucide-react";
+import { Layout, PageHero } from "@/components/layout";
 import { SEO } from "@/components/seo";
 
 export default function TermsAndConditions() {
@@ -9,14 +10,11 @@ export default function TermsAndConditions() {
         description="Read the terms and conditions for using Travel Idea's visa services." 
       />
 
-      <section className="bg-primary py-16">
-        <div className="container">
-          <h1 className="text-3xl md:text-4xl font-display font-bold text-primary-foreground">
-            Terms & Conditions
-          </h1>
-          <p className="text-primary-foreground/80 mt-2">Last updated: January 2024</p>
-        </div>
-      </section>
+      <PageHero
+        title="Terms & Conditions"
+        subtitle="Last updated: January 2024"
+        icon={FileText}
+      />
 
       <section className="py-12">
         <div className="container">

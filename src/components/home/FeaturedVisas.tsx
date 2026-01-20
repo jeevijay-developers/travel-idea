@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, ArrowRight, Clock, Zap } from "lucide-react";
+import { Search, ArrowRight, Zap } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { motion, type Variants } from "framer-motion";
+import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 
 // Country images
 import uaeImage from "@/assets/countries/uae.jpg";
@@ -136,6 +138,7 @@ const visas = [
 export function FeaturedVisas() {
   const [activeFilter, setActiveFilter] = useState("popular");
   const [searchQuery, setSearchQuery] = useState("");
+  const { ref: sectionRef, isVisible } = useScrollAnimation({ threshold: 0.1 });
 
   // Filter visas based on active filter and search
   const filteredVisas = visas.filter((visa) => {
@@ -151,21 +154,57 @@ export function FeaturedVisas() {
     return true;
   });
 
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const cardVariants: Variants = {
+    hidden: { opacity: 0, y: 40, scale: 0.95 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
+    },
+  };
+
+  const headerVariants: Variants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } },
+  };
+
   return (
-    <section className="py-16 bg-background">
+    <section ref={sectionRef} className="py-16 bg-background">
       <div className="container">
         {/* Section header */}
-        <div className="text-center mb-10">
+        <motion.div
+          initial="hidden"
+          animate={isVisible ? "visible" : "hidden"}
+          variants={headerVariants}
+          className="text-center mb-10"
+        >
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
             Featured VISA
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Explore our most popular visa destinations and start your journey with ease
           </p>
-        </div>
+        </motion.div>
 
         {/* Search and filters */}
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-10"
+        >
           {/* Search */}
           <div className="relative max-w-md w-full">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
@@ -180,9 +219,14 @@ export function FeaturedVisas() {
 
           {/* Filter pills */}
           <div className="flex flex-wrap gap-2">
-            {filterCategories.map((filter) => (
-              <button
+            {filterCategories.map((filter, index) => (
+              <motion.button
                 key={filter.id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={isVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+                transition={{ delay: 0.3 + index * 0.05, duration: 0.3 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => setActiveFilter(filter.id)}
                 className={cn(
                   "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border",
@@ -193,68 +237,78 @@ export function FeaturedVisas() {
               >
                 {filter.icon && <filter.icon className="inline-block h-4 w-4 mr-1" />}
                 {filter.label}
-              </button>
+              </motion.button>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Visa cards grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {filteredVisas.slice(0, 8).map((visa, index) => (
-            <Link
-              key={visa.id}
-              to={`/visas/${visa.id}`}
-              className="group relative overflow-hidden rounded-xl bg-card border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-300 animate-fade-in"
-              style={{ animationDelay: `${index * 0.05}s` }}
-            >
-              {/* Image */}
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src={visa.image}
-                  alt={visa.country}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                {/* Badge */}
-                <div className="absolute top-3 right-3 px-3 py-1 text-xs font-medium bg-travel-success text-white rounded-full">
-                  {visa.issuedRecently} issued recently
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="p-4">
-                {/* Country & type */}
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
-                    {visa.country}
-                  </h3>
-                  <span className="text-xs px-2 py-1 bg-secondary text-secondary-foreground rounded-full">
-                    {visa.type}
-                  </span>
-                </div>
-
-                {/* Price & processing */}
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xl font-bold text-primary">{visa.price}</p>
-                    {visa.additionalFees && (
-                      <p className="text-xs text-muted-foreground">{visa.additionalFees}</p>
-                    )}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate={isVisible ? "visible" : "hidden"}
+          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
+        >
+          {filteredVisas.slice(0, 8).map((visa) => (
+            <motion.div key={visa.id} variants={cardVariants}>
+              <Link
+                to={`/visas/${visa.id}`}
+                className="group relative overflow-hidden rounded-xl bg-card border border-border hover:border-primary/50 hover:shadow-xl transition-all duration-300 block"
+              >
+                {/* Image */}
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={visa.image}
+                    alt={visa.country}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  {/* Badge */}
+                  <div className="absolute top-3 right-3 px-3 py-1 text-xs font-medium bg-travel-success text-primary-foreground rounded-full">
+                    {visa.issuedRecently} issued recently
                   </div>
-                  <div className="text-right text-sm text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      {visa.isFast && <Zap className="h-3 w-3 text-amber-500" />}
-                      <span>Get Visa in</span>
+                </div>
+
+                {/* Content */}
+                <div className="p-4">
+                  {/* Country & type */}
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                      {visa.country}
+                    </h3>
+                    <span className="text-xs px-2 py-1 bg-secondary text-secondary-foreground rounded-full">
+                      {visa.type}
+                    </span>
+                  </div>
+
+                  {/* Price & processing */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xl font-bold text-primary">{visa.price}</p>
+                      {visa.additionalFees && (
+                        <p className="text-xs text-muted-foreground">{visa.additionalFees}</p>
+                      )}
                     </div>
-                    <p className="font-medium text-foreground">{visa.processingDays} days</p>
+                    <div className="text-right text-sm text-muted-foreground">
+                      <div className="flex items-center gap-1">
+                        {visa.isFast && <Zap className="h-3 w-3 text-amber-500" />}
+                        <span>Get Visa in</span>
+                      </div>
+                      <p className="font-medium text-foreground">{visa.processingDays} days</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {/* View all button */}
-        <div className="text-center mt-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ delay: 0.8, duration: 0.5 }}
+          className="text-center mt-10"
+        >
           <Link
             to="/visas"
             className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
@@ -262,7 +316,7 @@ export function FeaturedVisas() {
             View All Visas
             <ArrowRight className="h-4 w-4" />
           </Link>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
+import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 
 const faqs = [
   {
@@ -31,6 +33,7 @@ const faqs = [
 
 export function FAQsSection() {
   const [openItems, setOpenItems] = useState<Set<number>>(new Set([0]));
+  const { ref: sectionRef, isVisible } = useScrollAnimation({ threshold: 0.1 });
 
   const toggleItem = (index: number) => {
     const newOpen = new Set(openItems);
@@ -42,55 +45,107 @@ export function FAQsSection() {
     setOpenItems(newOpen);
   };
 
+  const headerVariants: Variants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } },
+  };
+
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] } },
+  };
+
   return (
-    <section className="py-16 bg-muted/30">
+    <section ref={sectionRef} className="py-16 bg-muted/30">
       <div className="container">
-        <div className="text-center mb-12">
+        <motion.div
+          initial="hidden"
+          animate={isVisible ? "visible" : "hidden"}
+          variants={headerVariants}
+          className="text-center mb-12"
+        >
           <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
             Frequently Asked Questions
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Find quick answers to common questions about our visa services.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="max-w-3xl mx-auto space-y-3">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate={isVisible ? "visible" : "hidden"}
+          className="max-w-3xl mx-auto space-y-3"
+        >
           {faqs.map((faq, index) => {
             const isOpen = openItems.has(index);
             return (
-              <div key={index} className="bg-card border rounded-xl overflow-hidden shadow-sm">
-                <button
+              <motion.div
+                key={index}
+                variants={itemVariants}
+                className="bg-card border rounded-xl overflow-hidden shadow-sm"
+              >
+                <motion.button
                   onClick={() => toggleItem(index)}
-                  className="w-full flex items-center justify-between p-5 text-left hover:bg-muted/50 transition-colors"
+                  whileHover={{ backgroundColor: "rgba(0,0,0,0.02)" }}
+                  className="w-full flex items-center justify-between p-5 text-left transition-colors"
                 >
                   <span className="font-medium pr-4">{faq.question}</span>
-                  {isOpen ? (
-                    <ChevronUp className="h-5 w-5 text-primary shrink-0" />
-                  ) : (
-                    <ChevronDown className="h-5 w-5 text-muted-foreground shrink-0" />
+                  <motion.div
+                    animate={{ rotate: isOpen ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ChevronDown className={cn(
+                      "h-5 w-5 shrink-0 transition-colors",
+                      isOpen ? "text-primary" : "text-muted-foreground"
+                    )} />
+                  </motion.div>
+                </motion.button>
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-5 pb-5 text-muted-foreground">
+                        {faq.answer}
+                      </div>
+                    </motion.div>
                   )}
-                </button>
-                <div className={cn(
-                  "overflow-hidden transition-all duration-300",
-                  isOpen ? "max-h-96" : "max-h-0"
-                )}>
-                  <div className="px-5 pb-5 text-muted-foreground">
-                    {faq.answer}
-                  </div>
-                </div>
-              </div>
+                </AnimatePresence>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
 
-        <div className="text-center mt-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ delay: 0.8, duration: 0.5 }}
+          className="text-center mt-8"
+        >
           <a 
             href="/faqs" 
             className="text-primary font-medium hover:underline"
           >
             View all FAQs →
           </a>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

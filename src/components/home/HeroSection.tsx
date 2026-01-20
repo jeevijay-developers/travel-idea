@@ -134,21 +134,6 @@ export function HeroSection() {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            {/* Trust badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-6"
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
-              </span>
-              <span className="text-xs md:text-sm font-medium text-primary-foreground/90">
-                ISO9001:2015 Certified • Trusted by 50,000+ Travelers
-              </span>
-            </motion.div>
 
             {/* Main Headline */}
             <motion.h1

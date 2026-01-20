@@ -8,26 +8,23 @@ const steps = [
   {
     number: "01",
     icon: MapPin,
-    title: "Choose Your Destination",
-    description: "Select your destination country and visa type. Our system instantly shows you requirements, pricing, and processing times.",
-    features: ["Instant pricing", "Document checklist", "Processing timeline"],
-    color: "bg-primary",
+    title: "Choose Destination",
+    description: "Select your destination and visa type. Get instant pricing and requirements.",
+    features: ["Instant pricing", "Document list", "Timeline"],
   },
   {
     number: "02",
     icon: Upload,
     title: "Submit Documents",
-    description: "Upload your passport, photos, and documents through our secure portal. Our experts verify everything before submission.",
-    features: ["Secure upload", "Expert verification", "Error checking"],
-    color: "bg-accent",
+    description: "Upload documents through our secure portal. Our experts verify everything.",
+    features: ["Secure upload", "Expert review", "Error check"],
   },
   {
     number: "03",
     icon: Mail,
-    title: "Receive Your Visa",
-    description: "Track your application in real-time. Once approved, receive your visa via email or courier for sticker visas.",
-    features: ["Real-time tracking", "Email delivery", "Express available"],
-    color: "bg-travel-success",
+    title: "Receive Visa",
+    description: "Track in real-time. Get your visa via email or courier for sticker visas.",
+    features: ["Live tracking", "Email delivery", "Express option"],
   },
 ];
 
@@ -38,48 +35,46 @@ export function HowItWorks() {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.15, delayChildren: 0.3 },
+      transition: { staggerChildren: 0.12, delayChildren: 0.2 },
     },
   };
 
   const cardVariants: Variants = {
-    hidden: { opacity: 0, y: 40 },
+    hidden: { opacity: 0, y: 25 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+      transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
     },
   };
 
   return (
-    <section ref={ref} className="py-24 bg-background relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-muted/50 to-transparent -z-10" />
-
+    <section ref={ref} className="py-12 md:py-16 bg-background">
       <div className="container">
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={isVisible ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          transition={{ duration: 0.5 }}
+          className="text-center mb-10"
         >
-          <span className="inline-block px-3 py-1 bg-accent/10 text-accent text-sm font-semibold rounded-full mb-4">
+          <span className="inline-block px-2.5 py-0.5 bg-accent/10 text-accent text-xs font-semibold rounded-full mb-3">
             Simple Process
           </span>
-          <h2 className="text-3xl md:text-5xl font-display font-bold text-foreground mb-4">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-display font-bold text-foreground mb-2">
             How It Works
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Getting your visa is as easy as 1-2-3. We've simplified the entire process
-            so you can focus on planning your trip.
+          <p className="text-muted-foreground text-sm max-w-lg mx-auto">
+            Getting your visa is as easy as 1-2-3. We've simplified everything.
           </p>
         </motion.div>
 
+        {/* Steps */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate={isVisible ? "visible" : "hidden"}
-          className="grid md:grid-cols-3 gap-8 mb-16"
+          className="grid md:grid-cols-3 gap-5 mb-10"
         >
           {steps.map((step, index) => (
             <motion.div
@@ -87,37 +82,35 @@ export function HowItWorks() {
               variants={cardVariants}
               className="relative"
             >
-              {/* Connector line */}
+              {/* Connector */}
               {index < steps.length - 1 && (
-                <div className="hidden md:block absolute top-16 left-full w-full h-0.5 bg-gradient-to-r from-border via-accent/30 to-border -translate-x-1/2 z-0" />
+                <div className="hidden md:block absolute top-12 left-full w-full h-px bg-gradient-to-r from-border via-accent/20 to-border -translate-x-1/2 z-0" />
               )}
 
-              <div className="relative bg-card rounded-2xl border border-border p-8 hover:border-accent/30 hover:shadow-xl transition-all duration-300 h-full">
-                {/* Step number */}
-                <div className="absolute -top-4 left-8">
-                  <span className="inline-block px-4 py-2 bg-accent text-accent-foreground text-sm font-bold rounded-full shadow-lg">
-                    Step {step.number}
-                  </span>
-                </div>
+              <div className="relative bg-card rounded-xl border border-border p-5 hover:border-accent/30 hover:shadow-md transition-all h-full">
+                {/* Step badge */}
+                <span className="absolute -top-2.5 left-5 px-2.5 py-1 bg-accent text-accent-foreground text-[10px] font-bold rounded-full">
+                  Step {step.number}
+                </span>
 
                 {/* Icon */}
-                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl ${step.color} text-white mt-4 mb-6`}>
-                  <step.icon className="h-8 w-8" />
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary text-primary-foreground mt-2 mb-4">
+                  <step.icon className="h-6 w-6" />
                 </div>
 
                 {/* Content */}
-                <h3 className="text-xl font-bold text-foreground mb-3">
+                <h3 className="text-base font-bold text-foreground mb-2">
                   {step.title}
                 </h3>
-                <p className="text-muted-foreground mb-6 leading-relaxed">
+                <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
                   {step.description}
                 </p>
 
                 {/* Features */}
-                <ul className="space-y-2">
+                <ul className="space-y-1.5">
                   {step.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Check className="h-4 w-4 text-accent shrink-0" />
+                    <li key={feature} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Check className="h-3 w-3 text-accent shrink-0" />
                       {feature}
                     </li>
                   ))}
@@ -129,19 +122,19 @@ export function HowItWorks() {
 
         {/* CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={isVisible ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.8, duration: 0.5 }}
+          transition={{ delay: 0.5, duration: 0.4 }}
           className="text-center"
         >
           <Link to="/visas">
-            <Button size="lg" className="h-14 px-10 text-lg bg-accent hover:bg-accent/90 text-accent-foreground shadow-lg shadow-accent/25">
+            <Button size="default" className="h-10 px-6 text-sm bg-accent hover:bg-accent/90 text-accent-foreground">
               Start Your Application
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
-          <p className="text-sm text-muted-foreground mt-4">
-            Average processing time: 3-15 business days
+          <p className="text-xs text-muted-foreground mt-2">
+            Average processing: 3-15 business days
           </p>
         </motion.div>
       </div>

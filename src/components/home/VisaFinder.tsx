@@ -32,10 +32,10 @@ const popularDestinations = [
 ];
 
 const travelPurposes = [
-  { value: "tourist", label: "Tourism / Holiday", icon: "🏖️" },
-  { value: "business", label: "Business Travel", icon: "💼" },
-  { value: "transit", label: "Transit / Stopover", icon: "✈️" },
-  { value: "medical", label: "Medical Treatment", icon: "🏥" },
+  { value: "tourist", label: "Tourism", icon: "🏖️" },
+  { value: "business", label: "Business", icon: "💼" },
+  { value: "transit", label: "Transit", icon: "✈️" },
+  { value: "medical", label: "Medical", icon: "🏥" },
 ];
 
 export function VisaFinder() {
@@ -58,88 +58,78 @@ export function VisaFinder() {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+      transition: { staggerChildren: 0.1, delayChildren: 0.1 },
     },
   };
 
   const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+      transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
     },
   };
 
   return (
-    <section ref={ref} className="py-20 bg-background relative overflow-hidden">
-      {/* Subtle background pattern */}
-      <div className="absolute inset-0 opacity-[0.02]">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, hsl(var(--primary)) 1px, transparent 0)`,
-          backgroundSize: "40px 40px"
-        }} />
-      </div>
-
-      <div className="container relative z-10">
+    <section ref={ref} className="py-12 md:py-16 bg-background">
+      <div className="container">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate={isVisible ? "visible" : "hidden"}
-          className="max-w-5xl mx-auto"
+          className="max-w-4xl mx-auto"
         >
           {/* Header */}
-          <motion.div variants={itemVariants} className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent/10 rounded-full text-accent text-sm font-medium mb-6">
-              <Sparkles className="h-4 w-4" />
+          <motion.div variants={itemVariants} className="text-center mb-8">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-accent/10 rounded-full text-accent text-xs font-medium mb-4">
+              <Sparkles className="h-3 w-3" />
               Smart Visa Finder
             </div>
-            <h2 className="text-3xl md:text-5xl font-display font-bold text-foreground mb-4">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-display font-bold text-foreground mb-2">
               Find Your Perfect Visa
             </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Enter your destination and travel purpose. We'll show you the best visa options
-              with transparent pricing and processing times.
+            <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
+              Enter your destination and we'll show you the best visa options with transparent pricing.
             </p>
           </motion.div>
 
-          {/* Premium Finder Card */}
+          {/* Finder Card */}
           <motion.div
             variants={itemVariants}
-            className="relative bg-card rounded-3xl border border-border shadow-xl overflow-hidden"
+            className="bg-card rounded-2xl border border-border shadow-lg overflow-hidden"
           >
-            {/* Card gradient accent */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-primary" />
+            {/* Top accent line */}
+            <div className="h-1 bg-gradient-to-r from-primary via-accent to-primary" />
 
-            <div className="p-8 md:p-10">
+            <div className="p-5 md:p-6">
               {/* Search input */}
-              <div className="relative mb-6">
-                <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <div className="relative mb-4">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="text"
-                  placeholder="Where to, captain? (e.g., Dubai, Thailand, UK...)"
+                  placeholder="Where to? (e.g., Dubai, Thailand, UK...)"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                  className="pl-14 h-16 text-lg bg-muted/50 border-0 rounded-2xl focus:ring-2 focus:ring-accent/50"
+                  className="pl-11 h-12 text-sm bg-muted/50 border-0 rounded-xl"
                 />
               </div>
 
               {/* Select fields */}
-              <div className="grid md:grid-cols-2 gap-4 mb-8">
-                {/* Destination */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-accent" />
-                    Or choose from popular destinations
+              <div className="grid md:grid-cols-2 gap-3 mb-5">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                    <MapPin className="h-3 w-3 text-accent" />
+                    Or choose destination
                   </label>
                   <Select value={destination} onValueChange={setDestination}>
-                    <SelectTrigger className="h-14 rounded-xl bg-muted/50 border-0">
-                      <SelectValue placeholder="Select destination" />
+                    <SelectTrigger className="h-10 rounded-lg bg-muted/50 border-0 text-sm">
+                      <SelectValue placeholder="Select country" />
                     </SelectTrigger>
-                    <SelectContent className="bg-card border-border rounded-xl">
+                    <SelectContent className="bg-card border-border rounded-lg">
                       {popularDestinations.map((dest) => (
-                        <SelectItem key={dest} value={dest} className="py-3">
+                        <SelectItem key={dest} value={dest} className="text-sm py-2">
                           {dest}
                         </SelectItem>
                       ))}
@@ -147,21 +137,20 @@ export function VisaFinder() {
                   </Select>
                 </div>
 
-                {/* Travel Purpose */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                    <Briefcase className="h-4 w-4 text-accent" />
-                    Travel Purpose
+                <div className="space-y-1.5">
+                  <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                    <Briefcase className="h-3 w-3 text-accent" />
+                    Travel purpose
                   </label>
                   <Select value={purpose} onValueChange={setPurpose}>
-                    <SelectTrigger className="h-14 rounded-xl bg-muted/50 border-0">
+                    <SelectTrigger className="h-10 rounded-lg bg-muted/50 border-0 text-sm">
                       <SelectValue placeholder="Select purpose" />
                     </SelectTrigger>
-                    <SelectContent className="bg-card border-border rounded-xl">
+                    <SelectContent className="bg-card border-border rounded-lg">
                       {travelPurposes.map((p) => (
-                        <SelectItem key={p.value} value={p.value} className="py-3">
-                          <span className="flex items-center gap-3">
-                            <span className="text-lg">{p.icon}</span>
+                        <SelectItem key={p.value} value={p.value} className="text-sm py-2">
+                          <span className="flex items-center gap-2">
+                            <span>{p.icon}</span>
                             {p.label}
                           </span>
                         </SelectItem>
@@ -174,11 +163,10 @@ export function VisaFinder() {
               {/* Search Button */}
               <Button
                 onClick={handleSearch}
-                size="lg"
-                className="w-full h-16 text-lg font-semibold rounded-2xl bg-accent hover:bg-accent/90 text-accent-foreground shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all duration-300"
+                className="w-full h-11 text-sm font-semibold rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground"
               >
                 Find My Visa
-                <ArrowRight className="ml-3 h-5 w-5" />
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
 
@@ -186,29 +174,26 @@ export function VisaFinder() {
             <div className="grid grid-cols-3 divide-x divide-border border-t bg-muted/30">
               {[
                 { value: "100+", label: "Countries" },
-                { value: "24hr", label: "Express Available" },
-                { value: "99%", label: "Success Rate" },
+                { value: "24hr", label: "Express" },
+                { value: "99%", label: "Success" },
               ].map((stat) => (
-                <div key={stat.label} className="py-5 text-center">
-                  <p className="text-xl font-bold text-accent">{stat.value}</p>
-                  <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
+                <div key={stat.label} className="py-3 text-center">
+                  <p className="text-base font-bold text-accent">{stat.value}</p>
+                  <p className="text-[10px] text-muted-foreground">{stat.label}</p>
                 </div>
               ))}
             </div>
           </motion.div>
 
-          {/* Popular quick links */}
-          <motion.div
-            variants={itemVariants}
-            className="mt-8 text-center"
-          >
-            <p className="text-sm text-muted-foreground mb-4">Popular destinations:</p>
-            <div className="flex flex-wrap justify-center gap-2">
+          {/* Quick links */}
+          <motion.div variants={itemVariants} className="mt-5 text-center">
+            <p className="text-xs text-muted-foreground mb-2">Popular:</p>
+            <div className="flex flex-wrap justify-center gap-1.5">
               {["UAE", "Thailand", "Singapore", "Japan", "UK", "USA"].map((country) => (
                 <button
                   key={country}
                   onClick={() => navigate(`/visas?search=${country}`)}
-                  className="px-4 py-2 text-sm font-medium bg-muted hover:bg-muted/80 text-foreground rounded-full transition-colors"
+                  className="px-3 py-1.5 text-xs font-medium bg-muted hover:bg-muted/80 text-foreground rounded-full transition-colors"
                 >
                   {country}
                 </button>

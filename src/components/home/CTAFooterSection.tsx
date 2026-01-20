@@ -11,144 +11,91 @@ export function CTAFooterSection() {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+      transition: { staggerChildren: 0.08, delayChildren: 0.1 },
     },
   };
 
   const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 15 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
+      transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
     },
   };
 
   return (
-    <section ref={ref} className="py-24 bg-primary text-primary-foreground relative overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0">
-        <motion.div
-          animate={{
-            x: [0, 100, 0],
-            y: [0, -50, 0],
-          }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute top-20 left-10 w-64 h-64 bg-white/5 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{
-            x: [0, -100, 0],
-            y: [0, 50, 0],
-          }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="absolute bottom-20 right-10 w-96 h-96 bg-white/5 rounded-full blur-3xl"
-        />
-      </div>
-
-      <div className="container relative z-10">
+    <section ref={ref} className="py-12 md:py-16 bg-primary text-primary-foreground">
+      <div className="container">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate={isVisible ? "visible" : "hidden"}
-          className="max-w-3xl mx-auto text-center"
+          className="max-w-2xl mx-auto text-center"
         >
           {/* Icon */}
           <motion.div
             variants={itemVariants}
-            className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/10 mb-6"
+            className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary-foreground/10 mb-4"
           >
-            <Plane className="h-8 w-8" />
+            <Plane className="h-6 w-6" />
           </motion.div>
 
           {/* Heading */}
-          <motion.h2
-            variants={itemVariants}
-            className="text-3xl md:text-5xl font-bold mb-4"
-          >
+          <motion.h2 variants={itemVariants} className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3">
             Ready to Apply for Your Visa?
           </motion.h2>
 
-          <motion.p
-            variants={itemVariants}
-            className="text-lg text-primary-foreground/80 mb-10 max-w-xl mx-auto"
-          >
-            Start your hassle-free visa application today. Our experts are ready to help you every step of the way.
+          <motion.p variants={itemVariants} className="text-sm text-primary-foreground/70 mb-6 max-w-md mx-auto">
+            Start your hassle-free visa application today. Our experts are ready to help.
           </motion.p>
 
           {/* CTA Buttons */}
-          <motion.div
-            variants={itemVariants}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10"
-          >
+          <motion.div variants={itemVariants} className="flex flex-wrap items-center justify-center gap-3 mb-6">
             <Link to="/visas">
-              <Button
-                size="lg"
-                className="h-14 px-8 text-lg bg-white text-primary hover:bg-white/90 shadow-xl"
-              >
+              <Button size="default" className="h-10 px-6 text-sm bg-primary-foreground text-primary hover:bg-primary-foreground/90">
                 Apply Now
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
-
-            <a
-              href="https://wa.me/919101197909"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="https://wa.me/919101197909" target="_blank" rel="noopener noreferrer">
               <Button
-                size="lg"
+                size="default"
                 variant="outline"
-                className="h-14 px-8 text-lg border-white/30 bg-white/10 hover:bg-white/20 text-primary-foreground"
+                className="h-10 px-6 text-sm border-primary-foreground/20 bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground"
               >
-                <MessageCircle className="mr-2 h-5 w-5" />
-                WhatsApp Us
+                <MessageCircle className="mr-2 h-4 w-4" />
+                WhatsApp
               </Button>
             </a>
           </motion.div>
 
-          {/* Contact info */}
-          <motion.div
-            variants={itemVariants}
-            className="flex flex-col sm:flex-row items-center justify-center gap-6 text-sm"
-          >
-            <a
-              href="tel:+919101197909"
-              className="flex items-center gap-2 text-primary-foreground/80 hover:text-primary-foreground transition-colors"
-            >
-              <Phone className="h-4 w-4" />
+          {/* Contact */}
+          <motion.div variants={itemVariants} className="flex flex-wrap items-center justify-center gap-4 text-xs">
+            <a href="tel:+919101197909" className="flex items-center gap-1.5 text-primary-foreground/70 hover:text-primary-foreground transition-colors">
+              <Phone className="h-3.5 w-3.5" />
               +91 9101197909
             </a>
-            <span className="hidden sm:block text-primary-foreground/40">|</span>
-            <span className="text-primary-foreground/80">
-              Available 24/7 for your queries
-            </span>
+            <span className="text-primary-foreground/30">•</span>
+            <span className="text-primary-foreground/70">Available 24/7</span>
           </motion.div>
 
-          {/* Trust badges */}
+          {/* Stats */}
           <motion.div
             variants={itemVariants}
-            className="flex flex-wrap items-center justify-center gap-6 mt-10 pt-10 border-t border-white/20"
+            className="flex flex-wrap items-center justify-center gap-6 mt-8 pt-6 border-t border-primary-foreground/10"
           >
-            <div className="text-center">
-              <p className="text-2xl font-bold">100+</p>
-              <p className="text-xs text-primary-foreground/70">Countries</p>
-            </div>
-            <div className="w-px h-8 bg-white/20" />
-            <div className="text-center">
-              <p className="text-2xl font-bold">50K+</p>
-              <p className="text-xs text-primary-foreground/70">Happy Travelers</p>
-            </div>
-            <div className="w-px h-8 bg-white/20" />
-            <div className="text-center">
-              <p className="text-2xl font-bold">99%</p>
-              <p className="text-xs text-primary-foreground/70">Success Rate</p>
-            </div>
-            <div className="w-px h-8 bg-white/20" />
-            <div className="text-center">
-              <p className="text-2xl font-bold">ISO</p>
-              <p className="text-xs text-primary-foreground/70">9001:2015</p>
-            </div>
+            {[
+              { value: "100+", label: "Countries" },
+              { value: "50K+", label: "Travelers" },
+              { value: "99%", label: "Success" },
+              { value: "ISO", label: "9001:2015" },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <p className="text-lg font-bold">{stat.value}</p>
+                <p className="text-[10px] text-primary-foreground/60">{stat.label}</p>
+              </div>
+            ))}
           </motion.div>
         </motion.div>
       </div>

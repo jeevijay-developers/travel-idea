@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { Search, Filter, Clock, Zap, ArrowRight, X } from "lucide-react";
+import { motion } from "framer-motion";
+import { Search, Filter, Clock, Zap, ArrowRight, X, MapPin, Sparkles, Globe } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Layout } from "@/components/layout";
@@ -107,17 +108,17 @@ const countryImages: Record<string, string> = {
 
 // Filter categories
 const filterCategories = [
-  { id: "all", label: "All Visas" },
-  { id: "fast", label: "Fast Processing", icon: Zap },
-  { id: "budget", label: "Budget Friendly" },
-  { id: "popular", label: "Most Popular" },
+  { id: "all", label: "All", icon: Globe },
+  { id: "fast", label: "Express", icon: Zap },
+  { id: "budget", label: "Budget" },
+  { id: "popular", label: "Popular" },
 ];
 
 const budgetFilters = [
-  { id: "all", label: "All Budgets" },
-  { id: "low", label: "Under ₹3,000" },
-  { id: "mid", label: "₹3,000 - ₹10,000" },
-  { id: "high", label: "Above ₹10,000" },
+  { id: "all", label: "Any Price" },
+  { id: "low", label: "Under ₹3K" },
+  { id: "mid", label: "₹3K - ₹10K" },
+  { id: "high", label: "Above ₹10K" },
 ];
 
 interface Visa {
@@ -179,7 +180,6 @@ export default function Visas() {
 
   // Filter visas
   const filteredVisas = visas.filter((visa) => {
-    // Search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       if (!visa.countries?.name.toLowerCase().includes(query) && 
@@ -188,18 +188,22 @@ export default function Visas() {
       }
     }
 
-    // Category filter
     if (activeFilter === "fast" && !visa.is_fast) return false;
     if (activeFilter === "budget" && visa.price > 3000) return false;
     if (activeFilter === "popular" && (visa.issued_recently || 0) < 500) return false;
 
-    // Budget filter
     if (budgetFilter === "low" && visa.price >= 3000) return false;
     if (budgetFilter === "mid" && (visa.price < 3000 || visa.price > 10000)) return false;
     if (budgetFilter === "high" && visa.price <= 10000) return false;
 
     return true;
   });
+
+  const clearFilters = () => {
+    setSearchQuery("");
+    setActiveFilter("all");
+    setBudgetFilter("all");
+  };
 
   return (
     <Layout>
@@ -208,31 +212,48 @@ export default function Visas() {
         description="Explore visa options for 100+ countries. Find the right visa for your travel needs with transparent pricing and fast processing." 
       />
 
-      {/* Header */}
-      <section className="bg-primary py-16">
-        <div className="container">
-          <h1 className="text-3xl md:text-4xl font-display font-bold text-primary-foreground mb-4">
-            Explore Visas
-          </h1>
-          <p className="text-primary-foreground/80 max-w-2xl">
-            Find the perfect visa for your travel destination. We offer transparent pricing and fast processing for 100+ countries.
-          </p>
+      {/* Hero Header */}
+      <section className="relative bg-gradient-to-br from-primary via-primary to-primary/90 py-12 md:py-16 overflow-hidden">
+        {/* Background pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{ 
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` 
+          }} />
+        </div>
+
+        <div className="container relative">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center max-w-3xl mx-auto"
+          >
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full text-white/90 text-sm mb-4">
+              <Sparkles className="h-4 w-4" />
+              100+ Countries Available
+            </div>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-primary-foreground mb-4">
+              Explore All Visas
+            </h1>
+            <p className="text-primary-foreground/80 text-sm md:text-base max-w-xl mx-auto">
+              Find the perfect visa for your destination with transparent pricing and fast processing.
+            </p>
+          </motion.div>
         </div>
       </section>
 
       {/* Search and Filters */}
-      <section className="py-8 bg-muted/30 border-b">
-        <div className="container">
-          <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+      <section className="sticky top-16 z-40 bg-background/95 backdrop-blur-md border-b shadow-sm">
+        <div className="container py-4">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-3">
             {/* Search */}
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 type="text"
-                placeholder="Search by country or visa type..."
+                placeholder="Search by country..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 h-12 bg-background"
+                className="pl-10 h-10 bg-muted/50 border-0 rounded-lg text-sm"
               />
               {searchQuery && (
                 <button
@@ -247,14 +268,15 @@ export default function Visas() {
             {/* Filter toggle for mobile */}
             <Button
               variant="outline"
-              className="lg:hidden"
+              size="sm"
+              className="lg:hidden h-10"
               onClick={() => setShowFilters(!showFilters)}
             >
               <Filter className="h-4 w-4 mr-2" />
               Filters
             </Button>
 
-            {/* Filter pills */}
+            {/* Category filters */}
             <div className={cn(
               "flex flex-wrap gap-2",
               !showFilters && "hidden lg:flex"
@@ -264,19 +286,19 @@ export default function Visas() {
                   key={filter.id}
                   onClick={() => setActiveFilter(filter.id)}
                   className={cn(
-                    "px-4 py-2 rounded-full text-sm font-medium transition-all border",
+                    "px-3 py-1.5 rounded-full text-xs font-medium transition-all",
                     activeFilter === filter.id
-                      ? "bg-primary text-primary-foreground border-primary"
-                      : "bg-background text-muted-foreground border-border hover:border-primary/50"
+                      ? "bg-accent text-accent-foreground shadow-sm"
+                      : "bg-muted text-muted-foreground hover:bg-muted/80"
                   )}
                 >
-                  {filter.icon && <filter.icon className="inline-block h-4 w-4 mr-1" />}
+                  {filter.icon && <filter.icon className="inline-block h-3 w-3 mr-1" />}
                   {filter.label}
                 </button>
               ))}
             </div>
 
-            {/* Budget filter */}
+            {/* Budget filters */}
             <div className={cn(
               "flex flex-wrap gap-2",
               !showFilters && "hidden lg:flex"
@@ -286,10 +308,10 @@ export default function Visas() {
                   key={filter.id}
                   onClick={() => setBudgetFilter(filter.id)}
                   className={cn(
-                    "px-4 py-2 rounded-full text-sm font-medium transition-all border",
+                    "px-3 py-1.5 rounded-full text-xs font-medium transition-all",
                     budgetFilter === filter.id
-                      ? "bg-secondary text-secondary-foreground border-secondary"
-                      : "bg-background text-muted-foreground border-border hover:border-secondary/50"
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "bg-muted text-muted-foreground hover:bg-muted/80"
                   )}
                 >
                   {filter.label}
@@ -301,18 +323,29 @@ export default function Visas() {
       </section>
 
       {/* Results */}
-      <section className="py-12">
+      <section className="py-8 md:py-12">
         <div className="container">
           {/* Results count */}
-          <p className="text-muted-foreground mb-6">
-            Showing {filteredVisas.length} visa{filteredVisas.length !== 1 ? "s" : ""}
-          </p>
+          <div className="flex items-center justify-between mb-6">
+            <p className="text-sm text-muted-foreground">
+              Showing <span className="font-medium text-foreground">{filteredVisas.length}</span> visa{filteredVisas.length !== 1 ? "s" : ""}
+            </p>
+            {(searchQuery || activeFilter !== "all" || budgetFilter !== "all") && (
+              <button
+                onClick={clearFilters}
+                className="text-xs text-accent hover:underline flex items-center gap-1"
+              >
+                <X className="h-3 w-3" />
+                Clear filters
+              </button>
+            )}
+          </div>
 
           {loading ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               {[...Array(8)].map((_, i) => (
-                <div key={i} className="bg-card rounded-xl border animate-pulse">
-                  <div className="h-48 bg-muted rounded-t-xl" />
+                <div key={i} className="bg-card rounded-2xl border animate-pulse overflow-hidden">
+                  <div className="h-44 bg-muted" />
                   <div className="p-4 space-y-3">
                     <div className="h-5 bg-muted rounded w-3/4" />
                     <div className="h-4 bg-muted rounded w-1/2" />
@@ -322,94 +355,124 @@ export default function Visas() {
             </div>
           ) : filteredVisas.length === 0 ? (
             <div className="text-center py-16">
-              <p className="text-xl text-muted-foreground mb-4">No visas found matching your criteria</p>
-              <Button onClick={() => { setSearchQuery(""); setActiveFilter("all"); setBudgetFilter("all"); }}>
-                Clear Filters
+              <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                <Search className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <p className="text-lg font-medium mb-2">No visas found</p>
+              <p className="text-muted-foreground text-sm mb-4">Try adjusting your search or filters</p>
+              <Button onClick={clearFilters} variant="outline" size="sm">
+                Clear All Filters
               </Button>
             </div>
           ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               {filteredVisas.map((visa, index) => (
-                <Link
+                <motion.div
                   key={visa.id}
-                  to={`/visas/${visa.countries?.slug}`}
-                  className="group relative overflow-hidden rounded-xl bg-card border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-300 animate-fade-in"
-                  style={{ animationDelay: `${index * 0.05}s` }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.03, duration: 0.3 }}
                 >
-                  {/* Image */}
-                  <div className="relative h-48 overflow-hidden">
-                    <img
-                      src={countryImages[visa.countries?.slug] || uaeImage}
-                      alt={visa.countries?.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    {visa.issued_recently && visa.issued_recently > 0 && (
-                      <div className="absolute top-3 right-3 px-3 py-1 text-xs font-medium bg-travel-success text-white rounded-full">
-                        {visa.issued_recently} issued recently
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-4">
-                    <div className="flex items-center justify-between mb-1">
-                      <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
-                        {visa.countries?.name}
-                      </h3>
-                      <span className="text-xs px-2 py-1 bg-secondary text-secondary-foreground rounded-full">
-                        {visa.visa_type}
-                      </span>
-                    </div>
-
-                    {/* 2-line truncated description */}
-                    <p className="text-sm text-muted-foreground line-clamp-2 mb-3 min-h-[2.5rem]">
-                      {visa.short_description || `Get your ${visa.visa_type} for ${visa.countries?.name} with hassle-free processing.`}
-                    </p>
-
-                    <div className="flex items-center justify-between mb-3">
-                      <div>
-                        <p className="text-xl font-bold text-primary">₹{visa.price.toLocaleString()}</p>
-                        {visa.additional_fees && (
-                          <p className="text-xs text-muted-foreground">{visa.additional_fees}</p>
+                  <Link
+                    to={`/visas/${visa.countries?.slug}`}
+                    className="group block overflow-hidden rounded-2xl bg-card border border-border hover:border-accent/50 hover:shadow-xl transition-all duration-300"
+                  >
+                    {/* Image - Full vibrant, no overlay */}
+                    <div className="relative h-44 overflow-hidden">
+                      <img
+                        src={countryImages[visa.countries?.slug] || uaeImage}
+                        alt={visa.countries?.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      {/* Badges */}
+                      <div className="absolute top-3 left-3 right-3 flex items-start justify-between">
+                        <span className="px-2 py-1 text-xs font-medium bg-white/90 backdrop-blur-sm text-foreground rounded-md shadow-sm">
+                          {visa.visa_type}
+                        </span>
+                        {visa.is_fast && (
+                          <span className="px-2 py-1 text-xs font-medium bg-amber-400 text-amber-900 rounded-md flex items-center gap-1">
+                            <Zap className="h-3 w-3" />
+                            Express
+                          </span>
                         )}
                       </div>
-                      <div className="text-right text-sm text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          {visa.is_fast && <Zap className="h-3 w-3 text-amber-500" />}
-                          <Clock className="h-3 w-3" />
+                      {/* Issued badge */}
+                      {visa.issued_recently && visa.issued_recently > 0 && (
+                        <div className="absolute bottom-3 left-3 px-2 py-1 text-xs font-medium bg-accent text-accent-foreground rounded-md">
+                          {visa.issued_recently}+ issued
                         </div>
-                        <p className="font-medium text-foreground">{visa.processing_days} days</p>
-                      </div>
+                      )}
                     </div>
 
-                    {/* View Details Button */}
-                    <div className="flex items-center justify-end text-sm font-medium text-primary group-hover:translate-x-1 transition-transform">
-                      View Details
-                      <ArrowRight className="h-4 w-4 ml-1" />
+                    {/* Content */}
+                    <div className="p-4">
+                      {/* Country name with flag placeholder */}
+                      <div className="flex items-center gap-2 mb-2">
+                        <MapPin className="h-4 w-4 text-accent" />
+                        <h3 className="font-semibold text-foreground group-hover:text-accent transition-colors">
+                          {visa.countries?.name}
+                        </h3>
+                      </div>
+
+                      {/* Description */}
+                      <p className="text-xs text-muted-foreground line-clamp-2 mb-3 min-h-[2rem]">
+                        {visa.short_description || `Get your ${visa.visa_type} for ${visa.countries?.name} with hassle-free processing.`}
+                      </p>
+
+                      {/* Price and Processing */}
+                      <div className="flex items-end justify-between pt-3 border-t">
+                        <div>
+                          <p className="text-xs text-muted-foreground">From</p>
+                          <p className="text-xl font-bold text-accent">₹{visa.price.toLocaleString()}</p>
+                        </div>
+                        <div className="text-right">
+                          <div className="flex items-center gap-1 text-muted-foreground">
+                            <Clock className="h-3 w-3" />
+                            <span className="text-xs">{visa.processing_days} days</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* CTA */}
+                      <div className="mt-3 pt-3 border-t flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">
+                          {visa.additional_fees || "All inclusive"}
+                        </span>
+                        <span className="text-xs font-medium text-accent flex items-center gap-1 group-hover:gap-2 transition-all">
+                          View
+                          <ArrowRight className="h-3 w-3" />
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </Link>
+                  </Link>
+                </motion.div>
               ))}
             </div>
           )}
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-16 bg-primary">
+      {/* CTA Section */}
+      <section className="py-12 md:py-16 bg-gradient-to-r from-accent via-accent to-accent/90">
         <div className="container text-center">
-          <h2 className="text-2xl md:text-3xl font-display font-bold text-primary-foreground mb-4">
-            Can't find what you're looking for?
-          </h2>
-          <p className="text-primary-foreground/80 mb-8 max-w-xl mx-auto">
-            Contact us for personalized visa assistance. Our experts are ready to help you with any destination.
-          </p>
-          <Link to="/contact">
-            <Button size="lg" variant="secondary" className="gap-2">
-              Contact Us
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-2xl md:text-3xl font-display font-bold text-accent-foreground mb-3">
+              Can't find what you're looking for?
+            </h2>
+            <p className="text-accent-foreground/80 text-sm mb-6 max-w-md mx-auto">
+              Contact us for personalized visa assistance. Our experts are ready to help.
+            </p>
+            <Link to="/contact">
+              <Button size="lg" variant="secondary" className="gap-2 shadow-lg">
+                Contact Us
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+          </motion.div>
         </div>
       </section>
     </Layout>

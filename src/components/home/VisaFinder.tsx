@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, type Variants } from "framer-motion";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import { Search, MapPin, Briefcase, ArrowRight, Plane } from "lucide-react";
+import { Search, MapPin, Briefcase, ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -10,17 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
-
-const nationalities = [
-  "Indian",
-  "American",
-  "British",
-  "Australian",
-  "Canadian",
-  "German",
-  "French",
-];
 
 const popularDestinations = [
   "United Arab Emirates",
@@ -41,22 +32,23 @@ const popularDestinations = [
 ];
 
 const travelPurposes = [
-  { value: "tourist", label: "Tourist / Holiday", icon: "🏖️" },
-  { value: "business", label: "Business", icon: "💼" },
-  { value: "transit", label: "Transit", icon: "✈️" },
-  { value: "medical", label: "Medical", icon: "🏥" },
+  { value: "tourist", label: "Tourism / Holiday", icon: "🏖️" },
+  { value: "business", label: "Business Travel", icon: "💼" },
+  { value: "transit", label: "Transit / Stopover", icon: "✈️" },
+  { value: "medical", label: "Medical Treatment", icon: "🏥" },
 ];
 
 export function VisaFinder() {
   const navigate = useNavigate();
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
+  const [searchQuery, setSearchQuery] = useState("");
   const [destination, setDestination] = useState("");
-  const [nationality, setNationality] = useState("Indian");
   const [purpose, setPurpose] = useState("");
 
   const handleSearch = () => {
-    if (destination) {
-      navigate(`/visas?search=${encodeURIComponent(destination)}`);
+    const query = destination || searchQuery;
+    if (query) {
+      navigate(`/visas?search=${encodeURIComponent(query)}`);
     } else {
       navigate("/visas");
     }
@@ -71,20 +63,22 @@ export function VisaFinder() {
   };
 
   const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
-      transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] } 
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
     },
   };
 
   return (
     <section ref={ref} className="py-20 bg-background relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+      {/* Subtle background pattern */}
+      <div className="absolute inset-0 opacity-[0.02]">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `radial-gradient(circle at 1px 1px, hsl(var(--primary)) 1px, transparent 0)`,
+          backgroundSize: "40px 40px"
+        }} />
       </div>
 
       <div className="container relative z-10">
@@ -92,116 +86,133 @@ export function VisaFinder() {
           variants={containerVariants}
           initial="hidden"
           animate={isVisible ? "visible" : "hidden"}
-          className="max-w-4xl mx-auto"
+          className="max-w-5xl mx-auto"
         >
           {/* Header */}
-          <motion.div variants={itemVariants} className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-4">
-              <Search className="h-4 w-4" />
+          <motion.div variants={itemVariants} className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent/10 rounded-full text-accent text-sm font-medium mb-6">
+              <Sparkles className="h-4 w-4" />
               Smart Visa Finder
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
-              Find Your Visa in Seconds
+            <h2 className="text-3xl md:text-5xl font-display font-bold text-foreground mb-4">
+              Find Your Perfect Visa
             </h2>
-            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-              Tell us where you're going and we'll show you the best visa options with pricing and processing times
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              Enter your destination and travel purpose. We'll show you the best visa options
+              with transparent pricing and processing times.
             </p>
           </motion.div>
 
-          {/* Finder Card */}
+          {/* Premium Finder Card */}
           <motion.div
             variants={itemVariants}
-            className="bg-card rounded-2xl border border-border shadow-xl p-6 md:p-8"
+            className="relative bg-card rounded-3xl border border-border shadow-xl overflow-hidden"
           >
-            <div className="grid md:grid-cols-3 gap-4 mb-6">
-              {/* Destination */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-primary" />
-                  Where are you travelling?
-                </label>
-                <Select value={destination} onValueChange={setDestination}>
-                  <SelectTrigger className="h-12">
-                    <SelectValue placeholder="Select destination" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-card border-border">
-                    {popularDestinations.map((dest) => (
-                      <SelectItem key={dest} value={dest}>
-                        {dest}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+            {/* Card gradient accent */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-primary" />
+
+            <div className="p-8 md:p-10">
+              {/* Search input */}
+              <div className="relative mb-6">
+                <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <Input
+                  type="text"
+                  placeholder="Where to, captain? (e.g., Dubai, Thailand, UK...)"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                  className="pl-14 h-16 text-lg bg-muted/50 border-0 rounded-2xl focus:ring-2 focus:ring-accent/50"
+                />
               </div>
 
-              {/* Nationality */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                  <Plane className="h-4 w-4 text-primary" />
-                  Your Nationality
-                </label>
-                <Select value={nationality} onValueChange={setNationality}>
-                  <SelectTrigger className="h-12">
-                    <SelectValue placeholder="Select nationality" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-card border-border">
-                    {nationalities.map((nat) => (
-                      <SelectItem key={nat} value={nat}>
-                        {nat}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              {/* Select fields */}
+              <div className="grid md:grid-cols-2 gap-4 mb-8">
+                {/* Destination */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-accent" />
+                    Or choose from popular destinations
+                  </label>
+                  <Select value={destination} onValueChange={setDestination}>
+                    <SelectTrigger className="h-14 rounded-xl bg-muted/50 border-0">
+                      <SelectValue placeholder="Select destination" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-card border-border rounded-xl">
+                      {popularDestinations.map((dest) => (
+                        <SelectItem key={dest} value={dest} className="py-3">
+                          {dest}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Travel Purpose */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                    <Briefcase className="h-4 w-4 text-accent" />
+                    Travel Purpose
+                  </label>
+                  <Select value={purpose} onValueChange={setPurpose}>
+                    <SelectTrigger className="h-14 rounded-xl bg-muted/50 border-0">
+                      <SelectValue placeholder="Select purpose" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-card border-border rounded-xl">
+                      {travelPurposes.map((p) => (
+                        <SelectItem key={p.value} value={p.value} className="py-3">
+                          <span className="flex items-center gap-3">
+                            <span className="text-lg">{p.icon}</span>
+                            {p.label}
+                          </span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
 
-              {/* Travel Purpose */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                  <Briefcase className="h-4 w-4 text-primary" />
-                  Travel Purpose
-                </label>
-                <Select value={purpose} onValueChange={setPurpose}>
-                  <SelectTrigger className="h-12">
-                    <SelectValue placeholder="Select purpose" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-card border-border">
-                    {travelPurposes.map((p) => (
-                      <SelectItem key={p.value} value={p.value}>
-                        <span className="flex items-center gap-2">
-                          <span>{p.icon}</span>
-                          {p.label}
-                        </span>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              {/* Search Button */}
+              <Button
+                onClick={handleSearch}
+                size="lg"
+                className="w-full h-16 text-lg font-semibold rounded-2xl bg-accent hover:bg-accent/90 text-accent-foreground shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all duration-300"
+              >
+                Find My Visa
+                <ArrowRight className="ml-3 h-5 w-5" />
+              </Button>
             </div>
 
-            {/* Search Button */}
-            <Button 
-              onClick={handleSearch}
-              size="lg" 
-              className="w-full h-14 text-lg font-semibold"
-            >
-              Find My Visa
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            {/* Bottom stats */}
+            <div className="grid grid-cols-3 divide-x divide-border border-t bg-muted/30">
+              {[
+                { value: "100+", label: "Countries" },
+                { value: "24hr", label: "Express Available" },
+                { value: "99%", label: "Success Rate" },
+              ].map((stat) => (
+                <div key={stat.label} className="py-5 text-center">
+                  <p className="text-xl font-bold text-accent">{stat.value}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
 
-            {/* Quick stats */}
-            <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-border">
-              <div className="text-center">
-                <p className="text-2xl font-bold text-primary">100+</p>
-                <p className="text-xs text-muted-foreground">Countries</p>
-              </div>
-              <div className="text-center">
-                <p className="text-2xl font-bold text-primary">24hr</p>
-                <p className="text-xs text-muted-foreground">Express Available</p>
-              </div>
-              <div className="text-center">
-                <p className="text-2xl font-bold text-primary">99%</p>
-                <p className="text-xs text-muted-foreground">Success Rate</p>
-              </div>
+          {/* Popular quick links */}
+          <motion.div
+            variants={itemVariants}
+            className="mt-8 text-center"
+          >
+            <p className="text-sm text-muted-foreground mb-4">Popular destinations:</p>
+            <div className="flex flex-wrap justify-center gap-2">
+              {["UAE", "Thailand", "Singapore", "Japan", "UK", "USA"].map((country) => (
+                <button
+                  key={country}
+                  onClick={() => navigate(`/visas?search=${country}`)}
+                  className="px-4 py-2 text-sm font-medium bg-muted hover:bg-muted/80 text-foreground rounded-full transition-colors"
+                >
+                  {country}
+                </button>
+              ))}
             </div>
           </motion.div>
         </motion.div>

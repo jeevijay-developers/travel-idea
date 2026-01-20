@@ -62,8 +62,11 @@ export default {
           navy: "hsl(var(--travel-navy))",
           "navy-light": "hsl(var(--travel-navy-light))",
           "navy-dark": "hsl(var(--travel-navy-dark))",
+          teal: "hsl(var(--travel-teal))",
+          "teal-light": "hsl(var(--travel-teal-light))",
           sky: "hsl(var(--travel-sky))",
           success: "hsl(var(--travel-success))",
+          gold: "hsl(var(--travel-gold))",
         },
       },
       borderRadius: {

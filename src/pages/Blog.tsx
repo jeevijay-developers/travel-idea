@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Calendar, User, ArrowRight } from "lucide-react";
-import { Layout } from "@/components/layout";
+import { motion } from "framer-motion";
+import { Calendar, User, ArrowRight, BookOpen } from "lucide-react";
+import { Layout, PageHero } from "@/components/layout";
 import { SEO } from "@/components/seo";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -42,32 +43,27 @@ export default function Blog() {
     <Layout>
       <SEO 
         title="Travel Blog - Travel Idea" 
-        description="Read our latest travel tips, visa guides, and destination insights to plan your perfect trip." 
+        description="Read our latest travel tips, visa guides, and destination insights." 
       />
 
-      {/* Hero */}
-      <section className="bg-primary py-16">
-        <div className="container">
-          <h1 className="text-3xl md:text-4xl font-display font-bold text-primary-foreground mb-4">
-            Travel Blog
-          </h1>
-          <p className="text-primary-foreground/80 max-w-2xl">
-            Expert visa tips, travel guides, and destination insights to help you plan your perfect journey.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        title="Travel Blog"
+        subtitle="Expert visa tips, travel guides, and destination insights."
+        icon={BookOpen}
+        badge="Latest Articles"
+      />
 
       {/* Category filters */}
       {categories.length > 0 && (
-        <section className="py-6 bg-muted/30 border-b">
+        <section className="py-4 bg-muted/30 border-b">
           <div className="container">
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => setSelectedCategory(null)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all border ${
+                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                   !selectedCategory 
-                    ? "bg-primary text-primary-foreground border-primary" 
-                    : "bg-background text-muted-foreground border-border hover:border-primary/50"
+                    ? "bg-accent text-accent-foreground" 
+                    : "bg-muted text-muted-foreground hover:bg-muted/80"
                 }`}
               >
                 All Posts
@@ -76,10 +72,10 @@ export default function Blog() {
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all border ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                     selectedCategory === cat 
-                      ? "bg-primary text-primary-foreground border-primary" 
-                      : "bg-background text-muted-foreground border-border hover:border-primary/50"
+                      ? "bg-accent text-accent-foreground" 
+                      : "bg-muted text-muted-foreground hover:bg-muted/80"
                   }`}
                 >
                   {cat}
@@ -91,84 +87,91 @@ export default function Blog() {
       )}
 
       {/* Posts grid */}
-      <section className="py-12">
+      <section className="py-10">
         <div className="container">
           {loading ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="bg-card rounded-xl border animate-pulse">
-                  <div className="h-48 bg-muted rounded-t-xl" />
-                  <div className="p-6 space-y-3">
+                <div key={i} className="bg-card rounded-xl border animate-pulse overflow-hidden">
+                  <div className="h-40 bg-muted" />
+                  <div className="p-5 space-y-3">
                     <div className="h-4 bg-muted rounded w-1/4" />
-                    <div className="h-6 bg-muted rounded w-3/4" />
-                    <div className="h-4 bg-muted rounded w-full" />
+                    <div className="h-5 bg-muted rounded w-3/4" />
                   </div>
                 </div>
               ))}
             </div>
           ) : filteredPosts.length === 0 ? (
             <div className="text-center py-16">
-              <p className="text-xl text-muted-foreground mb-4">No blog posts yet</p>
-              <p className="text-muted-foreground">Check back soon for travel tips and guides!</p>
+              <div className="w-14 h-14 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                <BookOpen className="h-7 w-7 text-muted-foreground" />
+              </div>
+              <p className="text-lg font-medium mb-2">No blog posts yet</p>
+              <p className="text-sm text-muted-foreground">Check back soon for travel tips!</p>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredPosts.map((post, index) => (
-                <Link
+                <motion.div
                   key={post.id}
-                  to={`/blog/${post.slug}`}
-                  className="group bg-card border rounded-xl overflow-hidden hover:border-primary/50 hover:shadow-lg transition-all duration-300 animate-fade-in"
-                  style={{ animationDelay: `${index * 0.05}s` }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
                 >
-                  {/* Image */}
-                  <div className="relative h-48 overflow-hidden bg-muted">
-                    {post.cover_image ? (
-                      <img
-                        src={post.cover_image}
-                        alt={post.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                        <span className="text-4xl">✈️</span>
-                      </div>
-                    )}
-                    {post.category && (
-                      <span className="absolute top-3 left-3 px-3 py-1 text-xs font-medium bg-primary text-primary-foreground rounded-full">
-                        {post.category}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6">
-                    <h2 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors line-clamp-2">
-                      {post.title}
-                    </h2>
-                    {post.excerpt && (
-                      <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-                        {post.excerpt}
-                      </p>
-                    )}
-                    <div className="flex items-center justify-between text-xs text-muted-foreground">
-                      <div className="flex items-center gap-4">
-                        {post.author && (
-                          <span className="flex items-center gap-1">
-                            <User className="h-3 w-3" />
-                            {post.author}
-                          </span>
-                        )}
-                        {post.published_at && (
-                          <span className="flex items-center gap-1">
-                            <Calendar className="h-3 w-3" />
-                            {new Date(post.published_at).toLocaleDateString()}
-                          </span>
-                        )}
-                      </div>
-                      <ArrowRight className="h-4 w-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <Link
+                    to={`/blog/${post.slug}`}
+                    className="group block bg-card border rounded-xl overflow-hidden hover:border-accent/50 hover:shadow-lg transition-all duration-300"
+                  >
+                    {/* Image */}
+                    <div className="relative h-40 overflow-hidden bg-muted">
+                      {post.cover_image ? (
+                        <img
+                          src={post.cover_image}
+                          alt={post.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/10 flex items-center justify-center">
+                          <span className="text-3xl">✈️</span>
+                        </div>
+                      )}
+                      {post.category && (
+                        <span className="absolute top-3 left-3 px-2 py-1 text-xs font-medium bg-accent text-accent-foreground rounded-md">
+                          {post.category}
+                        </span>
+                      )}
                     </div>
-                  </div>
-                </Link>
+
+                    {/* Content */}
+                    <div className="p-5">
+                      <h2 className="font-semibold mb-2 group-hover:text-accent transition-colors line-clamp-2">
+                        {post.title}
+                      </h2>
+                      {post.excerpt && (
+                        <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
+                          {post.excerpt}
+                        </p>
+                      )}
+                      <div className="flex items-center justify-between text-xs text-muted-foreground">
+                        <div className="flex items-center gap-3">
+                          {post.author && (
+                            <span className="flex items-center gap-1">
+                              <User className="h-3 w-3" />
+                              {post.author}
+                            </span>
+                          )}
+                          {post.published_at && (
+                            <span className="flex items-center gap-1">
+                              <Calendar className="h-3 w-3" />
+                              {new Date(post.published_at).toLocaleDateString()}
+                            </span>
+                          )}
+                        </div>
+                        <ArrowRight className="h-4 w-4 text-accent opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </div>
+                    </div>
+                  </Link>
+                </motion.div>
               ))}
             </div>
           )}

@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Search, Filter, Clock, Zap, ArrowRight, X, MapPin, Sparkles, Globe } from "lucide-react";
+import { Search, Filter, Clock, Zap, ArrowRight, X, MapPin, Globe } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Layout } from "@/components/layout";
+import { Layout, PageHero } from "@/components/layout";
 import { SEO } from "@/components/seo";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
@@ -23,6 +23,39 @@ import australiaImage from "@/assets/countries/australia.jpg";
 import bahrainImage from "@/assets/countries/bahrain.jpg";
 import sriLankaImage from "@/assets/countries/sri-lanka.jpg";
 import indonesiaImage from "@/assets/countries/indonesia.jpg";
+import franceImage from "@/assets/countries/france.jpg";
+import germanyImage from "@/assets/countries/germany.jpg";
+import italyImage from "@/assets/countries/italy.jpg";
+import switzerlandImage from "@/assets/countries/switzerland.jpg";
+import canadaImage from "@/assets/countries/canada.jpg";
+import chinaImage from "@/assets/countries/china.jpg";
+import turkeyImage from "@/assets/countries/turkey.jpg";
+import greeceImage from "@/assets/countries/greece.jpg";
+import egyptImage from "@/assets/countries/egypt.jpg";
+import saudiArabiaImage from "@/assets/countries/saudi-arabia.jpg";
+import omanImage from "@/assets/countries/oman.jpg";
+import cambodiaImage from "@/assets/countries/cambodia.jpg";
+import hongKongImage from "@/assets/countries/hong-kong.jpg";
+import kenyaImage from "@/assets/countries/kenya.jpg";
+import moroccoImage from "@/assets/countries/morocco.jpg";
+import azerbaijanImage from "@/assets/countries/azerbaijan.jpg";
+import uzbekistanImage from "@/assets/countries/uzbekistan.jpg";
+import russiaImage from "@/assets/countries/russia.jpg";
+import georgiaImage from "@/assets/countries/georgia.jpg";
+import philippinesImage from "@/assets/countries/philippines.jpg";
+import spainImage from "@/assets/countries/spain.jpg";
+import netherlandsImage from "@/assets/countries/netherlands.jpg";
+import norwayImage from "@/assets/countries/norway.jpg";
+import finlandImage from "@/assets/countries/finland.jpg";
+import austriaImage from "@/assets/countries/austria.jpg";
+import hungaryImage from "@/assets/countries/hungary.jpg";
+import czechRepublicImage from "@/assets/countries/czech-republic.jpg";
+import denmarkImage from "@/assets/countries/denmark.jpg";
+import swedenImage from "@/assets/countries/sweden.jpg";
+import armeniaImage from "@/assets/countries/armenia.jpg";
+import ethiopiaImage from "@/assets/countries/ethiopia.jpg";
+import madagascarImage from "@/assets/countries/madagascar.jpg";
+import laosImage from "@/assets/countries/laos.jpg";
 import franceImage from "@/assets/countries/france.jpg";
 import germanyImage from "@/assets/countries/germany.jpg";
 import italyImage from "@/assets/countries/italy.jpg";
@@ -212,34 +245,12 @@ export default function Visas() {
         description="Explore visa options for 100+ countries. Find the right visa for your travel needs with transparent pricing and fast processing." 
       />
 
-      {/* Hero Header */}
-      <section className="relative bg-gradient-to-br from-primary via-primary to-primary/90 py-12 md:py-16 overflow-hidden">
-        {/* Background pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{ 
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` 
-          }} />
-        </div>
-
-        <div className="container relative">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center max-w-3xl mx-auto"
-          >
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full text-white/90 text-sm mb-4">
-              <Sparkles className="h-4 w-4" />
-              100+ Countries Available
-            </div>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-primary-foreground mb-4">
-              Explore All Visas
-            </h1>
-            <p className="text-primary-foreground/80 text-sm md:text-base max-w-xl mx-auto">
-              Find the perfect visa for your destination with transparent pricing and fast processing.
-            </p>
-          </motion.div>
-        </div>
-      </section>
+      <PageHero
+        title="Explore All Visas"
+        subtitle="Find the perfect visa for your destination with transparent pricing and fast processing."
+        icon={Globe}
+        badge="100+ Countries Available"
+      />
 
       {/* Search and Filters */}
       <section className="sticky top-16 z-40 bg-background/95 backdrop-blur-md border-b shadow-sm">

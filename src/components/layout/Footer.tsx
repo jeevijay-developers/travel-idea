@@ -47,23 +47,23 @@ const socialLinks = [
 const certifications = [
   { icon: Shield, text: "ISO 9001:2015" },
   { icon: Award, text: "IATA Accredited" },
-  { icon: CheckCircle, text: "99% Success Rate" },
+  { icon: CheckCircle, text: "99% Success" },
 ];
 
 export function Footer() {
   return (
     <footer className="relative w-full overflow-hidden">
       {/* Newsletter Section */}
-      <div className="bg-gradient-to-r from-accent via-accent to-accent/90 py-12 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-accent via-accent to-accent/90 py-8 md:py-12 relative overflow-hidden">
         {/* Decorative elements */}
-        <div className="absolute top-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 right-0 w-48 h-48 bg-primary/20 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
+        <div className="absolute top-0 left-0 w-32 md:w-64 h-32 md:h-64 bg-white/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute bottom-0 right-0 w-24 md:w-48 h-24 md:h-48 bg-primary/20 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
         <div className="absolute inset-0 opacity-10">
           <div 
             className="absolute inset-0"
             style={{
               backgroundImage: `radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)`,
-              backgroundSize: "32px 32px",
+              backgroundSize: "24px 24px",
             }}
           />
         </div>
@@ -77,8 +77,8 @@ export function Footer() {
                 viewport={{ once: true }}
                 className="flex items-center gap-2 justify-center lg:justify-start mb-2"
               >
-                <Plane className="h-5 w-5 text-accent-foreground" />
-                <span className="text-sm font-medium text-accent-foreground/80 uppercase tracking-wider">
+                <Plane className="h-4 w-4 md:h-5 md:w-5 text-accent-foreground" />
+                <span className="text-xs md:text-sm font-medium text-accent-foreground/80 uppercase tracking-wider">
                   Stay Updated
                 </span>
               </motion.div>
@@ -87,18 +87,18 @@ export function Footer() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
-                className="text-2xl md:text-3xl font-display font-bold text-accent-foreground"
+                className="text-xl md:text-2xl lg:text-3xl font-display font-bold text-accent-foreground"
               >
-                Get Visa Tips & Travel Updates
+                Get Visa Tips & Updates
               </motion.h3>
               <motion.p
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
-                className="text-accent-foreground/80 mt-1"
+                className="text-accent-foreground/80 mt-1 text-sm md:text-base"
               >
-                Subscribe for exclusive offers and travel insights
+                Subscribe for exclusive offers
               </motion.p>
             </div>
             <motion.form
@@ -112,11 +112,11 @@ export function Footer() {
               <Input
                 type="email"
                 placeholder="Enter your email"
-                className="h-12 bg-white/90 border-0 text-foreground placeholder:text-muted-foreground flex-1"
+                className="h-10 md:h-12 bg-white/90 border-0 text-foreground placeholder:text-muted-foreground flex-1 text-sm"
               />
-              <Button size="lg" className="h-12 bg-primary hover:bg-primary/90 px-6">
+              <Button size="default" className="h-10 md:h-12 bg-primary hover:bg-primary/90 px-4 md:px-6 text-sm">
                 Subscribe
-                <Send className="ml-2 h-4 w-4" />
+                <Send className="ml-2 h-3 w-3 md:h-4 md:w-4" />
               </Button>
             </motion.form>
           </div>
@@ -124,7 +124,7 @@ export function Footer() {
       </div>
 
       {/* Main Footer */}
-      <div className="bg-primary py-16 relative">
+      <div className="bg-primary py-10 md:py-16 relative">
         {/* Background pattern */}
         <div className="absolute inset-0 opacity-[0.03]">
           <div 
@@ -134,25 +134,25 @@ export function Footer() {
                 linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
               `,
-              backgroundSize: "60px 60px",
+              backgroundSize: "40px 40px",
             }}
           />
         </div>
 
         <div className="container relative z-10">
           {/* Top section with logo and certifications */}
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 mb-12 pb-12 border-b border-primary-foreground/10">
-            <div className="flex flex-col gap-4">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8 md:mb-12 pb-8 md:pb-12 border-b border-primary-foreground/10">
+            <div className="flex flex-col gap-3">
               <Link to="/" className="inline-block">
-                <img src={logoDark} alt="Travel Idea" className="h-14 brightness-0 invert" />
+                <img src={logoDark} alt="Travel Idea" className="h-10 md:h-14 brightness-0 invert" />
               </Link>
-              <p className="text-primary-foreground/70 max-w-sm text-sm leading-relaxed">
-                Your trusted partner for hassle-free visa processing. We simplify global travel with expert guidance and transparent pricing.
+              <p className="text-primary-foreground/70 max-w-sm text-xs md:text-sm leading-relaxed">
+                Your trusted partner for hassle-free visa processing.
               </p>
             </div>
             
             {/* Certifications */}
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-2 md:gap-4">
               {certifications.map((cert, index) => (
                 <motion.div
                   key={cert.text}
@@ -160,31 +160,31 @@ export function Footer() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="flex items-center gap-2 px-4 py-2 bg-primary-foreground/5 border border-primary-foreground/10 rounded-full"
+                  className="flex items-center gap-1.5 md:gap-2 px-2 md:px-4 py-1.5 md:py-2 bg-primary-foreground/5 border border-primary-foreground/10 rounded-full"
                 >
-                  <cert.icon className="h-4 w-4 text-accent" />
-                  <span className="text-xs font-medium text-primary-foreground">{cert.text}</span>
+                  <cert.icon className="h-3 w-3 md:h-4 md:w-4 text-accent" />
+                  <span className="text-[10px] md:text-xs font-medium text-primary-foreground">{cert.text}</span>
                 </motion.div>
               ))}
             </div>
           </div>
 
           {/* Links Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-12 mb-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 md:gap-8 lg:gap-12 mb-8 md:mb-12">
             {/* Visa Services */}
             <div>
-              <h4 className="text-primary-foreground font-semibold mb-5 flex items-center gap-2">
-                <Globe className="h-4 w-4 text-accent" />
+              <h4 className="text-primary-foreground font-semibold mb-3 md:mb-5 flex items-center gap-2 text-sm md:text-base">
+                <Globe className="h-3 w-3 md:h-4 md:w-4 text-accent" />
                 Visa Services
               </h4>
-              <ul className="space-y-3">
+              <ul className="space-y-2 md:space-y-3">
                 {footerLinks.services.map((link) => (
                   <li key={link.name}>
                     <Link
                       to={link.href}
-                      className="text-sm text-primary-foreground/60 hover:text-accent transition-colors inline-flex items-center gap-1 group"
+                      className="text-xs md:text-sm text-primary-foreground/60 hover:text-accent transition-colors inline-flex items-center gap-1 group"
                     >
-                      <ArrowRight className="h-3 w-3 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" />
+                      <ArrowRight className="h-2.5 w-2.5 md:h-3 md:w-3 opacity-0 -ml-3 md:-ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" />
                       {link.name}
                     </Link>
                   </li>
@@ -194,18 +194,18 @@ export function Footer() {
 
             {/* Popular Destinations */}
             <div>
-              <h4 className="text-primary-foreground font-semibold mb-5 flex items-center gap-2">
-                <Plane className="h-4 w-4 text-accent" />
+              <h4 className="text-primary-foreground font-semibold mb-3 md:mb-5 flex items-center gap-2 text-sm md:text-base">
+                <Plane className="h-3 w-3 md:h-4 md:w-4 text-accent" />
                 Popular Visas
               </h4>
-              <ul className="space-y-3">
+              <ul className="space-y-2 md:space-y-3">
                 {footerLinks.popular.map((link) => (
                   <li key={link.name}>
                     <Link
                       to={link.href}
-                      className="text-sm text-primary-foreground/60 hover:text-accent transition-colors inline-flex items-center gap-1 group"
+                      className="text-xs md:text-sm text-primary-foreground/60 hover:text-accent transition-colors inline-flex items-center gap-1 group"
                     >
-                      <ArrowRight className="h-3 w-3 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" />
+                      <ArrowRight className="h-2.5 w-2.5 md:h-3 md:w-3 opacity-0 -ml-3 md:-ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" />
                       {link.name}
                     </Link>
                   </li>
@@ -215,15 +215,15 @@ export function Footer() {
 
             {/* Company */}
             <div>
-              <h4 className="text-primary-foreground font-semibold mb-5">Company</h4>
-              <ul className="space-y-3">
+              <h4 className="text-primary-foreground font-semibold mb-3 md:mb-5 text-sm md:text-base">Company</h4>
+              <ul className="space-y-2 md:space-y-3">
                 {footerLinks.company.map((link) => (
                   <li key={link.name}>
                     <Link
                       to={link.href}
-                      className="text-sm text-primary-foreground/60 hover:text-accent transition-colors inline-flex items-center gap-1 group"
+                      className="text-xs md:text-sm text-primary-foreground/60 hover:text-accent transition-colors inline-flex items-center gap-1 group"
                     >
-                      <ArrowRight className="h-3 w-3 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" />
+                      <ArrowRight className="h-2.5 w-2.5 md:h-3 md:w-3 opacity-0 -ml-3 md:-ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" />
                       {link.name}
                     </Link>
                   </li>
@@ -231,55 +231,53 @@ export function Footer() {
               </ul>
             </div>
 
-            {/* Contact Info */}
-            <div className="col-span-2 md:col-span-3 lg:col-span-2">
-              <h4 className="text-primary-foreground font-semibold mb-5">Contact Us</h4>
-              <div className="space-y-4">
+            {/* Contact Info - spans 2 cols on mobile */}
+            <div className="col-span-2 md:col-span-1 lg:col-span-2">
+              <h4 className="text-primary-foreground font-semibold mb-3 md:mb-5 text-sm md:text-base">Contact Us</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3 md:gap-4">
                 <a 
                   href="tel:+919101197909" 
-                  className="flex items-center gap-3 group"
+                  className="flex items-center gap-2 md:gap-3 group"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center group-hover:bg-accent transition-colors">
-                    <Phone className="h-4 w-4 text-accent group-hover:text-accent-foreground transition-colors" />
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-accent/20 flex items-center justify-center group-hover:bg-accent transition-colors shrink-0">
+                    <Phone className="h-3 w-3 md:h-4 md:w-4 text-accent group-hover:text-accent-foreground transition-colors" />
                   </div>
                   <div>
-                    <p className="text-xs text-primary-foreground/50">Call Us</p>
-                    <p className="text-sm text-primary-foreground font-medium">+91 9101197909</p>
+                    <p className="text-[10px] md:text-xs text-primary-foreground/50">Call Us</p>
+                    <p className="text-xs md:text-sm text-primary-foreground font-medium">+91 9101197909</p>
                   </div>
                 </a>
                 <a 
                   href="mailto:b2b@travelidea.in" 
-                  className="flex items-center gap-3 group"
+                  className="flex items-center gap-2 md:gap-3 group"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center group-hover:bg-accent transition-colors">
-                    <Mail className="h-4 w-4 text-accent group-hover:text-accent-foreground transition-colors" />
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-accent/20 flex items-center justify-center group-hover:bg-accent transition-colors shrink-0">
+                    <Mail className="h-3 w-3 md:h-4 md:w-4 text-accent group-hover:text-accent-foreground transition-colors" />
                   </div>
                   <div>
-                    <p className="text-xs text-primary-foreground/50">Email Us</p>
-                    <p className="text-sm text-primary-foreground font-medium">b2b@travelidea.in</p>
+                    <p className="text-[10px] md:text-xs text-primary-foreground/50">Email Us</p>
+                    <p className="text-xs md:text-sm text-primary-foreground font-medium">b2b@travelidea.in</p>
                   </div>
                 </a>
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center shrink-0">
-                    <MapPin className="h-4 w-4 text-accent" />
+                <div className="flex items-start gap-2 md:gap-3">
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-accent/20 flex items-center justify-center shrink-0">
+                    <MapPin className="h-3 w-3 md:h-4 md:w-4 text-accent" />
                   </div>
                   <div>
-                    <p className="text-xs text-primary-foreground/50">Head Office</p>
-                    <p className="text-sm text-primary-foreground/80">
-                      G-Square Mall, Tezpur Main Rd,<br />
-                      Tezpur, Assam 784001
+                    <p className="text-[10px] md:text-xs text-primary-foreground/50">Head Office</p>
+                    <p className="text-xs md:text-sm text-primary-foreground/80">
+                      G-Square Mall, Tezpur 784001
                     </p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center shrink-0">
-                    <Clock className="h-4 w-4 text-accent" />
+                <div className="flex items-start gap-2 md:gap-3">
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-accent/20 flex items-center justify-center shrink-0">
+                    <Clock className="h-3 w-3 md:h-4 md:w-4 text-accent" />
                   </div>
                   <div>
-                    <p className="text-xs text-primary-foreground/50">Working Hours</p>
-                    <p className="text-sm text-primary-foreground/80">
-                      Mon - Sat: 9:00 AM - 7:00 PM<br />
-                      Sun: 10:00 AM - 4:00 PM
+                    <p className="text-[10px] md:text-xs text-primary-foreground/50">Hours</p>
+                    <p className="text-xs md:text-sm text-primary-foreground/80">
+                      Mon - Sat: 9AM - 7PM
                     </p>
                   </div>
                 </div>
@@ -288,31 +286,31 @@ export function Footer() {
           </div>
 
           {/* Bottom Bar */}
-          <div className="pt-8 border-t border-primary-foreground/10">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="pt-6 md:pt-8 border-t border-primary-foreground/10">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
               {/* Social Links */}
-              <div className="flex items-center gap-3">
-                <span className="text-xs text-primary-foreground/50 mr-2">Follow Us:</span>
+              <div className="flex items-center gap-2 md:gap-3 order-2 md:order-1">
+                <span className="text-[10px] md:text-xs text-primary-foreground/50 mr-1 md:mr-2">Follow Us:</span>
                 {socialLinks.map((social) => (
                   <motion.a
                     key={social.name}
                     href={social.href}
                     aria-label={social.name}
                     whileHover={{ scale: 1.1, y: -2 }}
-                    className={`w-9 h-9 rounded-full bg-primary-foreground/10 flex items-center justify-center text-primary-foreground/70 hover:text-white transition-all ${social.color}`}
+                    className={`w-7 h-7 md:w-9 md:h-9 rounded-full bg-primary-foreground/10 flex items-center justify-center text-primary-foreground/70 hover:text-white transition-all ${social.color}`}
                   >
-                    <social.icon className="h-4 w-4" />
+                    <social.icon className="h-3 w-3 md:h-4 md:w-4" />
                   </motion.a>
                 ))}
               </div>
 
               {/* Legal Links */}
-              <div className="flex items-center gap-6">
+              <div className="flex items-center gap-4 md:gap-6 order-1 md:order-2">
                 {footerLinks.legal.map((link) => (
                   <Link
                     key={link.name}
                     to={link.href}
-                    className="text-xs text-primary-foreground/50 hover:text-accent transition-colors"
+                    className="text-[10px] md:text-xs text-primary-foreground/50 hover:text-accent transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -320,8 +318,8 @@ export function Footer() {
               </div>
 
               {/* Copyright */}
-              <p className="text-xs text-primary-foreground/50 text-center md:text-right">
-                © {new Date().getFullYear()} Experience Travelidea Pvt. Ltd. All Rights Reserved.
+              <p className="text-[10px] md:text-xs text-primary-foreground/50 text-center md:text-right order-3">
+                © {new Date().getFullYear()} Experience Travelidea Pvt. Ltd.
               </p>
             </div>
           </div>

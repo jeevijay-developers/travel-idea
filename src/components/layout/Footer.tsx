@@ -1,5 +1,11 @@
 import { Link } from "react-router-dom";
-import { Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
+import { motion } from "framer-motion";
+import { 
+  Phone, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin, Youtube,
+  Globe, Shield, Award, Send, ArrowRight, Plane, Clock, CheckCircle
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import logoDark from "@/assets/logo.png";
 
 const footerLinks = {
@@ -17,6 +23,13 @@ const footerLinks = {
     { name: "FAQs", href: "/faqs" },
     { name: "Contact", href: "/contact" },
   ],
+  popular: [
+    { name: "UAE Visa", href: "/visas/uae" },
+    { name: "Thailand Visa", href: "/visas/thailand" },
+    { name: "Singapore Visa", href: "/visas/singapore" },
+    { name: "Malaysia Visa", href: "/visas/malaysia" },
+    { name: "Japan Visa", href: "/visas/japan" },
+  ],
   legal: [
     { name: "Terms & Conditions", href: "/terms" },
     { name: "Privacy Policy", href: "/privacy" },
@@ -24,131 +37,295 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { name: "Facebook", icon: Facebook, href: "#" },
-  { name: "Twitter", icon: Twitter, href: "#" },
-  { name: "Instagram", icon: Instagram, href: "#" },
-  { name: "LinkedIn", icon: Linkedin, href: "#" },
+  { name: "Facebook", icon: Facebook, href: "#", color: "hover:bg-blue-600" },
+  { name: "Twitter", icon: Twitter, href: "#", color: "hover:bg-sky-500" },
+  { name: "Instagram", icon: Instagram, href: "#", color: "hover:bg-pink-600" },
+  { name: "LinkedIn", icon: Linkedin, href: "#", color: "hover:bg-blue-700" },
+  { name: "YouTube", icon: Youtube, href: "#", color: "hover:bg-red-600" },
+];
+
+const certifications = [
+  { icon: Shield, text: "ISO 9001:2015" },
+  { icon: Award, text: "IATA Accredited" },
+  { icon: CheckCircle, text: "99% Success Rate" },
 ];
 
 export function Footer() {
   return (
-    <footer className="w-full bg-[#fcfdfd] text-gray-800 py-12 border-t border-gray-100">
-      <div className="container mx-auto px-6 lg:px-16 max-w-7xl">
-        
-        {/* Brand Header with Logo - dark logo on light background */}
-        <div className="mb-10">
-          <Link to="/" className="inline-block mb-3">
-            <img src={logoDark} alt="Travel Idea" className="h-12" />
-          </Link>
-          <p className="text-base text-gray-800 font-medium">
-            Travelidea Private Limited: Simplifying global journeys.
-          </p>
+    <footer className="relative w-full overflow-hidden">
+      {/* Newsletter Section */}
+      <div className="bg-gradient-to-r from-accent via-accent to-accent/90 py-12 relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute bottom-0 right-0 w-48 h-48 bg-primary/20 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
+        <div className="absolute inset-0 opacity-10">
+          <div 
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)`,
+              backgroundSize: "32px 32px",
+            }}
+          />
         </div>
 
-        {/* Main Navigation Grid - 4 columns */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-16">
-          
-          {/* Column 1: Visa Services */}
-          <div>
-            <h3 className="text-xl font-semibold text-primary mb-6">Visa Services</h3>
-            <ul className="space-y-4 text-base">
-              {footerLinks.services.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    to={link.href}
-                    className="text-gray-700 hover:text-primary hover:underline transition-colors duration-200"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
+        <div className="container relative z-10">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+            <div className="text-center lg:text-left">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="flex items-center gap-2 justify-center lg:justify-start mb-2"
+              >
+                <Plane className="h-5 w-5 text-accent-foreground" />
+                <span className="text-sm font-medium text-accent-foreground/80 uppercase tracking-wider">
+                  Stay Updated
+                </span>
+              </motion.div>
+              <motion.h3
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="text-2xl md:text-3xl font-display font-bold text-accent-foreground"
+              >
+                Get Visa Tips & Travel Updates
+              </motion.h3>
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="text-accent-foreground/80 mt-1"
+              >
+                Subscribe for exclusive offers and travel insights
+              </motion.p>
+            </div>
+            <motion.form
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="flex w-full max-w-md gap-2"
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                className="h-12 bg-white/90 border-0 text-foreground placeholder:text-muted-foreground flex-1"
+              />
+              <Button size="lg" className="h-12 bg-primary hover:bg-primary/90 px-6">
+                Subscribe
+                <Send className="ml-2 h-4 w-4" />
+              </Button>
+            </motion.form>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Footer */}
+      <div className="bg-primary py-16 relative">
+        {/* Background pattern */}
+        <div className="absolute inset-0 opacity-[0.03]">
+          <div 
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `
+                linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+              `,
+              backgroundSize: "60px 60px",
+            }}
+          />
+        </div>
+
+        <div className="container relative z-10">
+          {/* Top section with logo and certifications */}
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 mb-12 pb-12 border-b border-primary-foreground/10">
+            <div className="flex flex-col gap-4">
+              <Link to="/" className="inline-block">
+                <img src={logoDark} alt="Travel Idea" className="h-14 brightness-0 invert" />
+              </Link>
+              <p className="text-primary-foreground/70 max-w-sm text-sm leading-relaxed">
+                Your trusted partner for hassle-free visa processing. We simplify global travel with expert guidance and transparent pricing.
+              </p>
+            </div>
+            
+            {/* Certifications */}
+            <div className="flex flex-wrap gap-4">
+              {certifications.map((cert, index) => (
+                <motion.div
+                  key={cert.text}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="flex items-center gap-2 px-4 py-2 bg-primary-foreground/5 border border-primary-foreground/10 rounded-full"
+                >
+                  <cert.icon className="h-4 w-4 text-accent" />
+                  <span className="text-xs font-medium text-primary-foreground">{cert.text}</span>
+                </motion.div>
               ))}
-            </ul>
+            </div>
           </div>
 
-          {/* Column 2: Company */}
-          <div>
-            <h3 className="text-xl font-semibold text-primary mb-6">Company</h3>
-            <ul className="space-y-4 text-base">
-              {footerLinks.company.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    to={link.href}
-                    className="text-gray-700 hover:text-primary hover:underline transition-colors duration-200"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Links Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-12 mb-12">
+            {/* Visa Services */}
+            <div>
+              <h4 className="text-primary-foreground font-semibold mb-5 flex items-center gap-2">
+                <Globe className="h-4 w-4 text-accent" />
+                Visa Services
+              </h4>
+              <ul className="space-y-3">
+                {footerLinks.services.map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      to={link.href}
+                      className="text-sm text-primary-foreground/60 hover:text-accent transition-colors inline-flex items-center gap-1 group"
+                    >
+                      <ArrowRight className="h-3 w-3 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" />
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* Column 3: Legal */}
-          <div>
-            <h3 className="text-xl font-semibold text-primary mb-6">Legal</h3>
-            <ul className="space-y-4 text-base">
-              {footerLinks.legal.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    to={link.href}
-                    className="text-gray-700 hover:text-primary hover:underline transition-colors duration-200"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+            {/* Popular Destinations */}
+            <div>
+              <h4 className="text-primary-foreground font-semibold mb-5 flex items-center gap-2">
+                <Plane className="h-4 w-4 text-accent" />
+                Popular Visas
+              </h4>
+              <ul className="space-y-3">
+                {footerLinks.popular.map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      to={link.href}
+                      className="text-sm text-primary-foreground/60 hover:text-accent transition-colors inline-flex items-center gap-1 group"
+                    >
+                      <ArrowRight className="h-3 w-3 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" />
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* Column 4: Contact */}
-          <div>
-            <h3 className="text-xl font-semibold text-primary mb-6">Contact</h3>
-            <ul className="space-y-5 text-base">
-              <li className="flex items-center group">
-                <Phone className="text-primary w-5 h-5 mr-3" />
+            {/* Company */}
+            <div>
+              <h4 className="text-primary-foreground font-semibold mb-5">Company</h4>
+              <ul className="space-y-3">
+                {footerLinks.company.map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      to={link.href}
+                      className="text-sm text-primary-foreground/60 hover:text-accent transition-colors inline-flex items-center gap-1 group"
+                    >
+                      <ArrowRight className="h-3 w-3 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" />
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Contact Info */}
+            <div className="col-span-2 md:col-span-3 lg:col-span-2">
+              <h4 className="text-primary-foreground font-semibold mb-5">Contact Us</h4>
+              <div className="space-y-4">
                 <a 
                   href="tel:+919101197909" 
-                  className="text-gray-700 hover:text-primary hover:underline transition-colors duration-200"
+                  className="flex items-center gap-3 group"
                 >
-                  +91 9101197909
+                  <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center group-hover:bg-accent transition-colors">
+                    <Phone className="h-4 w-4 text-accent group-hover:text-accent-foreground transition-colors" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-primary-foreground/50">Call Us</p>
+                    <p className="text-sm text-primary-foreground font-medium">+91 9101197909</p>
+                  </div>
                 </a>
-              </li>
-              <li className="flex items-center group">
-                <Mail className="text-primary w-5 h-5 mr-3" />
                 <a 
                   href="mailto:b2b@travelidea.in" 
-                  className="text-gray-700 hover:text-primary hover:underline transition-colors duration-200"
+                  className="flex items-center gap-3 group"
                 >
-                  b2b@travelidea.in
+                  <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center group-hover:bg-accent transition-colors">
+                    <Mail className="h-4 w-4 text-accent group-hover:text-accent-foreground transition-colors" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-primary-foreground/50">Email Us</p>
+                    <p className="text-sm text-primary-foreground font-medium">b2b@travelidea.in</p>
+                  </div>
                 </a>
-              </li>
-            </ul>
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center shrink-0">
+                    <MapPin className="h-4 w-4 text-accent" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-primary-foreground/50">Head Office</p>
+                    <p className="text-sm text-primary-foreground/80">
+                      G-Square Mall, Tezpur Main Rd,<br />
+                      Tezpur, Assam 784001
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center shrink-0">
+                    <Clock className="h-4 w-4 text-accent" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-primary-foreground/50">Working Hours</p>
+                    <p className="text-sm text-primary-foreground/80">
+                      Mon - Sat: 9:00 AM - 7:00 PM<br />
+                      Sun: 10:00 AM - 4:00 PM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-        </div>
+          {/* Bottom Bar */}
+          <div className="pt-8 border-t border-primary-foreground/10">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+              {/* Social Links */}
+              <div className="flex items-center gap-3">
+                <span className="text-xs text-primary-foreground/50 mr-2">Follow Us:</span>
+                {socialLinks.map((social) => (
+                  <motion.a
+                    key={social.name}
+                    href={social.href}
+                    aria-label={social.name}
+                    whileHover={{ scale: 1.1, y: -2 }}
+                    className={`w-9 h-9 rounded-full bg-primary-foreground/10 flex items-center justify-center text-primary-foreground/70 hover:text-white transition-all ${social.color}`}
+                  >
+                    <social.icon className="h-4 w-4" />
+                  </motion.a>
+                ))}
+              </div>
 
-        {/* Bottom Section - Social Icons and Copyright */}
-        <div className="flex flex-col items-center justify-center pt-4">
-          
-          {/* Social Icons */}
-          <div className="flex space-x-6 mb-6">
-            {socialLinks.map((social) => (
-              <a
-                key={social.name}
-                href={social.href}
-                aria-label={social.name}
-                className="text-primary/80 hover:text-primary text-xl transition-colors duration-200"
-              >
-                <social.icon className="h-5 w-5" />
-              </a>
-            ))}
+              {/* Legal Links */}
+              <div className="flex items-center gap-6">
+                {footerLinks.legal.map((link) => (
+                  <Link
+                    key={link.name}
+                    to={link.href}
+                    className="text-xs text-primary-foreground/50 hover:text-accent transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                ))}
+              </div>
+
+              {/* Copyright */}
+              <p className="text-xs text-primary-foreground/50 text-center md:text-right">
+                © {new Date().getFullYear()} Experience Travelidea Pvt. Ltd. All Rights Reserved.
+              </p>
+            </div>
           </div>
-
-          {/* Copyright Text */}
-          <p className="text-gray-800 text-base font-normal text-center">
-            © {new Date().getFullYear()} Travelidea. All Rights Reserved.
-          </p>
         </div>
-
       </div>
     </footer>
   );

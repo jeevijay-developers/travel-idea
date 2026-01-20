@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
+import { AuthProvider } from "@/contexts/AuthContext";
 import Home from "./pages/Home";
 import Visas from "./pages/Visas";
 import VisaDetail from "./pages/VisaDetail";
@@ -31,36 +32,38 @@ const queryClient = new QueryClient();
 const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/visas" element={<Visas />} />
-            <Route path="/visas/:slug" element={<VisaDetail />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/why-choose-us" element={<WhyChooseUs />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/enquiry" element={<Enquiry />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogDetail />} />
-            <Route path="/faqs" element={<FAQs />} />
-            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/admin" element={<AdminLogin />} />
-            <Route path="/admin/dashboard" element={<AdminDashboard />}>
-              <Route index element={<DashboardHome />} />
-              <Route path="visas" element={<AdminVisas />} />
-              <Route path="categories" element={<AdminCategories />} />
-              <Route path="countries" element={<AdminCountries />} />
-              <Route path="blog" element={<AdminBlog />} />
-              <Route path="enquiries" element={<AdminEnquiries />} />
-            </Route>
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/visas" element={<Visas />} />
+              <Route path="/visas/:slug" element={<VisaDetail />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/why-choose-us" element={<WhyChooseUs />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/enquiry" element={<Enquiry />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogDetail />} />
+              <Route path="/faqs" element={<FAQs />} />
+              <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/admin" element={<AdminLogin />} />
+              <Route path="/admin/dashboard" element={<AdminDashboard />}>
+                <Route index element={<DashboardHome />} />
+                <Route path="visas" element={<AdminVisas />} />
+                <Route path="categories" element={<AdminCategories />} />
+                <Route path="countries" element={<AdminCountries />} />
+                <Route path="blog" element={<AdminBlog />} />
+                <Route path="enquiries" element={<AdminEnquiries />} />
+              </Route>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   </HelmetProvider>
 );

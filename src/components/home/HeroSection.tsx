@@ -1,31 +1,60 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Play, Shield, Clock, Award, MapPin, Sparkles } from "lucide-react";
+import { ArrowRight, Shield, Clock, Award, ChevronLeft, ChevronRight, Plane } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence, type Variants } from "framer-motion";
-import heroImage from "@/assets/hero-travel.jpg";
+import { motion, AnimatePresence } from "framer-motion";
 
-// Popular destinations for rotating showcase
-const destinations = [
-  { name: "Dubai", country: "UAE", slug: "uae", emoji: "🇦🇪" },
-  { name: "Bangkok", country: "Thailand", slug: "thailand", emoji: "🇹🇭" },
-  { name: "Singapore", country: "Singapore", slug: "singapore", emoji: "🇸🇬" },
-  { name: "Tokyo", country: "Japan", slug: "japan", emoji: "🇯🇵" },
-  { name: "Kuala Lumpur", country: "Malaysia", slug: "malaysia", emoji: "🇲🇾" },
-  { name: "Sydney", country: "Australia", slug: "australia", emoji: "🇦🇺" },
+// Country images imports
+import armeniaImg from "@/assets/countries/armenia.jpg";
+import australiaImg from "@/assets/countries/australia.jpg";
+import cambodiaImg from "@/assets/countries/cambodia.jpg";
+import canadaImg from "@/assets/countries/canada.jpg";
+import egyptImg from "@/assets/countries/egypt.jpg";
+import franceImg from "@/assets/countries/france.jpg";
+import germanyImg from "@/assets/countries/germany.jpg";
+import japanImg from "@/assets/countries/japan.jpg";
+import malaysiaImg from "@/assets/countries/malaysia.jpg";
+import singaporeImg from "@/assets/countries/singapore.jpg";
+import thailandImg from "@/assets/countries/thailand.jpg";
+import turkeyImg from "@/assets/countries/turkey.jpg";
+import uaeImg from "@/assets/countries/uae.jpg";
+import ukImg from "@/assets/countries/uk.jpg";
+import usaImg from "@/assets/countries/usa.jpg";
+
+// Visa cards data with images
+const visaCards = [
+  { name: "UAE", slug: "uae", image: uaeImg, price: "₹5,999", days: "3-5 days", flag: "🇦🇪" },
+  { name: "Thailand", slug: "thailand", image: thailandImg, price: "₹2,499", days: "2-3 days", flag: "🇹🇭" },
+  { name: "Singapore", slug: "singapore", image: singaporeImg, price: "₹3,999", days: "3-4 days", flag: "🇸🇬" },
+  { name: "Japan", slug: "japan", image: japanImg, price: "₹7,999", days: "5-7 days", flag: "🇯🇵" },
+  { name: "Malaysia", slug: "malaysia", image: malaysiaImg, price: "₹2,999", days: "2-3 days", flag: "🇲🇾" },
+  { name: "Australia", slug: "australia", image: australiaImg, price: "₹12,999", days: "10-15 days", flag: "🇦🇺" },
+  { name: "France", slug: "france", image: franceImg, price: "₹8,999", days: "7-10 days", flag: "🇫🇷" },
+  { name: "Germany", slug: "germany", image: germanyImg, price: "₹8,499", days: "7-10 days", flag: "🇩🇪" },
+  { name: "UK", slug: "uk", image: ukImg, price: "₹11,999", days: "10-15 days", flag: "🇬🇧" },
+  { name: "USA", slug: "usa", image: usaImg, price: "₹14,999", days: "15-20 days", flag: "🇺🇸" },
+  { name: "Canada", slug: "canada", image: canadaImg, price: "₹13,999", days: "15-20 days", flag: "🇨🇦" },
+  { name: "Turkey", slug: "turkey", image: turkeyImg, price: "₹4,499", days: "3-5 days", flag: "🇹🇷" },
+  { name: "Egypt", slug: "egypt", image: egyptImg, price: "₹3,999", days: "3-5 days", flag: "🇪🇬" },
+  { name: "Cambodia", slug: "cambodia", image: cambodiaImg, price: "₹2,999", days: "2-3 days", flag: "🇰🇭" },
+  { name: "Armenia", slug: "armenia", image: armeniaImg, price: "₹4,999", days: "3-5 days", flag: "🇦🇲" },
 ];
 
 // Animated headline words
-const headlineWords = [
-  "Simplified",
-  "Fast-Tracked",
-  "Hassle-Free",
-  "Guaranteed",
+const headlineWords = ["Simplified", "Fast-Tracked", "Hassle-Free", "Guaranteed"];
+
+const trustBadges = [
+  { icon: Shield, text: "99% Success Rate" },
+  { icon: Clock, text: "Express Processing" },
+  { icon: Award, text: "IATA Certified" },
 ];
 
 export function HeroSection() {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [currentDestIndex, setCurrentDestIndex] = useState(0);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
 
   // Rotate headline words
   useEffect(() => {
@@ -35,327 +64,309 @@ export function HeroSection() {
     return () => clearInterval(interval);
   }, []);
 
-  // Rotate destinations
+  // Auto-scroll cards
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentDestIndex((prev) => (prev + 1) % destinations.length);
+      if (scrollContainerRef.current) {
+        const container = scrollContainerRef.current;
+        const cardWidth = 200;
+        const maxScroll = container.scrollWidth - container.clientWidth;
+        
+        if (container.scrollLeft >= maxScroll - 10) {
+          container.scrollTo({ left: 0, behavior: "smooth" });
+        } else {
+          container.scrollBy({ left: cardWidth, behavior: "smooth" });
+        }
+      }
     }, 4000);
     return () => clearInterval(interval);
   }, []);
 
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.12,
-        delayChildren: 0.1,
-      },
-    },
+  const updateScrollButtons = () => {
+    if (scrollContainerRef.current) {
+      const container = scrollContainerRef.current;
+      setCanScrollLeft(container.scrollLeft > 0);
+      setCanScrollRight(container.scrollLeft < container.scrollWidth - container.clientWidth - 10);
+    }
   };
 
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 25 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-    },
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: -250, behavior: "smooth" });
+    }
   };
 
-  const trustBadges = [
-    { icon: Shield, text: "99% Success" },
-    { icon: Clock, text: "Express" },
-    { icon: Award, text: "IATA" },
-  ];
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: 250, behavior: "smooth" });
+    }
+  };
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener("scroll", updateScrollButtons);
+      updateScrollButtons();
+      return () => container.removeEventListener("scroll", updateScrollButtons);
+    }
+  }, []);
 
   return (
-    <section className="relative min-h-[85vh] md:min-h-[90vh] flex items-center overflow-hidden">
-      {/* Background with parallax effect */}
-      <motion.div
-        initial={{ scale: 1.15 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 2.5, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute inset-0"
-      >
-        <img
-          src={heroImage}
-          alt="Travel destinations"
-          className="w-full h-full object-cover"
-        />
-      </motion.div>
-
-      {/* Animated gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary/60" />
-      <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent" />
-      
-      {/* Animated particles/dots - reduced on mobile */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(10)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-white/20 rounded-full"
-            initial={{
-              x: Math.random() * 100 + "%",
-              y: Math.random() * 100 + "%",
-            }}
-            animate={{
-              y: [null, "-20%", null],
-              opacity: [0.2, 0.5, 0.2],
-            }}
-            transition={{
-              duration: 5 + Math.random() * 5,
-              repeat: Infinity,
-              delay: Math.random() * 5,
-            }}
-          />
-        ))}
+    <section className="relative min-h-[100svh] flex flex-col bg-gradient-to-br from-primary via-primary to-primary/95 overflow-hidden">
+      {/* Subtle background pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
+          backgroundSize: '40px 40px'
+        }} />
       </div>
 
-      {/* Content */}
-      <div className="container relative z-10 py-8 md:py-16">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          {/* Left Column - Main Content */}
+      {/* Gradient orbs for visual interest */}
+      <div className="absolute top-20 left-10 w-64 h-64 bg-accent/20 rounded-full blur-3xl" />
+      <div className="absolute bottom-40 right-10 w-80 h-80 bg-accent/15 rounded-full blur-3xl" />
+
+      {/* Main Content - Centered */}
+      <div className="flex-1 flex items-center justify-center px-4 pt-20 pb-8 md:pt-24 md:pb-12">
+        <div className="w-full max-w-6xl mx-auto">
           <motion.div
-            className="max-w-xl"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center"
           >
             {/* Trust badge */}
             <motion.div
-              variants={itemVariants}
-              className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-md rounded-full border border-white/10 mb-4 md:mb-6"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-6"
             >
-              <motion.span
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="flex h-2 w-2"
-              >
-                <span className="absolute inline-flex h-2 w-2 rounded-full bg-travel-success opacity-75 animate-ping" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-travel-success" />
-              </motion.span>
-              <span className="text-[10px] md:text-xs font-medium text-primary-foreground/90">
-                ISO9001:2015 Certified • 50,000+ Travelers
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
+              </span>
+              <span className="text-xs md:text-sm font-medium text-primary-foreground/90">
+                ISO9001:2015 Certified • Trusted by 50,000+ Travelers
               </span>
             </motion.div>
 
-            {/* Animated Headline */}
+            {/* Main Headline */}
             <motion.h1
-              variants={itemVariants}
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-primary-foreground leading-[1.1] mb-4 md:mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-primary-foreground leading-tight mb-4"
             >
               Your Visa,{" "}
-              <span className="relative inline-block">
+              <span className="relative inline-block min-w-[200px] md:min-w-[280px]">
                 <AnimatePresence mode="wait">
                   <motion.span
                     key={headlineWords[currentWordIndex]}
-                    initial={{ opacity: 0, y: 20, rotateX: -90 }}
-                    animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                    exit={{ opacity: 0, y: -20, rotateX: 90 }}
-                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -30 }}
+                    transition={{ duration: 0.4 }}
                     className="text-accent inline-block"
                   >
                     {headlineWords[currentWordIndex]}
                   </motion.span>
                 </AnimatePresence>
-                {/* Underline animation */}
                 <motion.span
-                  className="absolute -bottom-1 md:-bottom-2 left-0 h-0.5 md:h-1 bg-accent rounded-full"
-                  initial={{ width: 0 }}
-                  animate={{ width: "100%" }}
+                  className="absolute -bottom-2 left-0 right-0 h-1 bg-accent rounded-full"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
                   key={headlineWords[currentWordIndex]}
-                  transition={{ duration: 0.5, delay: 0.3 }}
+                  transition={{ duration: 0.4, delay: 0.2 }}
                 />
               </span>
             </motion.h1>
 
             {/* Subheadline */}
             <motion.p
-              variants={itemVariants}
-              className="text-sm sm:text-base md:text-lg text-primary-foreground/80 mb-6 md:mb-8 max-w-lg leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+              className="text-base sm:text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-8 px-4"
             >
-              Expert visa assistance for{" "}
-              <span className="text-primary-foreground font-semibold">100+ countries</span>. 
-              Fast processing, transparent pricing.
+              Expert visa assistance for <span className="text-primary-foreground font-semibold">100+ countries</span>.
+              Fast processing, transparent pricing, guaranteed approval.
             </motion.p>
 
             {/* CTA Buttons */}
             <motion.div
-              variants={itemVariants}
-              className="flex flex-col sm:flex-row gap-3 mb-6 md:mb-10"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+              className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10"
             >
-              <Link to="/visas" className="w-full sm:w-auto">
+              <Link to="/visas">
                 <Button
                   size="lg"
-                  className="w-full sm:w-auto h-12 md:h-14 px-6 md:px-8 text-sm md:text-base bg-accent hover:bg-accent/90 text-accent-foreground shadow-2xl shadow-accent/30 group"
+                  className="h-14 px-8 text-base bg-accent hover:bg-accent/90 text-accent-foreground shadow-2xl shadow-accent/30 group"
                 >
-                  <Sparkles className="mr-2 h-4 w-4 md:h-5 md:w-5 group-hover:rotate-12 transition-transform" />
+                  <Plane className="mr-2 h-5 w-5 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
                   Find Your Visa
-                  <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Link to="/contact" className="w-full sm:w-auto">
+              <Link to="/contact">
                 <Button
                   size="lg"
                   variant="outline"
-                  className="w-full sm:w-auto h-12 md:h-14 px-6 md:px-8 text-sm md:text-base border-2 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 backdrop-blur-sm"
+                  className="h-14 px-8 text-base border-2 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 backdrop-blur-sm"
                 >
-                  <Play className="mr-2 h-4 w-4" />
-                  How It Works
+                  Talk to Expert
                 </Button>
               </Link>
             </motion.div>
 
-            {/* Trust badges - mobile optimized */}
+            {/* Trust badges */}
             <motion.div
-              variants={itemVariants}
-              className="flex flex-wrap items-center gap-2 md:gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.6 }}
+              className="flex flex-wrap items-center justify-center gap-3 md:gap-6"
             >
               {trustBadges.map((badge, index) => (
-                <motion.div
+                <div
                   key={badge.text}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.9 + index * 0.15, duration: 0.5 }}
-                  className="flex items-center gap-2 bg-white/5 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/10"
+                  className="flex items-center gap-2 bg-white/5 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10"
                 >
-                  <div className="flex items-center justify-center w-6 h-6 md:w-8 md:h-8 rounded-full bg-accent/20">
-                    <badge.icon className="h-3 w-3 md:h-4 md:w-4 text-accent" />
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-accent/20">
+                    <badge.icon className="h-4 w-4 text-accent" />
                   </div>
-                  <span className="text-xs md:text-sm font-medium text-primary-foreground">{badge.text}</span>
-                </motion.div>
+                  <span className="text-sm font-medium text-primary-foreground">{badge.text}</span>
+                </div>
               ))}
             </motion.div>
-          </motion.div>
-
-          {/* Right Column - Rotating Destination Showcase - hidden on mobile */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-            className="hidden lg:block"
-          >
-            <div className="relative">
-              {/* Background glow */}
-              <div className="absolute inset-0 bg-accent/20 blur-3xl rounded-full scale-75" />
-              
-              {/* Destination cards carousel */}
-              <div className="relative bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20">
-                <div className="text-center mb-4">
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                    className="inline-flex items-center justify-center w-10 h-10 bg-accent/20 rounded-full mb-2"
-                  >
-                    <MapPin className="h-5 w-5 text-accent" />
-                  </motion.div>
-                  <p className="text-xs text-primary-foreground/60 uppercase tracking-wider">Popular Destination</p>
-                </div>
-
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={destinations[currentDestIndex].slug}
-                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.9, y: -20 }}
-                    transition={{ duration: 0.5 }}
-                    className="text-center"
-                  >
-                    <motion.span
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ delay: 0.2, type: "spring" }}
-                      className="text-5xl mb-3 block"
-                    >
-                      {destinations[currentDestIndex].emoji}
-                    </motion.span>
-                    <h3 className="text-2xl font-display font-bold text-primary-foreground mb-1">
-                      {destinations[currentDestIndex].name}
-                    </h3>
-                    <p className="text-primary-foreground/70 text-sm mb-4">
-                      {destinations[currentDestIndex].country} Visa
-                    </p>
-                    <Link to={`/visas/${destinations[currentDestIndex].slug}`}>
-                      <Button 
-                        variant="secondary" 
-                        size="sm"
-                        className="bg-white/20 hover:bg-white/30 text-primary-foreground border-0"
-                      >
-                        Apply Now
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </Link>
-                  </motion.div>
-                </AnimatePresence>
-
-                {/* Destination indicators */}
-                <div className="flex justify-center gap-1.5 mt-6">
-                  {destinations.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentDestIndex(index)}
-                      className={`w-1.5 h-1.5 rounded-full transition-all ${
-                        index === currentDestIndex
-                          ? "w-6 bg-accent"
-                          : "bg-primary-foreground/30 hover:bg-primary-foreground/50"
-                      }`}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Floating badges */}
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 3, repeat: Infinity }}
-                className="absolute -top-3 -right-3 bg-accent text-accent-foreground px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg"
-              >
-                🔥 Trending
-              </motion.div>
-              
-              <motion.div
-                animate={{ y: [0, 10, 0] }}
-                transition={{ duration: 3.5, repeat: Infinity, delay: 0.5 }}
-                className="absolute -bottom-3 -left-3 bg-white/90 text-foreground px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg"
-              >
-                ⚡ Express
-              </motion.div>
-            </div>
           </motion.div>
         </div>
       </div>
 
-      {/* Stats bar - mobile optimized */}
+      {/* Visa Cards Carousel Section */}
+      <div className="relative pb-24 md:pb-28">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.6 }}
+          className="w-full"
+        >
+          {/* Section header */}
+          <div className="text-center mb-6 px-4">
+            <p className="text-primary-foreground/60 text-sm uppercase tracking-widest mb-2">Popular Destinations</p>
+            <h3 className="text-xl md:text-2xl font-display font-semibold text-primary-foreground">
+              Explore Visa Options
+            </h3>
+          </div>
+
+          {/* Carousel container */}
+          <div className="relative group">
+            {/* Navigation buttons */}
+            <button
+              onClick={scrollLeft}
+              className={`absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 bg-white/90 hover:bg-white rounded-full shadow-xl flex items-center justify-center transition-all ${
+                canScrollLeft ? "opacity-100" : "opacity-0 pointer-events-none"
+              }`}
+            >
+              <ChevronLeft className="h-5 w-5 md:h-6 md:w-6 text-primary" />
+            </button>
+            <button
+              onClick={scrollRight}
+              className={`absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 bg-white/90 hover:bg-white rounded-full shadow-xl flex items-center justify-center transition-all ${
+                canScrollRight ? "opacity-100" : "opacity-0 pointer-events-none"
+              }`}
+            >
+              <ChevronRight className="h-5 w-5 md:h-6 md:w-6 text-primary" />
+            </button>
+
+            {/* Gradient fades */}
+            <div className="absolute left-0 top-0 bottom-0 w-8 md:w-16 bg-gradient-to-r from-primary/100 to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-8 md:w-16 bg-gradient-to-l from-primary/100 to-transparent z-10 pointer-events-none" />
+
+            {/* Cards container */}
+            <div
+              ref={scrollContainerRef}
+              className="flex gap-4 md:gap-5 overflow-x-auto scrollbar-hide px-6 md:px-12 py-2 scroll-smooth"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              {visaCards.map((card, index) => (
+                <Link
+                  key={card.slug}
+                  to={`/visas/${card.slug}`}
+                  className="flex-shrink-0 group/card"
+                >
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.8 + index * 0.05, duration: 0.5 }}
+                    className="relative w-40 sm:w-44 md:w-48 bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                  >
+                    {/* Card image */}
+                    <div className="relative h-24 sm:h-28 md:h-32 overflow-hidden">
+                      <img
+                        src={card.image}
+                        alt={card.name}
+                        className="w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                      
+                      {/* Flag badge */}
+                      <div className="absolute top-2 left-2 text-xl md:text-2xl">
+                        {card.flag}
+                      </div>
+                      
+                      {/* Processing time badge */}
+                      <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-0.5 rounded-full">
+                        <span className="text-[10px] md:text-xs font-medium text-primary">{card.days}</span>
+                      </div>
+                    </div>
+
+                    {/* Card content */}
+                    <div className="p-3 md:p-4">
+                      <h4 className="font-display font-bold text-foreground text-sm md:text-base mb-1">
+                        {card.name} Visa
+                      </h4>
+                      <div className="flex items-center justify-between">
+                        <span className="text-accent font-bold text-sm md:text-base">{card.price}</span>
+                        <span className="text-xs text-muted-foreground flex items-center gap-1 group-hover/card:text-accent transition-colors">
+                          Apply <ArrowRight className="h-3 w-3" />
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Bottom Stats Bar */}
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.8, duration: 0.6 }}
-        className="absolute bottom-0 left-0 right-0 bg-gradient-to-r from-primary via-primary/95 to-primary backdrop-blur-xl border-t border-primary-foreground/10"
+        transition={{ delay: 1, duration: 0.6 }}
+        className="absolute bottom-0 left-0 right-0 bg-white/10 backdrop-blur-xl border-t border-white/10"
       >
-        <div className="container py-3 md:py-5">
-          <div className="grid grid-cols-4 gap-2 md:gap-6">
+        <div className="container py-4 md:py-5">
+          <div className="grid grid-cols-4 gap-2 md:gap-8">
             {[
               { value: "100+", label: "Countries", icon: "🌍" },
-              { value: "50K+", label: "Visas", icon: "✈️" },
-              { value: "99%", label: "Success", icon: "✅" },
-              { value: "24/7", label: "Support", icon: "💬" },
-            ].map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1 + index * 0.1, duration: 0.4 }}
-                className="text-center"
-              >
-                <div className="flex items-center justify-center gap-1 mb-0.5">
-                  <span className="text-sm md:text-lg">{stat.icon}</span>
-                  <p className="text-lg sm:text-xl md:text-2xl font-bold text-primary-foreground">
+              { value: "50K+", label: "Visas Issued", icon: "✈️" },
+              { value: "99%", label: "Success Rate", icon: "✅" },
+              { value: "24/7", label: "Expert Support", icon: "💬" },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <div className="flex items-center justify-center gap-1 md:gap-2 mb-1">
+                  <span className="text-base md:text-xl">{stat.icon}</span>
+                  <span className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-primary-foreground">
                     {stat.value}
-                  </p>
+                  </span>
                 </div>
-                <p className="text-[9px] md:text-xs text-primary-foreground/60 uppercase tracking-wider">{stat.label}</p>
-              </motion.div>
+                <p className="text-[10px] sm:text-xs md:text-sm text-primary-foreground/60">
+                  {stat.label}
+                </p>
+              </div>
             ))}
           </div>
         </div>

@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link, Outlet, useLocation } from "react-router-dom";
-import { LayoutDashboard, Plane, FolderOpen, Globe, FileText, MessageSquare, LogOut, Menu, X } from "lucide-react";
+import { LayoutDashboard, Plane, FolderOpen, Globe, FileText, MessageSquare, LogOut, Menu, X, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SEO } from "@/components/seo";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 import logoWhite from "@/assets/logo-white.png";
 
 const navItems = [
@@ -18,18 +19,67 @@ const navItems = [
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, isAdmin, isLoading, signOut } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  // Redirect if not authenticated or not admin
   useEffect(() => {
-    if (sessionStorage.getItem("admin_authenticated") !== "true") {
-      navigate("/admin");
+    if (!isLoading) {
+      if (!user) {
+        navigate("/admin");
+      } else if (!isAdmin) {
+        // User is authenticated but not an admin
+        navigate("/admin?error=not_authorized");
+      }
     }
-  }, [navigate]);
+  }, [user, isAdmin, isLoading, navigate]);
 
-  const handleLogout = () => {
-    sessionStorage.removeItem("admin_authenticated");
+  const handleLogout = async () => {
+    await signOut();
     navigate("/admin");
   };
+
+  // Show loading state while checking auth
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-primary flex items-center justify-center">
+        <div className="animate-pulse text-primary-foreground">Loading...</div>
+      </div>
+    );
+  }
+
+  // Show unauthorized message if authenticated but not admin
+  if (user && !isAdmin) {
+    return (
+      <div className="min-h-screen bg-muted/30 flex items-center justify-center p-4">
+        <SEO title="Access Denied - Travel Idea" />
+        <div className="bg-card border rounded-xl p-8 max-w-md text-center">
+          <div className="w-16 h-16 bg-destructive/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Shield className="h-8 w-8 text-destructive" />
+          </div>
+          <h1 className="text-2xl font-bold mb-2">Access Denied</h1>
+          <p className="text-muted-foreground mb-6">
+            You don't have admin privileges. Please contact the administrator if you believe this is an error.
+          </p>
+          <div className="flex flex-col gap-2">
+            <Button onClick={handleLogout} variant="outline">
+              Sign Out
+            </Button>
+            <Link to="/">
+              <Button variant="ghost" className="w-full">
+                Back to Website
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render dashboard content if not authorized
+  if (!user || !isAdmin) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-muted/30">
@@ -52,7 +102,14 @@ export default function AdminDashboard() {
           <div className="p-6 hidden lg:block">
             <img src={logoWhite} alt="Travel Idea" className="h-10" />
           </div>
-          <nav className="px-4 py-6 lg:py-0 space-y-1">
+          
+          {/* User info */}
+          <div className="px-4 py-2 border-b border-primary-foreground/10 mb-4">
+            <p className="text-xs text-primary-foreground/50">Logged in as</p>
+            <p className="text-sm text-primary-foreground truncate">{user.email}</p>
+          </div>
+          
+          <nav className="px-4 space-y-1">
             {navItems.map((item) => (
               <Link
                 key={item.path}
@@ -69,7 +126,11 @@ export default function AdminDashboard() {
             ))}
           </nav>
           <div className="absolute bottom-0 left-0 right-0 p-4">
-            <Button variant="ghost" className="w-full justify-start text-primary-foreground/70 hover:text-primary-foreground" onClick={handleLogout}>
+            <Button 
+              variant="ghost" 
+              className="w-full justify-start text-primary-foreground/70 hover:text-primary-foreground hover:bg-primary-foreground/10" 
+              onClick={handleLogout}
+            >
               <LogOut className="h-5 w-5 mr-3" />
               Logout
             </Button>

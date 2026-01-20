@@ -19,24 +19,6 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full">
-      {/* Top bar with contact info */}
-      <div className="gradient-dark text-primary-foreground">
-        <div className="container flex items-center justify-between py-2 text-sm">
-          <div className="hidden items-center gap-6 md:flex">
-            <a href="tel:+919101197909" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-              <Phone className="h-3.5 w-3.5" />
-              <span>+91 9101197909</span>
-            </a>
-            <a href="mailto:b2b@travelidea.in" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-              <Mail className="h-3.5 w-3.5" />
-              <span>b2b@travelidea.in</span>
-            </a>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="text-xs opacity-80">ISO9001:2015 Certified | IATA Accredited</span>
-          </div>
-        </div>
-      </div>
 
       {/* Main navigation */}
       <nav className="bg-card/95 backdrop-blur-md border-b border-border shadow-sm">

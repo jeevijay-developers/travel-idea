@@ -21,11 +21,9 @@ import australiaImage from "@/assets/countries/australia.jpg";
 // Filter categories like Teleport
 const filterCategories = [
   { id: "popular", label: "Popular", icon: null },
-  { id: "visa-in-a-week", label: "Visa in a week", icon: Zap },
-  { id: "easy-visa", label: "Easy Visa", icon: null },
-  { id: "seasonal", label: "Season", icon: null },
-  { id: "schengen", label: "Schengen Visa", icon: null },
-  { id: "visa-free", label: "Visa Free", icon: null },
+  { id: "visa-in-a-week", label: "Fast", icon: Zap },
+  { id: "easy-visa", label: "Easy", icon: null },
+  { id: "schengen", label: "Schengen", icon: null },
 ];
 
 // Sample visa data with images
@@ -42,10 +40,10 @@ const visas = [
   },
   {
     id: "usa",
-    country: "United States of America",
+    country: "United States",
     type: "Sticker",
     price: "₹17,020",
-    additionalFees: "₹2999 (Fees+Tax)",
+    additionalFees: "+₹2999",
     processingDays: 270,
     issuedRecently: 2,
     isFast: false,
@@ -56,7 +54,7 @@ const visas = [
     country: "South Korea",
     type: "Sticker",
     price: "₹3,400",
-    additionalFees: "₹3199 (Fees+Tax)",
+    additionalFees: "+₹3199",
     processingDays: 15,
     issuedRecently: 338,
     isFast: false,
@@ -67,7 +65,7 @@ const visas = [
     country: "Japan",
     type: "Sticker",
     price: "₹2,000",
-    additionalFees: "₹2499 (Fees+Tax)",
+    additionalFees: "+₹2499",
     processingDays: 12,
     issuedRecently: 320,
     isFast: true,
@@ -181,73 +179,72 @@ export function FeaturedVisas() {
   };
 
   return (
-    <section ref={sectionRef} className="py-16 bg-background">
+    <section ref={sectionRef} className="py-10 md:py-16 bg-background">
       <div className="container">
         {/* Section header */}
         <motion.div
           initial="hidden"
           animate={isVisible ? "visible" : "hidden"}
           variants={headerVariants}
-          className="text-center mb-10"
+          className="text-center mb-6 md:mb-10"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-2 md:mb-3">
             Featured VISA
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Explore our most popular visa destinations and start your journey with ease
+          <p className="text-muted-foreground text-sm md:text-lg max-w-2xl mx-auto px-4">
+            Explore our most popular visa destinations
           </p>
         </motion.div>
 
-        {/* Search and filters */}
+        {/* Search and filters - mobile optimized */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-10"
+          className="flex flex-col gap-4 mb-6 md:mb-10"
         >
           {/* Search */}
-          <div className="relative max-w-md w-full">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+          <div className="relative max-w-md w-full mx-auto md:mx-0">
+            <Search className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
             <Input
               type="text"
-              placeholder="Where to, captain?"
+              placeholder="Search country..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 h-12 text-base border-border bg-card"
+              className="pl-10 md:pl-12 h-10 md:h-12 text-sm md:text-base border-border bg-card"
             />
           </div>
 
-          {/* Filter pills */}
-          <div className="flex flex-wrap gap-2">
+          {/* Filter pills - horizontal scroll on mobile */}
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0 md:flex-wrap md:justify-center lg:justify-start">
             {filterCategories.map((filter, index) => (
               <motion.button
                 key={filter.id}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={isVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
                 transition={{ delay: 0.3 + index * 0.05, duration: 0.3 }}
-                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setActiveFilter(filter.id)}
                 className={cn(
-                  "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border",
+                  "px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-medium transition-all duration-200 border whitespace-nowrap shrink-0",
                   activeFilter === filter.id
                     ? "bg-primary text-primary-foreground border-primary"
                     : "bg-card text-muted-foreground border-border hover:border-primary/50 hover:text-foreground"
                 )}
               >
-                {filter.icon && <filter.icon className="inline-block h-4 w-4 mr-1" />}
+                {filter.icon && <filter.icon className="inline-block h-3 w-3 md:h-4 md:w-4 mr-1" />}
                 {filter.label}
               </motion.button>
             ))}
           </div>
         </motion.div>
 
-        {/* Visa cards grid */}
+        {/* Visa cards grid - responsive */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate={isVisible ? "visible" : "hidden"}
-          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6"
         >
           {filteredVisas.slice(0, 8).map((visa) => (
             <motion.div key={visa.id} variants={cardVariants}>
@@ -255,45 +252,44 @@ export function FeaturedVisas() {
                 to={`/visas/${visa.id}`}
                 className="group relative overflow-hidden rounded-xl bg-card border border-border hover:border-primary/50 hover:shadow-xl transition-all duration-300 block"
               >
-                {/* Image */}
-                <div className="relative h-48 overflow-hidden">
+                {/* Image - smaller on mobile */}
+                <div className="relative h-28 sm:h-36 md:h-44 lg:h-48 overflow-hidden">
                   <img
                     src={visa.image}
                     alt={visa.country}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
                   {/* Badge */}
-                  <div className="absolute top-3 right-3 px-3 py-1 text-xs font-medium bg-travel-success text-primary-foreground rounded-full">
-                    {visa.issuedRecently} issued recently
+                  <div className="absolute top-2 right-2 md:top-3 md:right-3 px-2 py-0.5 md:px-3 md:py-1 text-[9px] md:text-xs font-medium bg-travel-success text-primary-foreground rounded-full">
+                    {visa.issuedRecently} issued
                   </div>
                 </div>
 
-                {/* Content */}
-                <div className="p-4">
+                {/* Content - compact on mobile */}
+                <div className="p-2.5 md:p-4">
                   {/* Country & type */}
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                  <div className="flex items-start justify-between gap-1 mb-1.5 md:mb-2">
+                    <h3 className="font-semibold text-xs md:text-sm text-foreground group-hover:text-primary transition-colors line-clamp-1">
                       {visa.country}
                     </h3>
-                    <span className="text-xs px-2 py-1 bg-secondary text-secondary-foreground rounded-full">
+                    <span className="text-[9px] md:text-xs px-1.5 md:px-2 py-0.5 bg-secondary text-secondary-foreground rounded-full shrink-0">
                       {visa.type}
                     </span>
                   </div>
 
-                  {/* Price & processing */}
-                  <div className="flex items-center justify-between">
+                  {/* Price & processing - stacked on mobile */}
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
                     <div>
-                      <p className="text-xl font-bold text-primary">{visa.price}</p>
+                      <p className="text-sm md:text-lg font-bold text-primary">{visa.price}</p>
                       {visa.additionalFees && (
-                        <p className="text-xs text-muted-foreground">{visa.additionalFees}</p>
+                        <p className="text-[9px] md:text-xs text-muted-foreground">{visa.additionalFees}</p>
                       )}
                     </div>
-                    <div className="text-right text-sm text-muted-foreground">
-                      <div className="flex items-center gap-1">
-                        {visa.isFast && <Zap className="h-3 w-3 text-amber-500" />}
-                        <span>Get Visa in</span>
+                    <div className="text-left sm:text-right text-[10px] md:text-sm text-muted-foreground">
+                      <div className="flex items-center gap-0.5 sm:justify-end">
+                        {visa.isFast && <Zap className="h-2.5 w-2.5 md:h-3 md:w-3 text-amber-500" />}
+                        <span className="text-[9px] md:text-xs">{visa.processingDays}d</span>
                       </div>
-                      <p className="font-medium text-foreground">{visa.processingDays} days</p>
                     </div>
                   </div>
                 </div>
@@ -307,11 +303,11 @@ export function FeaturedVisas() {
           initial={{ opacity: 0, y: 20 }}
           animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ delay: 0.8, duration: 0.5 }}
-          className="text-center mt-10"
+          className="text-center mt-6 md:mt-10"
         >
           <Link
             to="/visas"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+            className="inline-flex items-center gap-2 px-5 md:px-6 py-2.5 md:py-3 bg-primary text-primary-foreground rounded-lg text-sm md:text-base font-medium hover:bg-primary/90 transition-colors"
           >
             View All Visas
             <ArrowRight className="h-4 w-4" />

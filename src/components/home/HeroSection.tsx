@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Play, Shield, Clock, Award, ChevronDown, MapPin, Sparkles } from "lucide-react";
+import { ArrowRight, Play, Shield, Clock, Award, MapPin, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import heroImage from "@/assets/hero-travel.jpg";
@@ -65,12 +65,12 @@ export function HeroSection() {
 
   const trustBadges = [
     { icon: Shield, text: "99% Success" },
-    { icon: Clock, text: "Express Available" },
-    { icon: Award, text: "IATA Accredited" },
+    { icon: Clock, text: "Express" },
+    { icon: Award, text: "IATA" },
   ];
 
   return (
-    <section className="relative min-h-[95vh] flex items-center overflow-hidden">
+    <section className="relative min-h-[85vh] md:min-h-[90vh] flex items-center overflow-hidden">
       {/* Background with parallax effect */}
       <motion.div
         initial={{ scale: 1.15 }}
@@ -89,9 +89,9 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary/60" />
       <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent" />
       
-      {/* Animated particles/dots */}
+      {/* Animated particles/dots - reduced on mobile */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+        {[...Array(10)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute w-1 h-1 bg-white/20 rounded-full"
@@ -113,11 +113,11 @@ export function HeroSection() {
       </div>
 
       {/* Content */}
-      <div className="container relative z-10 py-12 md:py-20">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <div className="container relative z-10 py-8 md:py-16">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Column - Main Content */}
           <motion.div
-            className="max-w-2xl"
+            className="max-w-xl"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -125,7 +125,7 @@ export function HeroSection() {
             {/* Trust badge */}
             <motion.div
               variants={itemVariants}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/10 mb-6"
+              className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-md rounded-full border border-white/10 mb-4 md:mb-6"
             >
               <motion.span
                 animate={{ scale: [1, 1.2, 1] }}
@@ -135,15 +135,15 @@ export function HeroSection() {
                 <span className="absolute inline-flex h-2 w-2 rounded-full bg-travel-success opacity-75 animate-ping" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-travel-success" />
               </motion.span>
-              <span className="text-xs font-medium text-primary-foreground/90">
-                ISO9001:2015 Certified • 50,000+ Happy Travelers
+              <span className="text-[10px] md:text-xs font-medium text-primary-foreground/90">
+                ISO9001:2015 Certified • 50,000+ Travelers
               </span>
             </motion.div>
 
             {/* Animated Headline */}
             <motion.h1
               variants={itemVariants}
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-primary-foreground leading-[1.1] mb-6"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-primary-foreground leading-[1.1] mb-4 md:mb-6"
             >
               Your Visa,{" "}
               <span className="relative inline-block">
@@ -161,7 +161,7 @@ export function HeroSection() {
                 </AnimatePresence>
                 {/* Underline animation */}
                 <motion.span
-                  className="absolute -bottom-2 left-0 h-1 bg-accent rounded-full"
+                  className="absolute -bottom-1 md:-bottom-2 left-0 h-0.5 md:h-1 bg-accent rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: "100%" }}
                   key={headlineWords[currentWordIndex]}
@@ -173,33 +173,33 @@ export function HeroSection() {
             {/* Subheadline */}
             <motion.p
               variants={itemVariants}
-              className="text-lg sm:text-xl text-primary-foreground/80 mb-8 max-w-lg leading-relaxed"
+              className="text-sm sm:text-base md:text-lg text-primary-foreground/80 mb-6 md:mb-8 max-w-lg leading-relaxed"
             >
               Expert visa assistance for{" "}
               <span className="text-primary-foreground font-semibold">100+ countries</span>. 
-              Fast processing, transparent pricing, and dedicated support.
+              Fast processing, transparent pricing.
             </motion.p>
 
             {/* CTA Buttons */}
             <motion.div
               variants={itemVariants}
-              className="flex flex-wrap gap-4 mb-10"
+              className="flex flex-col sm:flex-row gap-3 mb-6 md:mb-10"
             >
-              <Link to="/visas">
+              <Link to="/visas" className="w-full sm:w-auto">
                 <Button
                   size="lg"
-                  className="h-14 px-8 text-base bg-accent hover:bg-accent/90 text-accent-foreground shadow-2xl shadow-accent/30 group"
+                  className="w-full sm:w-auto h-12 md:h-14 px-6 md:px-8 text-sm md:text-base bg-accent hover:bg-accent/90 text-accent-foreground shadow-2xl shadow-accent/30 group"
                 >
-                  <Sparkles className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
+                  <Sparkles className="mr-2 h-4 w-4 md:h-5 md:w-5 group-hover:rotate-12 transition-transform" />
                   Find Your Visa
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Link to="/contact">
+              <Link to="/contact" className="w-full sm:w-auto">
                 <Button
                   size="lg"
                   variant="outline"
-                  className="h-14 px-8 text-base border-2 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 backdrop-blur-sm"
+                  className="w-full sm:w-auto h-12 md:h-14 px-6 md:px-8 text-sm md:text-base border-2 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 backdrop-blur-sm"
                 >
                   <Play className="mr-2 h-4 w-4" />
                   How It Works
@@ -207,10 +207,10 @@ export function HeroSection() {
               </Link>
             </motion.div>
 
-            {/* Trust badges */}
+            {/* Trust badges - mobile optimized */}
             <motion.div
               variants={itemVariants}
-              className="flex flex-wrap items-center gap-6"
+              className="flex flex-wrap items-center gap-2 md:gap-4"
             >
               {trustBadges.map((badge, index) => (
                 <motion.div
@@ -218,19 +218,18 @@ export function HeroSection() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.9 + index * 0.15, duration: 0.5 }}
-                  whileHover={{ scale: 1.05 }}
-                  className="flex items-center gap-3 bg-white/5 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10"
+                  className="flex items-center gap-2 bg-white/5 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/10"
                 >
-                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-accent/20">
-                    <badge.icon className="h-4 w-4 text-accent" />
+                  <div className="flex items-center justify-center w-6 h-6 md:w-8 md:h-8 rounded-full bg-accent/20">
+                    <badge.icon className="h-3 w-3 md:h-4 md:w-4 text-accent" />
                   </div>
-                  <span className="text-sm font-medium text-primary-foreground">{badge.text}</span>
+                  <span className="text-xs md:text-sm font-medium text-primary-foreground">{badge.text}</span>
                 </motion.div>
               ))}
             </motion.div>
           </motion.div>
 
-          {/* Right Column - Rotating Destination Showcase */}
+          {/* Right Column - Rotating Destination Showcase - hidden on mobile */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -242,16 +241,16 @@ export function HeroSection() {
               <div className="absolute inset-0 bg-accent/20 blur-3xl rounded-full scale-75" />
               
               {/* Destination cards carousel */}
-              <div className="relative bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20">
-                <div className="text-center mb-6">
+              <div className="relative bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20">
+                <div className="text-center mb-4">
                   <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                    className="inline-flex items-center justify-center w-12 h-12 bg-accent/20 rounded-full mb-3"
+                    className="inline-flex items-center justify-center w-10 h-10 bg-accent/20 rounded-full mb-2"
                   >
-                    <MapPin className="h-6 w-6 text-accent" />
+                    <MapPin className="h-5 w-5 text-accent" />
                   </motion.div>
-                  <p className="text-sm text-primary-foreground/60 uppercase tracking-wider">Popular Destination</p>
+                  <p className="text-xs text-primary-foreground/60 uppercase tracking-wider">Popular Destination</p>
                 </div>
 
                 <AnimatePresence mode="wait">
@@ -267,14 +266,14 @@ export function HeroSection() {
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ delay: 0.2, type: "spring" }}
-                      className="text-6xl mb-4 block"
+                      className="text-5xl mb-3 block"
                     >
                       {destinations[currentDestIndex].emoji}
                     </motion.span>
-                    <h3 className="text-3xl font-display font-bold text-primary-foreground mb-2">
+                    <h3 className="text-2xl font-display font-bold text-primary-foreground mb-1">
                       {destinations[currentDestIndex].name}
                     </h3>
-                    <p className="text-primary-foreground/70 mb-6">
+                    <p className="text-primary-foreground/70 text-sm mb-4">
                       {destinations[currentDestIndex].country} Visa
                     </p>
                     <Link to={`/visas/${destinations[currentDestIndex].slug}`}>
@@ -291,14 +290,14 @@ export function HeroSection() {
                 </AnimatePresence>
 
                 {/* Destination indicators */}
-                <div className="flex justify-center gap-2 mt-8">
+                <div className="flex justify-center gap-1.5 mt-6">
                   {destinations.map((_, index) => (
                     <button
                       key={index}
                       onClick={() => setCurrentDestIndex(index)}
-                      className={`w-2 h-2 rounded-full transition-all ${
+                      className={`w-1.5 h-1.5 rounded-full transition-all ${
                         index === currentDestIndex
-                          ? "w-8 bg-accent"
+                          ? "w-6 bg-accent"
                           : "bg-primary-foreground/30 hover:bg-primary-foreground/50"
                       }`}
                     />
@@ -310,7 +309,7 @@ export function HeroSection() {
               <motion.div
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 3, repeat: Infinity }}
-                className="absolute -top-4 -right-4 bg-accent text-accent-foreground px-4 py-2 rounded-full text-sm font-semibold shadow-lg"
+                className="absolute -top-3 -right-3 bg-accent text-accent-foreground px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg"
               >
                 🔥 Trending
               </motion.div>
@@ -318,70 +317,48 @@ export function HeroSection() {
               <motion.div
                 animate={{ y: [0, 10, 0] }}
                 transition={{ duration: 3.5, repeat: Infinity, delay: 0.5 }}
-                className="absolute -bottom-4 -left-4 bg-white/90 text-foreground px-4 py-2 rounded-full text-sm font-semibold shadow-lg"
+                className="absolute -bottom-3 -left-3 bg-white/90 text-foreground px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg"
               >
-                ⚡ Express Processing
+                ⚡ Express
               </motion.div>
             </div>
           </motion.div>
         </div>
       </div>
 
-      {/* Stats bar */}
+      {/* Stats bar - mobile optimized */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8, duration: 0.6 }}
         className="absolute bottom-0 left-0 right-0 bg-gradient-to-r from-primary via-primary/95 to-primary backdrop-blur-xl border-t border-primary-foreground/10"
       >
-        <div className="container py-5">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="container py-3 md:py-5">
+          <div className="grid grid-cols-4 gap-2 md:gap-6">
             {[
               { value: "100+", label: "Countries", icon: "🌍" },
-              { value: "50K+", label: "Visas Processed", icon: "✈️" },
-              { value: "99%", label: "Success Rate", icon: "✅" },
-              { value: "24/7", label: "Expert Support", icon: "💬" },
+              { value: "50K+", label: "Visas", icon: "✈️" },
+              { value: "99%", label: "Success", icon: "✅" },
+              { value: "24/7", label: "Support", icon: "💬" },
             ].map((stat, index) => (
               <motion.div
                 key={stat.label}
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1 + index * 0.1, duration: 0.4 }}
-                whileHover={{ scale: 1.05 }}
-                className="text-center group cursor-default"
+                className="text-center"
               >
-                <div className="flex items-center justify-center gap-2 mb-1">
-                  <span className="text-lg group-hover:scale-125 transition-transform">{stat.icon}</span>
-                  <p className="text-2xl sm:text-3xl font-bold text-primary-foreground">
+                <div className="flex items-center justify-center gap-1 mb-0.5">
+                  <span className="text-sm md:text-lg">{stat.icon}</span>
+                  <p className="text-lg sm:text-xl md:text-2xl font-bold text-primary-foreground">
                     {stat.value}
                   </p>
                 </div>
-                <p className="text-xs text-primary-foreground/60 uppercase tracking-wider">{stat.label}</p>
+                <p className="text-[9px] md:text-xs text-primary-foreground/60 uppercase tracking-wider">{stat.label}</p>
               </motion.div>
             ))}
           </div>
         </div>
-      </motion.div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="absolute bottom-28 left-1/2 -translate-x-1/2 hidden lg:flex flex-col items-center gap-2"
-      >
-        <span className="text-[10px] text-primary-foreground/40 uppercase tracking-widest">Scroll to explore</span>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-          className="w-6 h-10 border-2 border-primary-foreground/20 rounded-full flex items-start justify-center p-1"
-        >
-          <motion.div
-            animate={{ y: [0, 12, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="w-1.5 h-3 bg-accent rounded-full"
-          />
-        </motion.div>
       </motion.div>
     </section>
   );

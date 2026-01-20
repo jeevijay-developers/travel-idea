@@ -1,4 +1,5 @@
-import { Layout } from "@/components/layout";
+import { Shield } from "lucide-react";
+import { Layout, PageHero } from "@/components/layout";
 import { SEO } from "@/components/seo";
 
 export default function PrivacyPolicy() {
@@ -9,14 +10,11 @@ export default function PrivacyPolicy() {
         description="Learn how Travel Idea collects, uses, and protects your personal information." 
       />
 
-      <section className="bg-primary py-16">
-        <div className="container">
-          <h1 className="text-3xl md:text-4xl font-display font-bold text-primary-foreground">
-            Privacy Policy
-          </h1>
-          <p className="text-primary-foreground/80 mt-2">Last updated: January 2024</p>
-        </div>
-      </section>
+      <PageHero
+        title="Privacy Policy"
+        subtitle="Last updated: January 2024"
+        icon={Shield}
+      />
 
       <section className="py-12">
         <div className="container">

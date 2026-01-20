@@ -19,6 +19,42 @@ import vietnamImage from "@/assets/countries/vietnam.jpg";
 import ukImage from "@/assets/countries/uk.jpg";
 import southKoreaImage from "@/assets/countries/south-korea.jpg";
 import australiaImage from "@/assets/countries/australia.jpg";
+import bahrainImage from "@/assets/countries/bahrain.jpg";
+import sriLankaImage from "@/assets/countries/sri-lanka.jpg";
+import indonesiaImage from "@/assets/countries/indonesia.jpg";
+import franceImage from "@/assets/countries/france.jpg";
+import germanyImage from "@/assets/countries/germany.jpg";
+import italyImage from "@/assets/countries/italy.jpg";
+import switzerlandImage from "@/assets/countries/switzerland.jpg";
+import canadaImage from "@/assets/countries/canada.jpg";
+import chinaImage from "@/assets/countries/china.jpg";
+import turkeyImage from "@/assets/countries/turkey.jpg";
+import greeceImage from "@/assets/countries/greece.jpg";
+import egyptImage from "@/assets/countries/egypt.jpg";
+import saudiArabiaImage from "@/assets/countries/saudi-arabia.jpg";
+import omanImage from "@/assets/countries/oman.jpg";
+import cambodiaImage from "@/assets/countries/cambodia.jpg";
+import hongKongImage from "@/assets/countries/hong-kong.jpg";
+import kenyaImage from "@/assets/countries/kenya.jpg";
+import moroccoImage from "@/assets/countries/morocco.jpg";
+import azerbaijanImage from "@/assets/countries/azerbaijan.jpg";
+import uzbekistanImage from "@/assets/countries/uzbekistan.jpg";
+import russiaImage from "@/assets/countries/russia.jpg";
+import georgiaImage from "@/assets/countries/georgia.jpg";
+import philippinesImage from "@/assets/countries/philippines.jpg";
+import spainImage from "@/assets/countries/spain.jpg";
+import netherlandsImage from "@/assets/countries/netherlands.jpg";
+import norwayImage from "@/assets/countries/norway.jpg";
+import finlandImage from "@/assets/countries/finland.jpg";
+import austriaImage from "@/assets/countries/austria.jpg";
+import hungaryImage from "@/assets/countries/hungary.jpg";
+import czechRepublicImage from "@/assets/countries/czech-republic.jpg";
+import denmarkImage from "@/assets/countries/denmark.jpg";
+import swedenImage from "@/assets/countries/sweden.jpg";
+import armeniaImage from "@/assets/countries/armenia.jpg";
+import ethiopiaImage from "@/assets/countries/ethiopia.jpg";
+import madagascarImage from "@/assets/countries/madagascar.jpg";
+import laosImage from "@/assets/countries/laos.jpg";
 
 const countryImages: Record<string, string> = {
   uae: uaeImage,
@@ -31,6 +67,42 @@ const countryImages: Record<string, string> = {
   uk: ukImage,
   "south-korea": southKoreaImage,
   australia: australiaImage,
+  bahrain: bahrainImage,
+  "sri-lanka": sriLankaImage,
+  indonesia: indonesiaImage,
+  france: franceImage,
+  germany: germanyImage,
+  italy: italyImage,
+  switzerland: switzerlandImage,
+  canada: canadaImage,
+  china: chinaImage,
+  turkey: turkeyImage,
+  greece: greeceImage,
+  egypt: egyptImage,
+  "saudi-arabia": saudiArabiaImage,
+  oman: omanImage,
+  cambodia: cambodiaImage,
+  "hong-kong": hongKongImage,
+  kenya: kenyaImage,
+  morocco: moroccoImage,
+  azerbaijan: azerbaijanImage,
+  uzbekistan: uzbekistanImage,
+  russia: russiaImage,
+  georgia: georgiaImage,
+  philippines: philippinesImage,
+  spain: spainImage,
+  netherlands: netherlandsImage,
+  norway: norwayImage,
+  finland: finlandImage,
+  austria: austriaImage,
+  hungary: hungaryImage,
+  "czech-republic": czechRepublicImage,
+  denmark: denmarkImage,
+  sweden: swedenImage,
+  armenia: armeniaImage,
+  ethiopia: ethiopiaImage,
+  madagascar: madagascarImage,
+  laos: laosImage,
 };
 
 // Filter categories

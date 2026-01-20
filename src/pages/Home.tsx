@@ -2,11 +2,20 @@ import { Layout } from "@/components/layout";
 import { SEO } from "@/components/seo";
 import {
   HeroSection,
-  FeaturedVisas,
+  VisaFinder,
+  StatsCounter,
+  PopularDestinations,
+  VisaTypesExplained,
+  HowItWorks,
   WhyChooseUs,
+  PriceTransparency,
+  ExpressVisa,
+  RecentlyIssuedVisas,
   Testimonials,
+  CorporateVisas,
   FAQsSection,
   BlogPreview,
+  CTAFooterSection,
 } from "@/components/home";
 
 const Home = () => {
@@ -15,11 +24,20 @@ const Home = () => {
       <SEO />
       <Layout>
         <HeroSection />
-        <FeaturedVisas />
+        <VisaFinder />
+        <StatsCounter />
+        <PopularDestinations />
+        <VisaTypesExplained />
+        <HowItWorks />
         <WhyChooseUs />
+        <PriceTransparency />
+        <ExpressVisa />
+        <RecentlyIssuedVisas />
         <Testimonials />
+        <CorporateVisas />
         <FAQsSection />
         <BlogPreview />
+        <CTAFooterSection />
       </Layout>
     </>
   );

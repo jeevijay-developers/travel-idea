@@ -1,20 +1,10 @@
 import { Link } from "react-router-dom";
-import { Search, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useState } from "react";
 import { motion, type Variants } from "framer-motion";
 import heroImage from "@/assets/hero-travel.jpg";
 
 export function HeroSection() {
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      window.location.href = `/visas?search=${encodeURIComponent(searchQuery)}`;
-    }
-  };
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -100,46 +90,22 @@ export function HeroSection() {
             Get your visa hassle-free with expert guidance. We process visas for 100+ countries with fast turnaround and transparent pricing.
           </motion.p>
 
-          {/* Search bar */}
-          <motion.form
+          {/* CTA Buttons */}
+          <motion.div
             variants={itemVariants}
-            onSubmit={handleSearch}
-            className="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto mb-8"
+            className="flex flex-col sm:flex-row gap-4 justify-center mb-8"
           >
-            <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <Input
-                type="text"
-                placeholder="Where to, captain? (e.g., Thailand, USA, UK...)"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 h-14 text-base bg-background text-foreground border-0 shadow-xl"
-              />
-            </div>
-            <Button type="submit" size="lg" className="h-14 px-8 bg-primary hover:bg-primary/90 shadow-xl">
-              Search Visas
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </motion.form>
-
-          {/* Quick links */}
-          <motion.div variants={itemVariants} className="flex flex-wrap justify-center gap-3">
-            <span className="text-sm text-primary-foreground/70">Popular:</span>
-            {["Thailand", "Singapore", "Dubai", "Malaysia", "Vietnam"].map((country, index) => (
-              <motion.div
-                key={country}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1 + index * 0.1, duration: 0.3 }}
-              >
-                <Link
-                  to={`/visas?search=${country}`}
-                  className="text-sm px-3 py-1.5 bg-primary-foreground/10 hover:bg-primary-foreground/20 rounded-full border border-primary-foreground/20 transition-colors"
-                >
-                  {country}
-                </Link>
-              </motion.div>
-            ))}
+            <Link to="/visas">
+              <Button size="lg" className="h-14 px-8 bg-primary-foreground text-primary hover:bg-primary-foreground/90 shadow-xl">
+                Explore All Visas
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
+            <Link to="/contact">
+              <Button size="lg" variant="outline" className="h-14 px-8 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
+                Contact Us
+              </Button>
+            </Link>
           </motion.div>
 
           {/* Stats */}

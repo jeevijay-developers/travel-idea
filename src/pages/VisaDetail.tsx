@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Clock, FileText, Calendar, Zap, ArrowLeft, CheckCircle } from "lucide-react";
+import { 
+  Clock, FileText, Calendar, Zap, ArrowLeft, CheckCircle, 
+  Globe, Shield, Users, AlertCircle, Phone, Mail, 
+  MapPin, Plane, CreditCard, HelpCircle, ChevronRight,
+  Ban, Check, Info
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Layout } from "@/components/layout";
 import { SEO } from "@/components/seo";
@@ -181,32 +186,233 @@ export default function VisaDetail() {
                 </div>
               </div>
 
-              {/* Description */}
+              {/* About This Visa - Enhanced */}
               <div className="bg-card border rounded-xl p-6">
-                <h2 className="text-xl font-semibold mb-4">About This Visa</h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  {visa.description || visa.short_description || `The ${visa.countries?.name} ${visa.visa_type} is designed for travelers visiting ${visa.countries?.name} for tourism purposes. This visa allows you to explore the country's attractions, culture, and landmarks with ease.`}
-                </p>
+                <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                  <Globe className="h-5 w-5 text-primary" />
+                  About This Visa
+                </h2>
+                
+                <div className="space-y-6">
+                  {/* Main Description */}
+                  <p className="text-muted-foreground leading-relaxed">
+                    {visa.description || `The ${visa.countries?.name} ${visa.visa_type} is designed for travelers visiting ${visa.countries?.name} for tourism, leisure, and recreational purposes. This visa grants you legal entry to explore the country's world-renowned attractions, experience its rich cultural heritage, savor local cuisines, and create unforgettable memories.`}
+                  </p>
+
+                  {/* Key Highlights */}
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                        <Clock className="h-5 w-5 text-primary" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-sm">Processing Time</p>
+                        <p className="text-muted-foreground text-sm">{visa.processing_days} working days (standard processing)</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                        <Calendar className="h-5 w-5 text-primary" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-sm">Visa Validity</p>
+                        <p className="text-muted-foreground text-sm">{visa.validity || "30-90 days"} from date of issue</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                        <Plane className="h-5 w-5 text-primary" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-sm">Entry Type</p>
+                        <p className="text-muted-foreground text-sm">Single / Multiple Entry (as applicable)</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                        <Users className="h-5 w-5 text-primary" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-sm">Stay Duration</p>
+                        <p className="text-muted-foreground text-sm">Up to 30-90 days per visit</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* What's Included */}
+                  <div>
+                    <h3 className="font-semibold mb-3 flex items-center gap-2">
+                      <Check className="h-4 w-4 text-travel-success" />
+                      What's Included in Our Service
+                    </h3>
+                    <div className="grid sm:grid-cols-2 gap-2">
+                      {[
+                        "Complete application assistance",
+                        "Document verification & review",
+                        "Embassy appointment booking",
+                        "Application form filling",
+                        "Real-time status updates",
+                        "Dedicated visa expert support",
+                        "Travel insurance guidance",
+                        "Pre-departure travel tips"
+                      ].map((item, index) => (
+                        <div key={index} className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <CheckCircle className="h-4 w-4 text-travel-success shrink-0" />
+                          <span>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Eligibility */}
+                  <div className="border-t pt-6">
+                    <h3 className="font-semibold mb-3 flex items-center gap-2">
+                      <Info className="h-4 w-4 text-primary" />
+                      Who Can Apply
+                    </h3>
+                    <ul className="space-y-2 text-sm text-muted-foreground">
+                      <li className="flex items-start gap-2">
+                        <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                        Indian passport holders traveling for tourism, business, or transit
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                        Applicants with a valid passport (minimum 6 months validity)
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                        Travelers with proof of sufficient funds and confirmed travel plans
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* Application Process */}
+              <div className="bg-card border rounded-xl p-6">
+                <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                  <FileText className="h-5 w-5 text-primary" />
+                  Application Process
+                </h2>
+                <div className="space-y-4">
+                  {[
+                    { step: 1, title: "Submit Enquiry", desc: "Fill out our simple enquiry form with your travel details" },
+                    { step: 2, title: "Document Collection", desc: "Our team will guide you on required documents and collect them" },
+                    { step: 3, title: "Application Review", desc: "Expert review of your application to ensure accuracy" },
+                    { step: 4, title: "Embassy Submission", desc: "We submit your application to the embassy/consulate" },
+                    { step: 5, title: "Receive Your Visa", desc: "Get your approved visa delivered to your email/address" }
+                  ].map((step, index) => (
+                    <div key={step.step} className="flex gap-4">
+                      <div className="flex flex-col items-center">
+                        <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-semibold">
+                          {step.step}
+                        </div>
+                        {index < 4 && <div className="w-0.5 h-full bg-border mt-2" />}
+                      </div>
+                      <div className="pb-6">
+                        <p className="font-medium">{step.title}</p>
+                        <p className="text-sm text-muted-foreground">{step.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Required documents */}
               <div className="bg-card border rounded-xl p-6">
-                <h2 className="text-xl font-semibold mb-4">Required Documents</h2>
-                <ul className="space-y-3">
+                <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                  <FileText className="h-5 w-5 text-primary" />
+                  Required Documents
+                </h2>
+                <div className="grid sm:grid-cols-2 gap-3">
                   {(visa.required_documents || [
                     "Valid Passport (6+ months validity)",
                     "Passport-size Photos (white background)",
-                    "Travel Itinerary",
-                    "Proof of Accommodation",
+                    "Confirmed Return Flight Tickets",
+                    "Hotel Booking / Accommodation Proof",
                     "Bank Statement (last 3 months)",
-                    "Travel Insurance"
+                    "Travel Insurance",
+                    "Cover Letter / Travel Itinerary",
+                    "Proof of Employment / Business"
                   ]).map((doc, index) => (
-                    <li key={index} className="flex items-start gap-3">
+                    <div key={index} className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                       <CheckCircle className="h-5 w-5 text-travel-success shrink-0 mt-0.5" />
-                      <span className="text-muted-foreground">{doc}</span>
-                    </li>
+                      <span className="text-sm text-muted-foreground">{doc}</span>
+                    </div>
                   ))}
-                </ul>
+                </div>
+                <div className="mt-4 p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium text-sm">Important Note</p>
+                      <p className="text-sm text-muted-foreground">Additional documents may be required based on your specific case. Our visa experts will guide you through the exact requirements after you submit your enquiry.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Common Rejection Reasons */}
+              <div className="bg-card border rounded-xl p-6">
+                <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                  <Ban className="h-5 w-5 text-destructive" />
+                  Common Rejection Reasons (Avoid These!)
+                </h2>
+                <div className="space-y-3">
+                  {[
+                    "Incomplete or incorrect application form",
+                    "Passport with less than 6 months validity",
+                    "Insufficient proof of financial stability",
+                    "Missing or unclear travel documents",
+                    "Previous visa violations or overstays",
+                    "Unclear purpose of travel"
+                  ].map((reason, index) => (
+                    <div key={index} className="flex items-start gap-3 text-sm">
+                      <AlertCircle className="h-4 w-4 text-destructive shrink-0 mt-0.5" />
+                      <span className="text-muted-foreground">{reason}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-4 text-sm text-muted-foreground">
+                  <strong className="text-foreground">Don't worry!</strong> Our expert team reviews every application to ensure all requirements are met before submission.
+                </p>
+              </div>
+
+              {/* FAQs */}
+              <div className="bg-card border rounded-xl p-6">
+                <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                  <HelpCircle className="h-5 w-5 text-primary" />
+                  Frequently Asked Questions
+                </h2>
+                <div className="space-y-4">
+                  {[
+                    { 
+                      q: `How long does it take to get a ${visa.countries?.name} visa?`, 
+                      a: `Standard processing takes ${visa.processing_days} working days. Express processing may be available for urgent travel needs.` 
+                    },
+                    { 
+                      q: "Is my visa approval guaranteed?", 
+                      a: "While we maintain a 99% success rate, visa approval is ultimately at the discretion of the embassy. Our expert review minimizes rejection risks significantly." 
+                    },
+                    { 
+                      q: "Can I track my visa application status?", 
+                      a: "Yes! You'll receive real-time updates via email and WhatsApp throughout the application process." 
+                    },
+                    { 
+                      q: "What happens if my visa gets rejected?", 
+                      a: "We'll analyze the rejection reason and guide you on reapplication. In some cases, partial refunds may apply as per our policy." 
+                    },
+                    { 
+                      q: "Do I need to visit the embassy in person?", 
+                      a: `This depends on the visa type. For most ${visa.visa_type} applications, we can process without your physical presence at the embassy.` 
+                    }
+                  ].map((faq, index) => (
+                    <div key={index} className="border-b last:border-b-0 pb-4 last:pb-0">
+                      <p className="font-medium mb-2">{faq.q}</p>
+                      <p className="text-sm text-muted-foreground">{faq.a}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 

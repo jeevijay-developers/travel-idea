@@ -26,6 +26,8 @@ import AdminCategories from "./pages/admin/AdminCategories";
 import AdminCountries from "./pages/admin/AdminCountries";
 import AdminBlog from "./pages/admin/AdminBlog";
 import AdminEnquiries from "./pages/admin/AdminEnquiries";
+import AdminNewsletter from "./pages/admin/AdminNewsletter";
+import AdminSettings from "./pages/admin/AdminSettings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -60,6 +62,8 @@ const App = () => (
                 <Route path="countries" element={<AdminCountries />} />
                 <Route path="blog" element={<AdminBlog />} />
                 <Route path="enquiries" element={<AdminEnquiries />} />
+                <Route path="newsletter" element={<AdminNewsletter />} />
+                <Route path="settings" element={<AdminSettings />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>

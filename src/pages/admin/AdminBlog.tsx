@@ -178,6 +178,9 @@ export default function AdminBlog() {
               </div>
               <div className="space-y-2">
                 <Label>Cover Image</Label>
+                <p className="text-xs text-muted-foreground mb-2">
+                  📐 Recommended: 1200 x 630px (16:9) • Max 5MB • JPG, PNG, WebP
+                </p>
                 <div className="space-y-3">
                   {form.cover_image && (
                     <div className="relative w-full h-32 rounded-lg overflow-hidden border">

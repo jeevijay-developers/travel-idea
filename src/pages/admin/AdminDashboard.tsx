@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link, Outlet, useLocation } from "react-router-dom";
-import { LayoutDashboard, Plane, FolderOpen, Globe, FileText, MessageSquare, LogOut, Menu, X, Shield, Mail, Settings } from "lucide-react";
+import { LayoutDashboard, Plane, FolderOpen, Globe, FileText, MessageSquare, LogOut, Menu, X, Shield, Mail, Settings, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SEO } from "@/components/seo";
 import { cn } from "@/lib/utils";
@@ -15,6 +15,7 @@ const navItems = [
   { icon: FileText, label: "Blog Posts", path: "/admin/dashboard/blog" },
   { icon: MessageSquare, label: "Enquiries", path: "/admin/dashboard/enquiries" },
   { icon: Mail, label: "Newsletter", path: "/admin/dashboard/newsletter" },
+  { icon: Users, label: "Staff", path: "/admin/dashboard/staff" },
   { icon: Settings, label: "Settings", path: "/admin/dashboard/settings" },
 ];
 

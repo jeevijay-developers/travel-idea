@@ -129,12 +129,15 @@ export default function Blog() {
                           src={post.cover_image}
                           alt={post.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                            e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                          }}
                         />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/10 flex items-center justify-center">
-                          <span className="text-3xl">✈️</span>
-                        </div>
-                      )}
+                      ) : null}
+                      <div className={`w-full h-full bg-gradient-to-br from-primary/20 to-accent/10 flex items-center justify-center ${post.cover_image ? 'hidden absolute inset-0' : ''}`}>
+                        <span className="text-3xl">✈️</span>
+                      </div>
                       {post.category && (
                         <span className="absolute top-3 left-3 px-2 py-1 text-xs font-medium bg-accent text-accent-foreground rounded-md">
                           {post.category}

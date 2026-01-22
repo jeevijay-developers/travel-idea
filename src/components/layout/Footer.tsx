@@ -1,12 +1,76 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
   Phone, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin, Youtube,
-  Globe, Shield, Award, Send, ArrowRight, Plane, Clock, CheckCircle
+  Globe, Shield, Award, Send, ArrowRight, Plane, Clock, CheckCircle, Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 import logoDark from "@/assets/logo.png";
+
+function NewsletterForm() {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !email.includes("@")) {
+      toast({
+        title: "Invalid email",
+        description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoading(true);
+    // Simulate API call - in production, this would save to database
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    toast({
+      title: "Subscribed!",
+      description: "Thank you for subscribing to our newsletter.",
+    });
+    setEmail("");
+    setLoading(false);
+  };
+
+  return (
+    <motion.form
+      initial={{ opacity: 0, x: 20 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: 0.3 }}
+      className="flex w-full max-w-md gap-2"
+      onSubmit={handleSubmit}
+    >
+      <Input
+        type="email"
+        placeholder="Enter your email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="h-10 md:h-12 bg-white/90 border-0 text-foreground placeholder:text-muted-foreground flex-1 text-sm"
+        disabled={loading}
+      />
+      <Button 
+        type="submit" 
+        size="default" 
+        className="h-10 md:h-12 bg-primary hover:bg-primary/90 px-4 md:px-6 text-sm"
+        disabled={loading}
+      >
+        {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : (
+          <>
+            Subscribe
+            <Send className="ml-2 h-3 w-3 md:h-4 md:w-4" />
+          </>
+        )}
+      </Button>
+    </motion.form>
+  );
+}
 
 const footerLinks = {
   services: [
@@ -31,8 +95,8 @@ const footerLinks = {
     { name: "Japan Visa", href: "/visas/japan" },
   ],
   legal: [
-    { name: "Terms & Conditions", href: "/terms" },
-    { name: "Privacy Policy", href: "/privacy" },
+    { name: "Terms & Conditions", href: "/terms-and-conditions" },
+    { name: "Privacy Policy", href: "/privacy-policy" },
   ],
 };
 
@@ -101,24 +165,7 @@ export function Footer() {
                 Subscribe for exclusive offers
               </motion.p>
             </div>
-            <motion.form
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              className="flex w-full max-w-md gap-2"
-              onSubmit={(e) => e.preventDefault()}
-            >
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                className="h-10 md:h-12 bg-white/90 border-0 text-foreground placeholder:text-muted-foreground flex-1 text-sm"
-              />
-              <Button size="default" className="h-10 md:h-12 bg-primary hover:bg-primary/90 px-4 md:px-6 text-sm">
-                Subscribe
-                <Send className="ml-2 h-3 w-3 md:h-4 md:w-4" />
-              </Button>
-            </motion.form>
+            <NewsletterForm />
           </div>
         </div>
       </div>

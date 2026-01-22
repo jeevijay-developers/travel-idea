@@ -203,6 +203,9 @@ export default function BlogDetail() {
                   src={post.cover_image}
                   alt={post.title}
                   className="w-full h-auto"
+                  onError={(e) => {
+                    e.currentTarget.parentElement?.classList.add('hidden');
+                  }}
                 />
               </motion.div>
             )}
@@ -212,11 +215,10 @@ export default function BlogDetail() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="prose prose-lg max-w-none"
+              className="prose prose-lg max-w-none prose-headings:text-foreground prose-headings:font-display prose-p:text-muted-foreground prose-a:text-accent prose-strong:text-foreground prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:text-muted-foreground prose-blockquote:text-muted-foreground prose-blockquote:border-accent"
             >
               {post.content ? (
                 <div 
-                  className="text-muted-foreground leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: post.content }}
                 />
               ) : (
@@ -260,14 +262,21 @@ export default function BlogDetail() {
                       to={`/blog/${related.slug}`}
                       className="group block bg-card border rounded-2xl overflow-hidden hover:border-accent/50 hover:shadow-lg transition-all"
                     >
-                      <div className="h-32 bg-muted overflow-hidden">
+                      <div className="h-32 bg-muted overflow-hidden relative">
                         {related.cover_image ? (
-                          <img src={related.cover_image} alt={related.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center">
-                            <BookOpen className="h-8 w-8 text-accent/50" />
-                          </div>
-                        )}
+                          <img 
+                            src={related.cover_image} 
+                            alt={related.title} 
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                            }}
+                          />
+                        ) : null}
+                        <div className={`w-full h-full bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center ${related.cover_image ? 'hidden absolute inset-0' : ''}`}>
+                          <BookOpen className="h-8 w-8 text-accent/50" />
+                        </div>
                       </div>
                       <div className="p-4">
                         {related.category && (

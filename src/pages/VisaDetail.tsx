@@ -724,7 +724,7 @@ export default function VisaDetail() {
                       { q: "What is your visa success rate?", a: "We maintain a 99% success rate. Our expert review process minimizes rejection risks significantly." },
                       { q: "Can I track my visa application?", a: "Yes! You'll receive real-time updates via email and WhatsApp at every stage of your application." },
                       { q: "What if my visa gets rejected?", a: "We'll analyze the rejection reason and guide you on reapplication. Partial refunds may apply per our policy." },
-                      { q: `What is the visa fee for ${visa.countries.name}?`, a: `The visa fee starts from ₹${visa.price.toLocaleString()}. ${visa.additional_fees ? `Additional fees: ${visa.additional_fees}` : ''}` },
+                      { q: `What is the visa fee for ${visa.countries.name}?`, a: `The visa fee starts from ₹${visa.price.toLocaleString()}. ${visa.additional_fees && Number(visa.additional_fees) > 0 ? `+₹${Number(visa.additional_fees).toLocaleString()} (fee+taxes)` : 'All inclusive'}` },
                     ].map((faq, i) => (
                       <AccordionItem key={i} value={`faq-${i}`} className="border rounded-xl px-3 md:px-4">
                         <AccordionTrigger className="text-xs md:text-sm text-left font-medium hover:no-underline py-3">
@@ -763,8 +763,8 @@ export default function VisaDetail() {
                     <div className="relative">
                       <p className="text-accent-foreground/80 text-xs md:text-sm">Starting from</p>
                       <p className="text-3xl md:text-4xl font-bold text-accent-foreground">₹{visa.price.toLocaleString()}</p>
-                      {visa.additional_fees && (
-                        <p className="text-accent-foreground/70 text-[10px] md:text-xs mt-1">{visa.additional_fees}</p>
+                      {visa.additional_fees && Number(visa.additional_fees) > 0 && (
+                        <p className="text-accent-foreground/70 text-[10px] md:text-xs mt-1">+₹{Number(visa.additional_fees).toLocaleString()} (fee+taxes)</p>
                       )}
                       {visa.issued_recently && visa.issued_recently > 0 && (
                         <motion.div 

@@ -414,7 +414,9 @@ export default function Visas() {
                       {/* CTA */}
                       <div className="mt-3 pt-3 border-t flex items-center justify-between">
                         <span className="text-xs text-muted-foreground">
-                          {visa.additional_fees || "All inclusive"}
+                          {visa.additional_fees && Number(visa.additional_fees) > 0
+                            ? `+₹${Number(visa.additional_fees).toLocaleString()} (fee+taxes)`
+                            : "All inclusive"}
                         </span>
                         <span className="text-xs font-medium text-accent flex items-center gap-1 group-hover:gap-2 transition-all">
                           View

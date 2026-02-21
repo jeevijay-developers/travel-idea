@@ -22,7 +22,7 @@ const navItems = [
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, isAdmin, isLoading, signOut } = useAuth();
+  const { user, isAdmin, isLoading, signOut, userRole } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Redirect if not authenticated or not admin
@@ -30,12 +30,11 @@ export default function AdminDashboard() {
     if (!isLoading) {
       if (!user) {
         navigate("/admin");
-      } else if (!isAdmin) {
-        // User is authenticated but not an admin
+      } else if (!isAdmin && userRole !== "enquiry_handler" && userRole !== "blog_editor" && userRole !== "visa_manager") {
         navigate("/admin?error=not_authorized");
       }
     }
-  }, [user, isAdmin, isLoading, navigate]);
+  }, [user, isAdmin, isLoading, userRole, navigate]);
 
   const handleLogout = async () => {
     await signOut();
@@ -51,8 +50,8 @@ export default function AdminDashboard() {
     );
   }
 
-  // Show unauthorized message if authenticated but not admin
-  if (user && !isAdmin) {
+  // Show unauthorized message if no valid role
+  if (user && !isAdmin && !["enquiry_handler", "blog_editor", "visa_manager"].includes(userRole || "")) {
     return (
       <div className="min-h-screen bg-muted/30 flex items-center justify-center p-4">
         <SEO title="Access Denied - Travel Idea" />
@@ -80,9 +79,17 @@ export default function AdminDashboard() {
   }
 
   // Don't render dashboard content if not authorized
-  if (!user || !isAdmin) {
+  if (!user || (!isAdmin && !["enquiry_handler", "blog_editor", "visa_manager"].includes(userRole || ""))) {
     return null;
   }
+
+  // Filter nav items based on role
+  const filteredNavItems = isAdmin ? navItems : navItems.filter(item => {
+    if (userRole === "enquiry_handler") return item.path === "/admin/dashboard/enquiries";
+    if (userRole === "blog_editor") return item.path === "/admin/dashboard/blog";
+    if (userRole === "visa_manager") return ["/admin/dashboard/visas", "/admin/dashboard/categories", "/admin/dashboard/countries"].includes(item.path);
+    return false;
+  });
 
   return (
     <div className="min-h-screen bg-muted/30">
@@ -113,7 +120,7 @@ export default function AdminDashboard() {
           </div>
           
           <nav className="px-4 space-y-1 flex-1 overflow-y-auto">
-            {navItems.map((item) => (
+            {filteredNavItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}

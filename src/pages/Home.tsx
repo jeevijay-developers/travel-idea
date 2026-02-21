@@ -7,7 +7,6 @@ import {
   HowItWorks,
   WhyChooseUs,
   Testimonials,
-  ReviewForm,
   FAQsSection,
   CTAFooterSection,
 } from "@/components/home";
@@ -23,7 +22,6 @@ const Home = () => {
         <HowItWorks />
         <WhyChooseUs />
         <Testimonials />
-        <ReviewForm />
         <FAQsSection />
         <CTAFooterSection />
       </Layout>

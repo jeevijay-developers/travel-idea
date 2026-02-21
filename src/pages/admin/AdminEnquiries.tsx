@@ -4,7 +4,7 @@ import { TablePagination, paginate } from "@/components/admin/TablePagination";
 import { 
   Eye, Trash2, Search, MessageSquare, Clock, CheckCircle, X, 
   Phone, Mail, MapPin, Calendar, Download, Filter, User,
-  ArrowUpRight, AlertCircle, Inbox, XCircle
+  ArrowUpRight, AlertCircle, Inbox, XCircle, UserPlus
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -28,6 +28,12 @@ interface Enquiry {
   visa_id: string | null;
   travel_date: string | null;
   travelers: number | null;
+  assigned_to: string | null;
+}
+
+interface StaffHandler {
+  user_id: string;
+  email: string;
 }
 
 const statusOptions = [
@@ -68,9 +74,10 @@ const itemVariants = {
 
 export default function AdminEnquiries() {
   const { toast } = useToast();
-  const { userRole } = useAuth();
+  const { userRole, isAdmin } = useAuth();
   const isEnquiryHandler = userRole === "enquiry_handler";
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
+  const [handlers, setHandlers] = useState<StaffHandler[]>([]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
@@ -78,7 +85,10 @@ export default function AdminEnquiries() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => { fetchEnquiries(); }, []);
+  useEffect(() => { 
+    fetchEnquiries(); 
+    if (isAdmin) fetchHandlers();
+  }, [isAdmin]);
 
   const fetchEnquiries = async () => {
     setLoading(true);
@@ -93,6 +103,50 @@ export default function AdminEnquiries() {
       setEnquiries(data || []);
     }
     setLoading(false);
+  };
+
+  const fetchHandlers = async () => {
+    // Get all users with enquiry_handler role
+    const { data: roleData } = await supabase
+      .from("user_roles")
+      .select("user_id")
+      .eq("role", "enquiry_handler");
+    
+    if (!roleData || roleData.length === 0) {
+      setHandlers([]);
+      return;
+    }
+
+    // Get emails via edge function
+    const { data: staffData } = await supabase.functions.invoke("manage-staff", {
+      body: { action: "list" },
+    });
+
+    if (staffData?.staff) {
+      const handlerIds = new Set(roleData.map(r => r.user_id));
+      const handlerList: StaffHandler[] = staffData.staff
+        .filter((s: any) => handlerIds.has(s.user_id))
+        .map((s: any) => ({ user_id: s.user_id, email: s.email }));
+      setHandlers(handlerList);
+    }
+  };
+
+  const handleAssign = async (enquiryId: string, handlerUserId: string | null) => {
+    const assignValue = handlerUserId === "unassign" ? null : handlerUserId;
+    const { error } = await supabase
+      .from("enquiries")
+      .update({ assigned_to: assignValue })
+      .eq("id", enquiryId);
+
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: assignValue ? "Enquiry assigned" : "Enquiry unassigned" });
+      fetchEnquiries();
+      if (selectedEnquiry?.id === enquiryId) {
+        setSelectedEnquiry({ ...selectedEnquiry, assigned_to: assignValue });
+      }
+    }
   };
 
   const handleStatusChange = async (id: string, newStatus: string) => {
@@ -127,11 +181,12 @@ export default function AdminEnquiries() {
   };
 
   const exportToCSV = () => {
-    const headers = ["Name", "Email", "Phone", "Destination", "Travel Date", "Travelers", "Message", "Status", "Date"];
+    const headers = ["Name", "Email", "Phone", "Destination", "Travel Date", "Travelers", "Message", "Status", "Assigned To", "Date"];
     const csvData = filteredEnquiries.map(e => [
       e.name, e.email, e.phone || "", e.destination || "", e.travel_date || "",
       e.travelers?.toString() || "1", e.message?.replace(/,/g, ";") || "",
-      e.status, new Date(e.created_at).toLocaleString()
+      e.status, getHandlerEmail(e.assigned_to) || "Unassigned",
+      new Date(e.created_at).toLocaleString()
     ]);
     const csv = [headers.join(","), ...csvData.map(row => row.join(","))].join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
@@ -141,6 +196,11 @@ export default function AdminEnquiries() {
     a.download = `enquiries-${new Date().toISOString().split("T")[0]}.csv`;
     a.click();
     toast({ title: "Exported successfully" });
+  };
+
+  const getHandlerEmail = (userId: string | null) => {
+    if (!userId) return null;
+    return handlers.find(h => h.user_id === userId)?.email || null;
   };
 
   const filteredEnquiries = useMemo(() => {
@@ -191,7 +251,7 @@ export default function AdminEnquiries() {
             Customer Enquiries
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
-            {isEnquiryHandler ? "View and update enquiry statuses" : "Manage and respond to customer enquiries"}
+            {isEnquiryHandler ? "View and update your assigned enquiries" : "Manage, assign, and respond to customer enquiries"}
           </p>
         </div>
         {!isEnquiryHandler && (
@@ -265,8 +325,8 @@ export default function AdminEnquiries() {
                 <TableHead className="font-semibold">Contact</TableHead>
                 <TableHead className="font-semibold">Destination</TableHead>
                 <TableHead className="font-semibold">Travel Date</TableHead>
-                <TableHead className="font-semibold">Travelers</TableHead>
                 <TableHead className="font-semibold">Status</TableHead>
+                {isAdmin && <TableHead className="font-semibold">Assigned To</TableHead>}
                 <TableHead className="font-semibold">Time</TableHead>
                 <TableHead className="w-[100px] font-semibold">Actions</TableHead>
               </TableRow>
@@ -274,12 +334,12 @@ export default function AdminEnquiries() {
             <TableBody>
               {filteredEnquiries.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={8} className="text-center py-12">
+                  <TableCell colSpan={isAdmin ? 8 : 7} className="text-center py-12">
                     <Inbox className="h-12 w-12 text-muted-foreground/30 mx-auto mb-4" />
                     <p className="text-muted-foreground">
                       {search || statusFilter !== "all" || dateFilter !== "all"
                         ? "No enquiries match your filters" 
-                        : "No enquiries yet."}
+                        : isEnquiryHandler ? "No enquiries assigned to you yet." : "No enquiries yet."}
                     </p>
                   </TableCell>
                 </TableRow>
@@ -317,9 +377,6 @@ export default function AdminEnquiries() {
                         ) : <span className="text-muted-foreground">-</span>}
                       </TableCell>
                       <TableCell>
-                        <div className="flex items-center gap-1 text-sm"><User className="h-3 w-3 text-muted-foreground" />{e.travelers || 1}</div>
-                      </TableCell>
-                      <TableCell>
                         <Select value={e.status} onValueChange={(v) => handleStatusChange(e.id, v)}>
                           <SelectTrigger className="w-[130px] h-8 border-0 bg-transparent">
                             <Badge className={meta.color}>
@@ -331,6 +388,27 @@ export default function AdminEnquiries() {
                           </SelectContent>
                         </Select>
                       </TableCell>
+                      {isAdmin && (
+                        <TableCell>
+                          <Select 
+                            value={e.assigned_to || "unassigned"} 
+                            onValueChange={(v) => handleAssign(e.id, v === "unassigned" ? "unassign" : v)}
+                          >
+                            <SelectTrigger className="w-[160px] h-8">
+                              <div className="flex items-center gap-1 text-sm truncate">
+                                <UserPlus className="h-3 w-3 text-muted-foreground flex-shrink-0" />
+                                <span className="truncate">{getHandlerEmail(e.assigned_to) || "Unassigned"}</span>
+                              </div>
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="unassigned">Unassigned</SelectItem>
+                              {handlers.map(h => (
+                                <SelectItem key={h.user_id} value={h.user_id}>{h.email}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </TableCell>
+                      )}
                       <TableCell>
                         <div className="flex items-center gap-1 text-sm text-muted-foreground">
                           <Calendar className="h-3 w-3" />{getTimeAgo(e.created_at)}
@@ -358,7 +436,7 @@ export default function AdminEnquiries() {
       {/* Detail Modal */}
       {selectedEnquiry && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-card border rounded-2xl p-6 w-full max-w-lg shadow-2xl">
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-card border rounded-2xl p-6 w-full max-w-lg shadow-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold flex items-center gap-2"><User className="h-5 w-5" />Enquiry Details</h2>
               <Button variant="ghost" size="icon" onClick={() => setSelectedEnquiry(null)}><X className="h-5 w-5" /></Button>
@@ -404,6 +482,30 @@ export default function AdminEnquiries() {
                     <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/30">
                       <div className="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center"><User className="h-5 w-5 text-indigo-500" /></div>
                       <div><p className="text-sm text-muted-foreground">Travelers</p><p className="font-medium">{selectedEnquiry.travelers || 1}</p></div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Assigned handler info */}
+                {isAdmin && (
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/30">
+                    <div className="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center"><UserPlus className="h-5 w-5 text-cyan-500" /></div>
+                    <div className="flex-1">
+                      <p className="text-sm text-muted-foreground">Assigned To</p>
+                      <Select 
+                        value={selectedEnquiry.assigned_to || "unassigned"} 
+                        onValueChange={(v) => handleAssign(selectedEnquiry.id, v === "unassigned" ? "unassign" : v)}
+                      >
+                        <SelectTrigger className="w-full h-8 mt-1">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="unassigned">Unassigned</SelectItem>
+                          {handlers.map(h => (
+                            <SelectItem key={h.user_id} value={h.user_id}>{h.email}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                 )}

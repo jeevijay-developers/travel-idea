@@ -148,6 +148,7 @@ export type Database = {
       }
       enquiries: {
         Row: {
+          assigned_to: string | null
           created_at: string
           destination: string | null
           email: string
@@ -162,6 +163,7 @@ export type Database = {
           visa_id: string | null
         }
         Insert: {
+          assigned_to?: string | null
           created_at?: string
           destination?: string | null
           email: string
@@ -176,6 +178,7 @@ export type Database = {
           visa_id?: string | null
         }
         Update: {
+          assigned_to?: string | null
           created_at?: string
           destination?: string | null
           email?: string

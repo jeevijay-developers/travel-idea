@@ -176,6 +176,8 @@ export default function VisaDetail() {
   const [currentStep, setCurrentStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [travelDate, setTravelDate] = useState("");
+  const [travelers, setTravelers] = useState(1);
   const [formData, setFormData] = useState<EnquiryFormData>({
     name: "",
     email: "",
@@ -776,6 +778,61 @@ export default function VisaDetail() {
                           {visa.issued_recently} issued recently
                         </motion.div>
                       )}
+                    </div>
+                  </div>
+
+                  {/* Travel Date & Travelers Selection */}
+                  <div className="p-3 md:p-4 border-b bg-muted/20 space-y-3">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="travel-date" className="text-xs md:text-sm font-medium flex items-center gap-1.5">
+                        <Calendar className="h-3.5 w-3.5 text-accent" />
+                        Travel Date
+                      </Label>
+                      <Input
+                        id="travel-date"
+                        type="date"
+                        value={travelDate}
+                        onChange={(e) => setTravelDate(e.target.value)}
+                        min={new Date().toISOString().split("T")[0]}
+                        className="h-9 md:h-10 text-xs md:text-sm"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="travelers" className="text-xs md:text-sm font-medium flex items-center gap-1.5">
+                        <Users className="h-3.5 w-3.5 text-accent" />
+                        Number of Travelers
+                      </Label>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="icon"
+                          className="h-9 w-9 shrink-0"
+                          onClick={() => setTravelers(Math.max(1, travelers - 1))}
+                          disabled={travelers <= 1}
+                        >
+                          −
+                        </Button>
+                        <Input
+                          id="travelers"
+                          type="number"
+                          value={travelers}
+                          onChange={(e) => setTravelers(Math.max(1, Math.min(20, parseInt(e.target.value) || 1)))}
+                          min={1}
+                          max={20}
+                          className="h-9 md:h-10 text-center text-xs md:text-sm"
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="icon"
+                          className="h-9 w-9 shrink-0"
+                          onClick={() => setTravelers(Math.min(20, travelers + 1))}
+                          disabled={travelers >= 20}
+                        >
+                          +
+                        </Button>
+                      </div>
                     </div>
                   </div>
 

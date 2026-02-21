@@ -40,26 +40,25 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Check admin role
-    const { data: roleData } = await supabaseAdmin
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", user.id)
-      .eq("role", "admin")
-      .maybeSingle();
-
-    if (!roleData) {
-      return new Response(
-        JSON.stringify({ error: "Only admins can manage staff" }),
-        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
     const { action, email, password, role, userId } = await req.json();
     console.log(`Staff management action: ${action}`);
 
+    // Allow "list" action for all authenticated staff (not just admins)
     if (action === "list") {
-      // List all staff members with their roles
+      // Verify user is staff
+      const { data: staffRole } = await supabaseAdmin
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (!staffRole) {
+        return new Response(
+          JSON.stringify({ error: "Not authorized" }),
+          { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
       const { data: roles, error: rolesError } = await supabaseAdmin
         .from("user_roles")
         .select("user_id, role");
@@ -71,7 +70,6 @@ Deno.serve(async (req) => {
         );
       }
 
-      // Get user details for each role
       const staffList = [];
       for (const r of (roles || [])) {
         const { data: userData } = await supabaseAdmin.auth.admin.getUserById(r.user_id);
@@ -87,6 +85,21 @@ Deno.serve(async (req) => {
       return new Response(
         JSON.stringify({ staff: staffList }),
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // All other actions require admin role
+    const { data: roleData } = await supabaseAdmin
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id)
+      .eq("role", "admin")
+      .maybeSingle();
+
+    if (!roleData) {
+      return new Response(
+        JSON.stringify({ error: "Only admins can manage staff" }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 

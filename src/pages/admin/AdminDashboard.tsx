@@ -32,9 +32,11 @@ export default function AdminDashboard() {
         navigate("/admin");
       } else if (!isAdmin && userRole !== "enquiry_handler" && userRole !== "blog_editor" && userRole !== "visa_manager") {
         navigate("/admin?error=not_authorized");
+      } else if (userRole === "enquiry_handler" && location.pathname !== "/admin/dashboard/enquiries") {
+        navigate("/admin/dashboard/enquiries", { replace: true });
       }
     }
-  }, [user, isAdmin, isLoading, userRole, navigate]);
+  }, [user, isAdmin, isLoading, userRole, navigate, location.pathname]);
 
   const handleLogout = async () => {
     await signOut();

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { 
   Plane, MessageSquare, FileText, Globe, Mail, TrendingUp, ArrowRight, 
   Users, Clock, CheckCircle, AlertCircle, BarChart3, Calendar, 
-  Zap, Eye, PenLine, Plus, ChevronRight, Sparkles
+  Zap, Eye, PenLine, Plus, ChevronRight, Sparkles, Phone, XCircle, UserCheck
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -36,6 +36,16 @@ interface TopVisa {
   enquiry_count: number;
 }
 
+interface HandlerStat {
+  user_id: string;
+  email: string;
+  pending: number;
+  contacted: number;
+  closed: number;
+  lost: number;
+  total: number;
+}
+
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -65,6 +75,7 @@ export default function DashboardHome() {
   const [recentBlogs, setRecentBlogs] = useState<RecentBlog[]>([]);
   const [enquiryTrend, setEnquiryTrend] = useState<{date: string; count: number}[]>([]);
   const [statusDistribution, setStatusDistribution] = useState<{name: string; value: number; color: string}[]>([]);
+  const [handlerStats, setHandlerStats] = useState<HandlerStat[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -73,7 +84,7 @@ export default function DashboardHome() {
 
   const fetchAllData = async () => {
     setLoading(true);
-    await Promise.all([fetchStats(), fetchRecentEnquiries(), fetchRecentBlogs(), fetchEnquiryTrend()]);
+    await Promise.all([fetchStats(), fetchRecentEnquiries(), fetchRecentBlogs(), fetchEnquiryTrend(), fetchHandlerStats()]);
     setLoading(false);
   };
 
@@ -150,6 +161,61 @@ export default function DashboardHome() {
       const last7Days = Object.entries(grouped).slice(-7).map(([date, count]) => ({ date, count }));
       setEnquiryTrend(last7Days.length > 0 ? last7Days : [{ date: "Today", count: 0 }]);
     }
+  };
+
+  const fetchHandlerStats = async () => {
+    const { data: roleData } = await supabase
+      .from("user_roles")
+      .select("user_id")
+      .eq("role", "enquiry_handler");
+    
+    if (!roleData || roleData.length === 0) {
+      setHandlerStats([]);
+      return;
+    }
+
+    const { data: staffData } = await supabase.functions.invoke("manage-staff", {
+      body: { action: "list" },
+    });
+
+    const { data: enquiryData } = await supabase
+      .from("enquiries")
+      .select("assigned_to, status")
+      .not("assigned_to", "is", null);
+
+    const handlerIds = new Set(roleData.map(r => r.user_id));
+    const emailMap: Record<string, string> = {};
+    if (staffData?.staff) {
+      staffData.staff.forEach((s: any) => {
+        if (handlerIds.has(s.user_id)) {
+          emailMap[s.user_id] = s.email;
+        }
+      });
+    }
+
+    const statsMap: Record<string, HandlerStat> = {};
+    roleData.forEach(r => {
+      statsMap[r.user_id] = {
+        user_id: r.user_id,
+        email: emailMap[r.user_id] || "Unknown",
+        pending: 0, contacted: 0, closed: 0, lost: 0, total: 0,
+      };
+    });
+
+    if (enquiryData) {
+      enquiryData.forEach(e => {
+        if (e.assigned_to && statsMap[e.assigned_to]) {
+          const stat = statsMap[e.assigned_to];
+          stat.total++;
+          if (e.status === "pending") stat.pending++;
+          else if (e.status === "contacted") stat.contacted++;
+          else if (e.status === "closed") stat.closed++;
+          else if (e.status === "lost") stat.lost++;
+        }
+      });
+    }
+
+    setHandlerStats(Object.values(statsMap));
   };
 
   const statCards = [
@@ -434,6 +500,59 @@ export default function DashboardHome() {
           </CardContent>
         </Card>
       </motion.div>
+
+      {/* Enquiry Handler Performance */}
+      {handlerStats.length > 0 && (
+        <motion.div variants={itemVariants}>
+          <Card className="border-0 shadow-lg">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg font-semibold flex items-center gap-2">
+                <UserCheck className="h-5 w-5 text-cyan-500" />
+                Enquiry Handler Performance
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {handlerStats.map((handler) => (
+                  <div key={handler.user_id} className="p-4 rounded-xl bg-muted/30 border">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-10 h-10 rounded-full bg-cyan-500/10 flex items-center justify-center">
+                        <span className="text-sm font-bold text-cyan-600">{handler.email.charAt(0).toUpperCase()}</span>
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-medium text-sm">{handler.email}</p>
+                        <p className="text-xs text-muted-foreground">{handler.total} total assigned</p>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-4 gap-3">
+                      <div className="text-center p-2 rounded-lg bg-blue-500/10">
+                        <AlertCircle className="h-4 w-4 text-blue-500 mx-auto mb-1" />
+                        <p className="text-lg font-bold text-blue-600">{handler.pending}</p>
+                        <p className="text-[10px] text-muted-foreground">Pending</p>
+                      </div>
+                      <div className="text-center p-2 rounded-lg bg-amber-500/10">
+                        <Phone className="h-4 w-4 text-amber-500 mx-auto mb-1" />
+                        <p className="text-lg font-bold text-amber-600">{handler.contacted}</p>
+                        <p className="text-[10px] text-muted-foreground">Contacted</p>
+                      </div>
+                      <div className="text-center p-2 rounded-lg bg-green-500/10">
+                        <CheckCircle className="h-4 w-4 text-green-500 mx-auto mb-1" />
+                        <p className="text-lg font-bold text-green-600">{handler.closed}</p>
+                        <p className="text-[10px] text-muted-foreground">Closed</p>
+                      </div>
+                      <div className="text-center p-2 rounded-lg bg-red-500/10">
+                        <XCircle className="h-4 w-4 text-red-500 mx-auto mb-1" />
+                        <p className="text-lg font-bold text-red-600">{handler.lost}</p>
+                        <p className="text-[10px] text-muted-foreground">Lost</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
 
       {/* Performance Summary */}
       <motion.div variants={itemVariants}>

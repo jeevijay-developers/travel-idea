@@ -144,6 +144,47 @@ export function Footer() {
       {/* Review Section */}
       <ReviewForm />
 
+      {/* Newsletter Section */}
+      <div className="bg-gradient-to-r from-accent via-accent to-accent/90 py-8 md:py-12 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-32 md:w-64 h-32 md:h-64 bg-white/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute bottom-0 right-0 w-24 md:w-48 h-24 md:h-48 bg-primary/20 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
+        <div className="container relative z-10">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+            <div className="text-center lg:text-left">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="flex items-center gap-2 justify-center lg:justify-start mb-2"
+              >
+                <Plane className="h-4 w-4 md:h-5 md:w-5 text-accent-foreground" />
+                <span className="text-xs md:text-sm font-medium text-accent-foreground/80 uppercase tracking-wider">
+                  Stay Updated
+                </span>
+              </motion.div>
+              <motion.h3
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="text-xl md:text-2xl lg:text-3xl font-display font-bold text-accent-foreground"
+              >
+                Get Visa Tips & Updates
+              </motion.h3>
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="text-accent-foreground/80 mt-1 text-sm md:text-base"
+              >
+                Subscribe for exclusive offers
+              </motion.p>
+            </div>
+            <NewsletterForm />
+          </div>
+        </div>
+      </div>
       {/* Main Footer */}
       <div className="bg-primary py-10 md:py-16 relative">
         {/* Background pattern */}

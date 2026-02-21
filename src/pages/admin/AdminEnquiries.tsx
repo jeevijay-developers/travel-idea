@@ -325,7 +325,7 @@ export default function AdminEnquiries() {
                       {e.travel_date ? (
                         <div className="flex items-center gap-1 text-sm">
                           <Calendar className="h-3 w-3 text-muted-foreground" />
-                          {new Date(e.travel_date).toLocaleDateString()}
+                          {(() => { const [y, m, d] = e.travel_date!.split('-'); return `${d}/${m}/${y}`; })()}
                         </div>
                       ) : (
                         <span className="text-muted-foreground">-</span>
@@ -472,7 +472,7 @@ export default function AdminEnquiries() {
                         </div>
                         <div>
                           <p className="text-sm text-muted-foreground">Travel Date</p>
-                          <p className="font-medium">{new Date(selectedEnquiry.travel_date).toLocaleDateString()}</p>
+                          <p className="font-medium">{(() => { const [y, m, d] = selectedEnquiry.travel_date!.split('-'); return `${d}/${m}/${y}`; })()}</p>
                         </div>
                       </div>
                     )}

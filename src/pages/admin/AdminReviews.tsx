@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Star, Check, X, Trash2, Eye, EyeOff } from "lucide-react";
+import { Star, Check, X, Trash2, Eye, EyeOff, ArrowUpDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { TablePagination } from "@/components/admin/TablePagination";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
@@ -27,15 +28,24 @@ export default function AdminReviews() {
   const [page, setPage] = useState(1);
   const [filter, setFilter] = useState<"all" | "pending" | "approved">("all");
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [sortByStars, setSortByStars] = useState<"none" | "high" | "low">("none");
 
   const { data, isLoading } = useQuery({
-    queryKey: ["admin-reviews", page, filter],
+    queryKey: ["admin-reviews", page, filter, sortByStars],
     queryFn: async () => {
       let query = supabase
         .from("reviews")
-        .select("*", { count: "exact" })
-        .order("created_at", { ascending: false })
-        .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
+        .select("*", { count: "exact" });
+
+      if (sortByStars === "high") {
+        query = query.order("rating", { ascending: false }).order("created_at", { ascending: false });
+      } else if (sortByStars === "low") {
+        query = query.order("rating", { ascending: true }).order("created_at", { ascending: false });
+      } else {
+        query = query.order("created_at", { ascending: false });
+      }
+
+      query = query.range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
 
       if (filter === "pending") query = query.eq("is_approved", false);
       if (filter === "approved") query = query.eq("is_approved", true);
@@ -79,7 +89,7 @@ export default function AdminReviews() {
           <h1 className="text-2xl font-bold">Reviews</h1>
           <p className="text-muted-foreground text-sm">Manage customer reviews and ratings</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2 items-center">
           {(["all", "pending", "approved"] as const).map((f) => (
             <Button
               key={f}
@@ -91,6 +101,17 @@ export default function AdminReviews() {
               {f}
             </Button>
           ))}
+          <Select value={sortByStars} onValueChange={(v) => { setSortByStars(v as "none" | "high" | "low"); setPage(1); }}>
+            <SelectTrigger className="w-[160px] h-9">
+              <ArrowUpDown className="h-3.5 w-3.5 mr-1.5" />
+              <SelectValue placeholder="Sort by stars" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">Latest first</SelectItem>
+              <SelectItem value="high">Stars: High → Low</SelectItem>
+              <SelectItem value="low">Stars: Low → High</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 

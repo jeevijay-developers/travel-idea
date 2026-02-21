@@ -58,6 +58,38 @@ Deno.serve(async (req) => {
     const { action, email, password, role, userId } = await req.json();
     console.log(`Staff management action: ${action}`);
 
+    if (action === "list") {
+      // List all staff members with their roles
+      const { data: roles, error: rolesError } = await supabaseAdmin
+        .from("user_roles")
+        .select("user_id, role");
+
+      if (rolesError) {
+        return new Response(
+          JSON.stringify({ error: "Failed to fetch roles" }),
+          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      // Get user details for each role
+      const staffList = [];
+      for (const r of (roles || [])) {
+        const { data: userData } = await supabaseAdmin.auth.admin.getUserById(r.user_id);
+        if (userData?.user) {
+          staffList.push({
+            user_id: r.user_id,
+            email: userData.user.email,
+            role: r.role,
+          });
+        }
+      }
+
+      return new Response(
+        JSON.stringify({ staff: staffList }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     if (action === "create") {
       // Validate inputs
       if (!email || !password || !role) {

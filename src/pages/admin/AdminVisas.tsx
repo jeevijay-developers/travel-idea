@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { TablePagination, paginate } from "@/components/admin/TablePagination";
 import { 
   Plus, Pencil, Trash2, X, Search, Filter, Plane, Clock, 
   DollarSign, FileText, Zap, Star, Eye, Globe, CheckCircle,
@@ -66,6 +67,7 @@ export default function AdminVisas() {
   const [filterCountry, setFilterCountry] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
   const [activeTab, setActiveTab] = useState("basic");
   
   const [form, setForm] = useState({
@@ -286,11 +288,11 @@ export default function AdminVisas() {
           <Input
             placeholder="Search visas by title or country..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
             className="pl-10"
           />
         </div>
-        <Select value={filterCountry} onValueChange={setFilterCountry}>
+        <Select value={filterCountry} onValueChange={(v) => { setFilterCountry(v); setCurrentPage(1); }}>
           <SelectTrigger className="w-[180px]">
             <Globe className="h-4 w-4 mr-2 text-muted-foreground" />
             <SelectValue placeholder="All Countries" />
@@ -302,7 +304,7 @@ export default function AdminVisas() {
             ))}
           </SelectContent>
         </Select>
-        <Select value={filterCategory} onValueChange={setFilterCategory}>
+        <Select value={filterCategory} onValueChange={(v) => { setFilterCategory(v); setCurrentPage(1); }}>
           <SelectTrigger className="w-[180px]">
             <Filter className="h-4 w-4 mr-2 text-muted-foreground" />
             <SelectValue placeholder="All Categories" />
@@ -604,6 +606,7 @@ export default function AdminVisas() {
             <p className="text-muted-foreground">Loading visas...</p>
           </div>
         ) : (
+          <>
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/30">
@@ -629,7 +632,7 @@ export default function AdminVisas() {
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredVisas.map((v) => (
+                paginate(filteredVisas, currentPage).map((v) => (
                   <TableRow key={v.id} className="group hover:bg-muted/30 transition-colors">
                     <TableCell>
                       <div className="flex items-center gap-3">
@@ -678,7 +681,7 @@ export default function AdminVisas() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex items-center gap-1">
                         <Button 
                           variant="ghost" 
                           size="icon" 
@@ -706,6 +709,8 @@ export default function AdminVisas() {
               )}
             </TableBody>
           </Table>
+          <TablePagination currentPage={currentPage} totalItems={filteredVisas.length} onPageChange={setCurrentPage} />
+          </>
         )}
       </motion.div>
     </motion.div>

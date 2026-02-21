@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { TablePagination, paginate } from "@/components/admin/TablePagination";
 import { Download, Trash2, Search, Mail, Users, TrendingUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,7 @@ export default function AdminNewsletter() {
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     fetchSubscribers();
@@ -148,7 +150,7 @@ export default function AdminNewsletter() {
           <Input
             placeholder="Search by email..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
             className="pl-10"
           />
         </div>
@@ -179,7 +181,7 @@ export default function AdminNewsletter() {
                 </TableCell>
               </TableRow>
             ) : (
-              filteredSubscribers.map((s) => (
+              paginate(filteredSubscribers, currentPage).map((s) => (
                 <TableRow key={s.id}>
                   <TableCell className="font-medium">{s.email}</TableCell>
                   <TableCell>{new Date(s.subscribed_at).toLocaleDateString()}</TableCell>
@@ -206,6 +208,7 @@ export default function AdminNewsletter() {
             )}
           </TableBody>
         </Table>
+        <TablePagination currentPage={currentPage} totalItems={filteredSubscribers.length} onPageChange={setCurrentPage} />
       </div>
     </div>
   );

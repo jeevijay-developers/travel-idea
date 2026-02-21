@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { TablePagination, paginate } from "@/components/admin/TablePagination";
 import { 
   Plus, Pencil, Trash2, X, Eye, EyeOff, Upload, Loader2, 
   FileText, Calendar, User, Tag, Search, Image as ImageIcon,
@@ -62,6 +63,7 @@ export default function AdminBlog() {
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
   const [activeTab, setActiveTab] = useState("content");
   const fileInputRef = useRef<HTMLInputElement>(null);
   
@@ -274,7 +276,7 @@ export default function AdminBlog() {
           <Input
             placeholder="Search posts by title or category..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
             className="pl-10"
           />
         </div>
@@ -282,21 +284,21 @@ export default function AdminBlog() {
           <Button 
             variant={filterStatus === "all" ? "default" : "outline"} 
             size="sm"
-            onClick={() => setFilterStatus("all")}
+            onClick={() => { setFilterStatus("all"); setCurrentPage(1); }}
           >
             All
           </Button>
           <Button 
             variant={filterStatus === "published" ? "default" : "outline"} 
             size="sm"
-            onClick={() => setFilterStatus("published")}
+            onClick={() => { setFilterStatus("published"); setCurrentPage(1); }}
           >
             Published
           </Button>
           <Button 
             variant={filterStatus === "draft" ? "default" : "outline"} 
             size="sm"
-            onClick={() => setFilterStatus("draft")}
+            onClick={() => { setFilterStatus("draft"); setCurrentPage(1); }}
           >
             Drafts
           </Button>
@@ -558,6 +560,7 @@ export default function AdminBlog() {
             <p className="text-muted-foreground">Loading posts...</p>
           </div>
         ) : (
+          <>
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/30">
@@ -582,7 +585,7 @@ export default function AdminBlog() {
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredPosts.map((p) => (
+                paginate(filteredPosts, currentPage).map((p) => (
                   <TableRow key={p.id} className="group hover:bg-muted/30 transition-colors">
                     <TableCell>
                       <div className="flex items-center gap-3">
@@ -664,6 +667,8 @@ export default function AdminBlog() {
               )}
             </TableBody>
           </Table>
+          <TablePagination currentPage={currentPage} totalItems={filteredPosts.length} onPageChange={setCurrentPage} />
+          </>
         )}
       </motion.div>
     </motion.div>

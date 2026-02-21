@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { TablePagination, paginate } from "@/components/admin/TablePagination";
 import { Plus, Pencil, Trash2, X, Globe, Search, MapPin, Flag, Map, Hash } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -43,6 +44,7 @@ export default function AdminCountries() {
   const [searchQuery, setSearchQuery] = useState("");
   const [regionFilter, setRegionFilter] = useState("all");
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => { fetchData(); }, []);
 
@@ -186,11 +188,11 @@ export default function AdminCountries() {
           <Input
             placeholder="Search countries by name, code, or region..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
             className="pl-10"
           />
         </div>
-        <Select value={regionFilter} onValueChange={setRegionFilter}>
+        <Select value={regionFilter} onValueChange={(v) => { setRegionFilter(v); setCurrentPage(1); }}>
           <SelectTrigger className="w-full sm:w-[180px]">
             <Map className="h-4 w-4 mr-2" />
             <SelectValue placeholder="Filter by Region" />
@@ -342,7 +344,7 @@ export default function AdminCountries() {
                 </TableCell>
               </TableRow>
             ) : (
-              filteredCountries.map((c, index) => (
+              paginate(filteredCountries, currentPage).map((c, index) => (
                 <motion.tr
                   key={c.id}
                   initial={{ opacity: 0, y: 10 }}
@@ -410,14 +412,8 @@ export default function AdminCountries() {
             )}
           </TableBody>
         </Table>
+        <TablePagination currentPage={currentPage} totalItems={filteredCountries.length} onPageChange={setCurrentPage} />
       </motion.div>
-
-      {/* Results count */}
-      {!loading && filteredCountries.length > 0 && (
-        <motion.p variants={itemVariants} className="text-sm text-muted-foreground text-center">
-          Showing {filteredCountries.length} of {countries.length} countries
-        </motion.p>
-      )}
     </motion.div>
   );
 }

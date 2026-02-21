@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { TablePagination, paginate } from "@/components/admin/TablePagination";
 import { 
   Eye, Trash2, Search, MessageSquare, Clock, CheckCircle, X, 
   Phone, Mail, MapPin, Calendar, Download, Filter, User,
@@ -45,6 +46,7 @@ export default function AdminEnquiries() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedEnquiry, setSelectedEnquiry] = useState<Enquiry | null>(null);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     fetchEnquiries();
@@ -172,7 +174,7 @@ export default function AdminEnquiries() {
 
       {/* Stats Cards */}
       <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="border-0 shadow-sm bg-gradient-to-br from-blue-500/10 to-blue-500/5 cursor-pointer hover:shadow-md transition-shadow" onClick={() => setStatusFilter("new")}>
+        <Card className="border-0 shadow-sm bg-gradient-to-br from-blue-500/10 to-blue-500/5 cursor-pointer hover:shadow-md transition-shadow" onClick={() => { setStatusFilter("new"); setCurrentPage(1); }}>
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -190,7 +192,7 @@ export default function AdminEnquiries() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm bg-gradient-to-br from-amber-500/10 to-amber-500/5 cursor-pointer hover:shadow-md transition-shadow" onClick={() => setStatusFilter("contacted")}>
+        <Card className="border-0 shadow-sm bg-gradient-to-br from-amber-500/10 to-amber-500/5 cursor-pointer hover:shadow-md transition-shadow" onClick={() => { setStatusFilter("contacted"); setCurrentPage(1); }}>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center shadow-lg">
@@ -203,7 +205,7 @@ export default function AdminEnquiries() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm bg-gradient-to-br from-green-500/10 to-green-500/5 cursor-pointer hover:shadow-md transition-shadow" onClick={() => setStatusFilter("resolved")}>
+        <Card className="border-0 shadow-sm bg-gradient-to-br from-green-500/10 to-green-500/5 cursor-pointer hover:shadow-md transition-shadow" onClick={() => { setStatusFilter("resolved"); setCurrentPage(1); }}>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center shadow-lg">
@@ -225,11 +227,11 @@ export default function AdminEnquiries() {
           <Input
             placeholder="Search by name, email, destination..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
             className="pl-10"
           />
         </div>
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
+        <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v); setCurrentPage(1); }}>
           <SelectTrigger className="w-[160px]">
             <Filter className="h-4 w-4 mr-2 text-muted-foreground" />
             <SelectValue placeholder="Filter status" />
@@ -251,6 +253,7 @@ export default function AdminEnquiries() {
             <p className="text-muted-foreground">Loading enquiries...</p>
           </div>
         ) : (
+          <>
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/30">
@@ -277,7 +280,7 @@ export default function AdminEnquiries() {
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredEnquiries.map((e) => (
+                paginate(filteredEnquiries, currentPage).map((e) => (
                   <TableRow 
                     key={e.id} 
                     className={`group hover:bg-muted/30 transition-colors ${e.status === "new" ? "bg-blue-500/5" : ""}`}
@@ -381,6 +384,8 @@ export default function AdminEnquiries() {
               )}
             </TableBody>
           </Table>
+          <TablePagination currentPage={currentPage} totalItems={filteredEnquiries.length} onPageChange={setCurrentPage} />
+          </>
         )}
       </motion.div>
 

@@ -99,7 +99,7 @@ export default function AdminDashboard() {
       <div className="flex">
         {/* Sidebar */}
         <aside className={cn(
-          "fixed inset-y-0 left-0 z-50 w-64 bg-primary transform transition-transform lg:translate-x-0 lg:static",
+          "fixed inset-y-0 left-0 z-50 w-64 bg-primary transform transition-transform lg:translate-x-0 lg:static flex flex-col",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}>
           <div className="p-6 hidden lg:block">
@@ -112,7 +112,7 @@ export default function AdminDashboard() {
             <p className="text-sm text-primary-foreground truncate">{user.email}</p>
           </div>
           
-          <nav className="px-4 space-y-1">
+          <nav className="px-4 space-y-1 flex-1 overflow-y-auto">
             {navItems.map((item) => (
               <Link
                 key={item.path}
@@ -128,7 +128,7 @@ export default function AdminDashboard() {
               </Link>
             ))}
           </nav>
-          <div className="absolute bottom-0 left-0 right-0 p-4">
+          <div className="p-4 border-t border-primary-foreground/10">
             <Button 
               variant="ghost" 
               className="w-full justify-start text-primary-foreground/70 hover:text-primary-foreground hover:bg-primary-foreground/10" 

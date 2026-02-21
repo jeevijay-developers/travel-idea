@@ -156,6 +156,8 @@ export type Database = {
           name: string
           phone: string | null
           status: string
+          travel_date: string | null
+          travelers: number | null
           updated_at: string
           visa_id: string | null
         }
@@ -168,6 +170,8 @@ export type Database = {
           name: string
           phone?: string | null
           status?: string
+          travel_date?: string | null
+          travelers?: number | null
           updated_at?: string
           visa_id?: string | null
         }
@@ -180,6 +184,8 @@ export type Database = {
           name?: string
           phone?: string | null
           status?: string
+          travel_date?: string | null
+          travelers?: number | null
           updated_at?: string
           visa_id?: string | null
         }

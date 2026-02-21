@@ -24,6 +24,8 @@ interface Enquiry {
   status: string;
   created_at: string;
   visa_id: string | null;
+  travel_date: string | null;
+  travelers: number | null;
 }
 
 const containerVariants = {
@@ -97,12 +99,14 @@ export default function AdminEnquiries() {
   };
 
   const exportToCSV = () => {
-    const headers = ["Name", "Email", "Phone", "Destination", "Message", "Status", "Date"];
+    const headers = ["Name", "Email", "Phone", "Destination", "Travel Date", "Travelers", "Message", "Status", "Date"];
     const csvData = filteredEnquiries.map(e => [
       e.name,
       e.email,
       e.phone || "",
       e.destination || "",
+      e.travel_date || "",
+      e.travelers?.toString() || "1",
       e.message?.replace(/,/g, ";") || "",
       e.status,
       new Date(e.created_at).toLocaleString()
@@ -253,6 +257,8 @@ export default function AdminEnquiries() {
                 <TableHead className="font-semibold">Customer</TableHead>
                 <TableHead className="font-semibold">Contact</TableHead>
                 <TableHead className="font-semibold">Destination</TableHead>
+                <TableHead className="font-semibold">Travel Date</TableHead>
+                <TableHead className="font-semibold">Travelers</TableHead>
                 <TableHead className="font-semibold">Status</TableHead>
                 <TableHead className="font-semibold">Time</TableHead>
                 <TableHead className="w-[100px] font-semibold">Actions</TableHead>
@@ -261,7 +267,7 @@ export default function AdminEnquiries() {
             <TableBody>
               {filteredEnquiries.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-12">
+                  <TableCell colSpan={8} className="text-center py-12">
                     <Inbox className="h-12 w-12 text-muted-foreground/30 mx-auto mb-4" />
                     <p className="text-muted-foreground">
                       {search || statusFilter !== "all" 
@@ -316,6 +322,22 @@ export default function AdminEnquiries() {
                       )}
                     </TableCell>
                     <TableCell>
+                      {e.travel_date ? (
+                        <div className="flex items-center gap-1 text-sm">
+                          <Calendar className="h-3 w-3 text-muted-foreground" />
+                          {new Date(e.travel_date).toLocaleDateString()}
+                        </div>
+                      ) : (
+                        <span className="text-muted-foreground">-</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-1 text-sm">
+                        <User className="h-3 w-3 text-muted-foreground" />
+                        {e.travelers || 1}
+                      </div>
+                    </TableCell>
+                    <TableCell>
                       <Select value={e.status} onValueChange={(v) => handleStatusChange(e.id, v)}>
                         <SelectTrigger className="w-[130px] h-8 border-0 bg-transparent">
                           <Badge className={getStatusColor(e.status)}>
@@ -339,7 +361,7 @@ export default function AdminEnquiries() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex items-center gap-1">
                         <Button variant="ghost" size="icon" onClick={() => setSelectedEnquiry(e)} title="View Details">
                           <Eye className="h-4 w-4" />
                         </Button>
@@ -436,6 +458,32 @@ export default function AdminEnquiries() {
                     <div>
                       <p className="text-sm text-muted-foreground">Interested Destination</p>
                       <p className="font-medium">{selectedEnquiry.destination}</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Travel Details */}
+                {(selectedEnquiry.travel_date || selectedEnquiry.travelers) && (
+                  <div className="grid grid-cols-2 gap-3">
+                    {selectedEnquiry.travel_date && (
+                      <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/30">
+                        <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center">
+                          <Calendar className="h-5 w-5 text-purple-500" />
+                        </div>
+                        <div>
+                          <p className="text-sm text-muted-foreground">Travel Date</p>
+                          <p className="font-medium">{new Date(selectedEnquiry.travel_date).toLocaleDateString()}</p>
+                        </div>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/30">
+                      <div className="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center">
+                        <User className="h-5 w-5 text-indigo-500" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Travelers</p>
+                        <p className="font-medium">{selectedEnquiry.travelers || 1}</p>
+                      </div>
                     </div>
                   </div>
                 )}

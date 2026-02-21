@@ -312,8 +312,10 @@ export default function VisaDetail() {
         destination: result.data.destination,
         visa_id: visa?.id || null,
         message: result.data.message || null,
-        status: "new"
-      });
+        status: "new",
+        travel_date: travelDate || null,
+        travelers: travelers,
+      } as any);
 
       if (error) throw error;
 

@@ -7,6 +7,7 @@ interface AuthContextType {
   session: Session | null;
   isAdmin: boolean;
   isLoading: boolean;
+  userRole: string | null;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
@@ -18,6 +19,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -34,6 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           }, 0);
         } else {
           setIsAdmin(false);
+          setUserRole(null);
         }
       }
     );
@@ -58,19 +61,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .from("user_roles")
         .select("role")
         .eq("user_id", userId)
-        .eq("role", "admin")
         .maybeSingle();
 
       if (error) {
         console.error("Error checking admin role:", error);
         setIsAdmin(false);
+        setUserRole(null);
         return;
       }
 
-      setIsAdmin(!!data);
+      setIsAdmin(data?.role === "admin");
+      setUserRole(data?.role ?? null);
     } catch (err) {
       console.error("Error checking admin role:", err);
       setIsAdmin(false);
+      setUserRole(null);
     }
   };
 
@@ -98,6 +103,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signOut = async () => {
     await supabase.auth.signOut();
     setIsAdmin(false);
+    setUserRole(null);
   };
 
   return (
@@ -107,6 +113,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         session,
         isAdmin,
         isLoading,
+        userRole,
         signIn,
         signUp,
         signOut,

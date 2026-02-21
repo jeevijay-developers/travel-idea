@@ -99,7 +99,7 @@ export default function AdminDashboard() {
       <div className="flex">
         {/* Sidebar */}
         <aside className={cn(
-          "fixed inset-y-0 left-0 z-50 w-64 bg-primary transform transition-transform lg:translate-x-0 lg:static flex flex-col",
+          "fixed inset-y-0 left-0 z-50 w-64 bg-primary transform transition-transform lg:translate-x-0 lg:sticky lg:top-0 flex flex-col h-screen",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}>
           <div className="p-6 hidden lg:block">

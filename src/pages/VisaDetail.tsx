@@ -795,7 +795,7 @@ export default function VisaDetail() {
                         type="date"
                         value={travelDate}
                         onChange={(e) => setTravelDate(e.target.value)}
-                        min={new Date().toISOString().split("T")[0]}
+                        min={(() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; })()}
                         className="h-9 md:h-10 text-xs md:text-sm"
                       />
                     </div>

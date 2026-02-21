@@ -14,3 +14,4 @@ export { RecentlyIssuedVisas } from "./RecentlyIssuedVisas";
 export { CorporateVisas } from "./CorporateVisas";
 export { CTAFooterSection } from "./CTAFooterSection";
 export { PopularDestinations } from "./PopularDestinations";
+export { ReviewForm } from "./ReviewForm";

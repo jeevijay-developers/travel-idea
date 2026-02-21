@@ -229,6 +229,45 @@ export type Database = {
         }
         Relationships: []
       }
+      reviews: {
+        Row: {
+          created_at: string
+          destination: string | null
+          email: string
+          id: string
+          is_approved: boolean
+          location: string | null
+          name: string
+          rating: number
+          review_text: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          destination?: string | null
+          email: string
+          id?: string
+          is_approved?: boolean
+          location?: string | null
+          name: string
+          rating: number
+          review_text: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          destination?: string | null
+          email?: string
+          id?: string
+          is_approved?: boolean
+          location?: string | null
+          name?: string
+          rating?: number
+          review_text?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           created_at: string

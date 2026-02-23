@@ -2,7 +2,6 @@ import { Layout } from "@/components/layout";
 import { SEO } from "@/components/seo";
 import {
   HeroSection,
-  VisaFinder,
   PopularDestinations,
   HowItWorks,
   WhyChooseUs,
@@ -17,7 +16,6 @@ const Home = () => {
       <SEO />
       <Layout>
         <HeroSection />
-        <VisaFinder />
         <PopularDestinations />
         <HowItWorks />
         <WhyChooseUs />

@@ -1,0 +1,1 @@
+ALTER TABLE public.enquiries ADD COLUMN return_date date NULL;

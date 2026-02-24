@@ -27,6 +27,7 @@ interface Enquiry {
   created_at: string;
   visa_id: string | null;
   travel_date: string | null;
+  return_date: string | null;
   travelers: number | null;
   assigned_to: string | null;
 }
@@ -181,9 +182,9 @@ export default function AdminEnquiries() {
   };
 
   const exportToCSV = () => {
-    const headers = ["Name", "Email", "Phone", "Destination", "Travel Date", "Travelers", "Message", "Status", "Assigned To", "Date"];
+    const headers = ["Name", "Email", "Phone", "Destination", "Travel Date", "Return Date", "Travelers", "Message", "Status", "Assigned To", "Date"];
     const csvData = filteredEnquiries.map(e => [
-      e.name, e.email, e.phone || "", e.destination || "", e.travel_date || "",
+      e.name, e.email, e.phone || "", e.destination || "", e.travel_date || "", e.return_date || "",
       e.travelers?.toString() || "1", e.message?.replace(/,/g, ";") || "",
       e.status, getHandlerEmail(e.assigned_to) || "Unassigned",
       new Date(e.created_at).toLocaleString()
@@ -471,12 +472,18 @@ export default function AdminEnquiries() {
                     <div><p className="text-sm text-muted-foreground">Interested Destination</p><p className="font-medium">{selectedEnquiry.destination}</p></div>
                   </div>
                 )}
-                {(selectedEnquiry.travel_date || selectedEnquiry.travelers) && (
+                {(selectedEnquiry.travel_date || selectedEnquiry.return_date || selectedEnquiry.travelers) && (
                   <div className="grid grid-cols-2 gap-3">
                     {selectedEnquiry.travel_date && (
                       <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/30">
                         <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center"><Calendar className="h-5 w-5 text-purple-500" /></div>
                         <div><p className="text-sm text-muted-foreground">Travel Date</p><p className="font-medium">{(() => { const [y, m, d] = selectedEnquiry.travel_date!.split('-'); return `${d}/${m}/${y}`; })()}</p></div>
+                      </div>
+                    )}
+                    {selectedEnquiry.return_date && (
+                      <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/30">
+                        <div className="w-10 h-10 rounded-lg bg-pink-500/10 flex items-center justify-center"><Calendar className="h-5 w-5 text-pink-500" /></div>
+                        <div><p className="text-sm text-muted-foreground">Return Date</p><p className="font-medium">{(() => { const [y, m, d] = selectedEnquiry.return_date!.split('-'); return `${d}/${m}/${y}`; })()}</p></div>
                       </div>
                     )}
                     <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/30">

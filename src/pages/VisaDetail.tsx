@@ -177,6 +177,7 @@ export default function VisaDetail() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [travelDate, setTravelDate] = useState("");
+  const [returnDate, setReturnDate] = useState("");
   const [travelers, setTravelers] = useState(1);
   const [formData, setFormData] = useState<EnquiryFormData>({
     name: "",
@@ -314,6 +315,7 @@ export default function VisaDetail() {
         message: result.data.message || null,
         status: "new",
         travel_date: travelDate || null,
+        return_date: returnDate || null,
         travelers: travelers,
       } as any);
 
@@ -785,19 +787,35 @@ export default function VisaDetail() {
 
                   {/* Travel Date & Travelers Selection */}
                   <div className="p-3 md:p-4 border-b bg-muted/20 space-y-3">
-                    <div className="space-y-1.5">
-                      <Label htmlFor="travel-date" className="text-xs md:text-sm font-medium flex items-center gap-1.5">
-                        <Calendar className="h-3.5 w-3.5 text-accent" />
-                        Travel Date
-                      </Label>
-                      <Input
-                        id="travel-date"
-                        type="date"
-                        value={travelDate}
-                        onChange={(e) => setTravelDate(e.target.value)}
-                        min={(() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; })()}
-                        className="h-9 md:h-10 text-xs md:text-sm"
-                      />
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1.5">
+                        <Label htmlFor="travel-date" className="text-xs md:text-sm font-medium flex items-center gap-1.5">
+                          <Calendar className="h-3.5 w-3.5 text-accent" />
+                          Travel Date
+                        </Label>
+                        <Input
+                          id="travel-date"
+                          type="date"
+                          value={travelDate}
+                          onChange={(e) => setTravelDate(e.target.value)}
+                          min={(() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; })()}
+                          className="h-9 md:h-10 text-xs md:text-sm"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label htmlFor="return-date" className="text-xs md:text-sm font-medium flex items-center gap-1.5">
+                          <Calendar className="h-3.5 w-3.5 text-accent" />
+                          Return Date
+                        </Label>
+                        <Input
+                          id="return-date"
+                          type="date"
+                          value={returnDate}
+                          onChange={(e) => setReturnDate(e.target.value)}
+                          min={travelDate || (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; })()}
+                          className="h-9 md:h-10 text-xs md:text-sm"
+                        />
+                      </div>
                     </div>
                     <div className="space-y-1.5">
                       <Label htmlFor="travelers" className="text-xs md:text-sm font-medium flex items-center gap-1.5">

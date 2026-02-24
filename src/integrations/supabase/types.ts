@@ -156,6 +156,7 @@ export type Database = {
           message: string | null
           name: string
           phone: string | null
+          return_date: string | null
           status: string
           travel_date: string | null
           travelers: number | null
@@ -171,6 +172,7 @@ export type Database = {
           message?: string | null
           name: string
           phone?: string | null
+          return_date?: string | null
           status?: string
           travel_date?: string | null
           travelers?: number | null
@@ -186,6 +188,7 @@ export type Database = {
           message?: string | null
           name?: string
           phone?: string | null
+          return_date?: string | null
           status?: string
           travel_date?: string | null
           travelers?: number | null

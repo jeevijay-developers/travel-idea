@@ -1,12 +1,33 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { 
-  Clock, FileText, Calendar, Zap, ArrowLeft, CheckCircle, 
-  Globe, Shield, Users, AlertCircle, Phone, Mail, 
-  Plane, HelpCircle, ChevronRight,
-  Ban, Check, Info, Send, Sparkles, MapPin, CreditCard,
-  Star, Award, Headphones, ArrowRight
+import {
+  Clock,
+  FileText,
+  Calendar,
+  Zap,
+  ArrowLeft,
+  CheckCircle,
+  Globe,
+  Shield,
+  Users,
+  AlertCircle,
+  Phone,
+  Mail,
+  Plane,
+  HelpCircle,
+  ChevronRight,
+  Ban,
+  Check,
+  Info,
+  Send,
+  Sparkles,
+  MapPin,
+  CreditCard,
+  Star,
+  Award,
+  Headphones,
+  ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,12 +38,7 @@ import { SEO } from "@/components/seo";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { enquirySchema, EnquiryFormData } from "@/lib/validation";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 // Country images - fallback for countries without image_url
 import uaeImage from "@/assets/countries/uae.jpg";
@@ -162,7 +178,7 @@ const defaultDocuments = [
   "Bank Statement (Last 3 months)",
   "Travel Insurance",
   "Cover Letter / Travel Itinerary",
-  "Proof of Employment / Business"
+  "Proof of Employment / Business",
 ];
 
 export default function VisaDetail() {
@@ -171,7 +187,7 @@ export default function VisaDetail() {
   const [visa, setVisa] = useState<Visa | null>(null);
   const [relatedVisas, setRelatedVisas] = useState<Visa[]>([]);
   const [loading, setLoading] = useState(true);
-  
+
   // Form state
   const [currentStep, setCurrentStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
@@ -184,7 +200,7 @@ export default function VisaDetail() {
     email: "",
     phone: "",
     destination: "",
-    message: ""
+    message: "",
   });
   const [errors, setErrors] = useState<Partial<Record<keyof EnquiryFormData, string>>>({});
 
@@ -196,7 +212,7 @@ export default function VisaDetail() {
 
   const fetchVisa = async () => {
     setLoading(true);
-    
+
     // First get the country by slug
     const { data: countryData, error: countryError } = await supabase
       .from("countries")
@@ -220,27 +236,29 @@ export default function VisaDetail() {
     if (!visaError && visaData) {
       const fullVisa: Visa = {
         ...visaData,
-        countries: countryData
+        countries: countryData,
       };
       setVisa(fullVisa);
-      setFormData(prev => ({ ...prev, destination: countryData.name || "" }));
-      
+      setFormData((prev) => ({ ...prev, destination: countryData.name || "" }));
+
       // Fetch related visas from same region
       fetchRelatedVisas(countryData.region, countryData.id);
     }
-    
+
     setLoading(false);
   };
 
   const fetchRelatedVisas = async (region: string | null, excludeCountryId: string) => {
     if (!region) return;
-    
+
     const { data } = await supabase
       .from("visas")
-      .select(`
+      .select(
+        `
         id, title, visa_type, price, processing_days, is_fast,
         countries!inner (id, name, slug, code, image_url, region)
-      `)
+      `,
+      )
       .eq("countries.region", region)
       .neq("country_id", excludeCountryId)
       .limit(4);
@@ -264,7 +282,7 @@ export default function VisaDetail() {
 
   const validateStep = (step: number): boolean => {
     const stepErrors: Partial<Record<keyof EnquiryFormData, string>> = {};
-    
+
     if (step === 1 && !formData.name.trim()) {
       stepErrors.name = "Please enter your name";
     }
@@ -274,7 +292,7 @@ export default function VisaDetail() {
         stepErrors.email = "Please enter a valid email";
       }
     }
-    
+
     setErrors(stepErrors);
     return Object.keys(stepErrors).length === 0;
   };
@@ -291,7 +309,7 @@ export default function VisaDetail() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const result = enquirySchema.safeParse(formData);
     if (!result.success) {
       const fieldErrors: Partial<Record<keyof EnquiryFormData, string>> = {};
@@ -330,7 +348,7 @@ export default function VisaDetail() {
       toast({
         title: "Error",
         description: "Failed to submit enquiry. Please try again.",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setSubmitting(false);
@@ -363,17 +381,14 @@ export default function VisaDetail() {
     return (
       <Layout>
         <div className="container py-20 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="max-w-md mx-auto"
-          >
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-md mx-auto">
             <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mx-auto mb-6">
               <Globe className="h-10 w-10 text-muted-foreground" />
             </div>
             <h1 className="text-2xl font-bold mb-3">Visa Not Found</h1>
             <p className="text-muted-foreground mb-6">
-              We don't have visa information for this destination yet. Please check back later or explore our available visas.
+              We don't have visa information for this destination yet. Please check back later or explore our available
+              visas.
             </p>
             <Link to="/visas">
               <Button className="bg-accent hover:bg-accent/90">
@@ -388,15 +403,17 @@ export default function VisaDetail() {
   }
 
   const countryImage = getCountryImage(visa.countries.slug, visa.countries.image_url);
-  const documents = visa.required_documents && visa.required_documents.length > 0 
-    ? visa.required_documents 
-    : defaultDocuments;
+  const documents =
+    visa.required_documents && visa.required_documents.length > 0 ? visa.required_documents : defaultDocuments;
 
   return (
     <Layout>
-      <SEO 
-        title={`${visa.countries.name} ${visa.visa_type} - Travel Idea`} 
-        description={visa.short_description || `Apply for ${visa.countries.name} ${visa.visa_type} with Travel Idea. ${visa.processing_days} days processing. Starting from ₹${visa.price.toLocaleString()}`} 
+      <SEO
+        title={`${visa.countries.name} ${visa.visa_type} - Travel Idea`}
+        description={
+          visa.short_description ||
+          `Apply for ${visa.countries.name} ${visa.visa_type} with Travel Idea. ${visa.processing_days} days processing. Starting from ₹${visa.price.toLocaleString()}`
+        }
       />
 
       {/* Hero Section */}
@@ -411,10 +428,10 @@ export default function VisaDetail() {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/40" />
         <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent" />
-        
+
         {/* Decorative grid */}
         <div className="absolute inset-0 opacity-10">
-          <div 
+          <div
             className="absolute inset-0"
             style={{
               backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
@@ -423,7 +440,7 @@ export default function VisaDetail() {
             }}
           />
         </div>
-        
+
         <div className="absolute inset-0 flex items-center">
           <div className="container">
             <motion.div
@@ -434,9 +451,13 @@ export default function VisaDetail() {
             >
               {/* Breadcrumb */}
               <div className="flex items-center gap-2 text-xs md:text-sm text-white/70 mb-3 md:mb-4">
-                <Link to="/" className="hover:text-white transition-colors">Home</Link>
+                <Link to="/" className="hover:text-white transition-colors">
+                  Home
+                </Link>
                 <ChevronRight className="h-3 w-3 md:h-4 md:w-4" />
-                <Link to="/visas" className="hover:text-white transition-colors">Visas</Link>
+                <Link to="/visas" className="hover:text-white transition-colors">
+                  Visas
+                </Link>
                 <ChevronRight className="h-3 w-3 md:h-4 md:w-4" />
                 <span className="text-white">{visa.countries.name}</span>
               </div>
@@ -464,10 +485,8 @@ export default function VisaDetail() {
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white mb-2 md:mb-3">
                 {visa.countries.name} Visa
               </h1>
-              
-              <p className="text-white/80 text-sm md:text-lg mb-4 md:mb-6 max-w-xl line-clamp-2">
-                {visa.title}
-              </p>
+
+              <p className="text-white/80 text-sm md:text-lg mb-4 md:mb-6 max-w-xl line-clamp-2">{visa.title}</p>
 
               {/* Quick stats */}
               <div className="flex flex-wrap gap-2 md:gap-3">
@@ -497,7 +516,6 @@ export default function VisaDetail() {
           <div className="grid lg:grid-cols-5 gap-6 md:gap-8">
             {/* Main content */}
             <div className="lg:col-span-3 space-y-6 md:space-y-8">
-              
               {/* Quick Info Cards */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
                 {[
@@ -536,7 +554,9 @@ export default function VisaDetail() {
                 </div>
                 <div className="p-4 md:p-5 space-y-4 md:space-y-5">
                   <p className="text-muted-foreground text-sm md:text-base leading-relaxed">
-                    {visa.description || visa.short_description || `The ${visa.countries.name} ${visa.visa_type} allows travelers to visit ${visa.countries.name} for tourism, leisure, and recreational purposes. This visa grants you legal entry to explore the country's world-renowned attractions and experience its rich cultural heritage.`}
+                    {visa.description ||
+                      visa.short_description ||
+                      `The ${visa.countries.name} ${visa.visa_type} allows travelers to visit ${visa.countries.name} for tourism, leisure, and recreational purposes. This visa grants you legal entry to explore the country's world-renowned attractions and experience its rich cultural heritage.`}
                   </p>
 
                   {/* Key Highlights */}
@@ -547,8 +567,8 @@ export default function VisaDetail() {
                       { icon: Plane, title: "Entry Type", desc: "Single / Multiple Entry" },
                       { icon: Users, title: "Stay Duration", desc: "Up to 30-90 days" },
                     ].map((item, i) => (
-                      <motion.div 
-                        key={i} 
+                      <motion.div
+                        key={i}
                         whileHover={{ scale: 1.02 }}
                         className="flex items-start gap-2 md:gap-3 p-2.5 md:p-3 bg-muted/50 rounded-xl"
                       >
@@ -578,8 +598,8 @@ export default function VisaDetail() {
                         "Real-time status updates",
                         "Dedicated visa expert support",
                       ].map((item, i) => (
-                        <motion.div 
-                          key={i} 
+                        <motion.div
+                          key={i}
                           initial={{ opacity: 0, x: -10 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: 0.3 + i * 0.05 }}
@@ -614,10 +634,10 @@ export default function VisaDetail() {
                       { step: 2, title: "Document Collection", desc: "We guide you on required documents" },
                       { step: 3, title: "Expert Review", desc: "Our team reviews for accuracy" },
                       { step: 4, title: "Embassy Submission", desc: "We handle the submission process" },
-                      { step: 5, title: "Get Your Visa", desc: "Receive your approved visa" }
+                      { step: 5, title: "Get Your Visa", desc: "Receive your approved visa" },
                     ].map((step, i, arr) => (
-                      <motion.div 
-                        key={step.step} 
+                      <motion.div
+                        key={step.step}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.4 + i * 0.1 }}
@@ -655,8 +675,8 @@ export default function VisaDetail() {
                 <div className="p-4 md:p-5">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {documents.map((doc, i) => (
-                      <motion.div 
-                        key={i} 
+                      <motion.div
+                        key={i}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5 + i * 0.05 }}
@@ -671,7 +691,8 @@ export default function VisaDetail() {
                     <div className="flex items-start gap-2">
                       <AlertCircle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
                       <p className="text-[10px] md:text-xs text-muted-foreground">
-                        <strong className="text-foreground">Note:</strong> Additional documents may be required based on your specific case.
+                        <strong className="text-foreground">Note:</strong> Additional documents may be required based on
+                        your specific case.
                       </p>
                     </div>
                   </div>
@@ -705,7 +726,8 @@ export default function VisaDetail() {
                     </div>
                   ))}
                   <p className="pt-3 text-[10px] md:text-xs text-muted-foreground border-t mt-4">
-                    <strong className="text-foreground">Don't worry!</strong> Our expert team reviews every application to ensure all requirements are met.
+                    <strong className="text-foreground">Don't worry!</strong> Our expert team reviews every application
+                    to ensure all requirements are met.
                   </p>
                 </div>
               </motion.div>
@@ -726,11 +748,26 @@ export default function VisaDetail() {
                 <div className="p-4 md:p-5">
                   <Accordion type="single" collapsible className="space-y-2">
                     {[
-                      { q: `How long does ${visa.countries.name} visa processing take?`, a: `Standard processing takes ${visa.processing_days} working days. Express processing may be available for urgent travel.` },
-                      { q: "What is your visa success rate?", a: "We maintain a 99% success rate. Our expert review process minimizes rejection risks significantly." },
-                      { q: "Can I track my visa application?", a: "Yes! You'll receive real-time updates via email and WhatsApp at every stage of your application." },
-                      { q: "What if my visa gets rejected?", a: "We'll analyze the rejection reason and guide you on reapplication. Partial refunds may apply per our policy." },
-                      { q: `What is the visa fee for ${visa.countries.name}?`, a: `The visa fee starts from ₹${visa.price.toLocaleString()}. ${visa.additional_fees && Number(visa.additional_fees) > 0 ? `+₹${Number(visa.additional_fees).toLocaleString()} (fee+taxes)` : 'All inclusive'}` },
+                      {
+                        q: `How long does ${visa.countries.name} visa processing take?`,
+                        a: `Standard processing takes ${visa.processing_days} working days. Express processing may be available for urgent travel.`,
+                      },
+                      {
+                        q: "What is your visa success rate?",
+                        a: "We maintain a 99% success rate. Our expert review process minimizes rejection risks significantly.",
+                      },
+                      {
+                        q: "Can I track my visa application?",
+                        a: "Yes! You'll receive real-time updates via email and WhatsApp at every stage of your application.",
+                      },
+                      {
+                        q: "What if my visa gets rejected?",
+                        a: "We'll analyze the rejection reason and guide you on reapplication. Partial refunds may apply per our policy.",
+                      },
+                      {
+                        q: `What is the visa fee for ${visa.countries.name}?`,
+                        a: `The visa fee starts from ₹${visa.price.toLocaleString()}. ${visa.additional_fees && Number(visa.additional_fees) > 0 ? `+₹${Number(visa.additional_fees).toLocaleString()} (fee+taxes)` : "All inclusive"}`,
+                      },
                     ].map((faq, i) => (
                       <AccordionItem key={i} value={`faq-${i}`} className="border rounded-xl px-3 md:px-4">
                         <AccordionTrigger className="text-xs md:text-sm text-left font-medium hover:no-underline py-3">
@@ -758,7 +795,7 @@ export default function VisaDetail() {
                   {/* Price header */}
                   <div className="bg-gradient-to-r from-accent via-accent to-accent/80 p-4 md:p-5 text-center relative overflow-hidden">
                     <div className="absolute inset-0 opacity-20">
-                      <div 
+                      <div
                         className="absolute inset-0"
                         style={{
                           backgroundImage: `radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)`,
@@ -768,12 +805,16 @@ export default function VisaDetail() {
                     </div>
                     <div className="relative">
                       <p className="text-accent-foreground/80 text-xs md:text-sm">Starting from</p>
-                      <p className="text-3xl md:text-4xl font-bold text-accent-foreground">₹{visa.price.toLocaleString()}</p>
+                      <p className="text-3xl md:text-4xl font-bold text-accent-foreground">
+                        ₹{visa.price.toLocaleString()}
+                      </p>
                       {visa.additional_fees && Number(visa.additional_fees) > 0 && (
-                        <p className="text-accent-foreground/70 text-[10px] md:text-xs mt-1">+₹{Number(visa.additional_fees).toLocaleString()} (fee+taxes)</p>
+                        <p className="text-accent-foreground/70 text-[10px] md:text-xs mt-1">
+                          +₹{Number(visa.additional_fees).toLocaleString()} (fee+taxes)
+                        </p>
                       )}
                       {visa.issued_recently && visa.issued_recently > 0 && (
-                        <motion.div 
+                        <motion.div
                           animate={{ scale: [1, 1.05, 1] }}
                           transition={{ duration: 2, repeat: Infinity }}
                           className="mt-3 inline-flex items-center gap-1.5 bg-white/20 px-3 py-1 rounded-full text-[10px] md:text-xs text-white"
@@ -789,7 +830,10 @@ export default function VisaDetail() {
                   <div className="p-3 md:p-4 border-b bg-muted/20 space-y-3">
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1.5">
-                        <Label htmlFor="travel-date" className="text-xs md:text-sm font-medium flex items-center gap-1.5">
+                        <Label
+                          htmlFor="travel-date"
+                          className="text-xs md:text-sm font-medium flex items-center gap-1.5"
+                        >
                           <Calendar className="h-3.5 w-3.5 text-accent" />
                           Travel Date
                         </Label>
@@ -798,12 +842,18 @@ export default function VisaDetail() {
                           type="date"
                           value={travelDate}
                           onChange={(e) => setTravelDate(e.target.value)}
-                          min={(() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; })()}
+                          min={(() => {
+                            const d = new Date();
+                            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+                          })()}
                           className="h-9 md:h-10 text-xs md:text-sm"
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <Label htmlFor="return-date" className="text-xs md:text-sm font-medium flex items-center gap-1.5">
+                        <Label
+                          htmlFor="return-date"
+                          className="text-xs md:text-sm font-medium flex items-center gap-1.5"
+                        >
                           <Calendar className="h-3.5 w-3.5 text-accent" />
                           Return Date
                         </Label>
@@ -812,7 +862,13 @@ export default function VisaDetail() {
                           type="date"
                           value={returnDate}
                           onChange={(e) => setReturnDate(e.target.value)}
-                          min={travelDate || (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; })()}
+                          min={
+                            travelDate ||
+                            (() => {
+                              const d = new Date();
+                              return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+                            })()
+                          }
                           className="h-9 md:h-10 text-xs md:text-sm"
                         />
                       </div>
@@ -857,12 +913,12 @@ export default function VisaDetail() {
                   </div>
 
                   {submitted ? (
-                    <motion.div 
+                    <motion.div
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       className="p-6 text-center"
                     >
-                      <motion.div 
+                      <motion.div
                         animate={{ scale: [1, 1.1, 1] }}
                         transition={{ duration: 0.5 }}
                         className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4"
@@ -874,7 +930,9 @@ export default function VisaDetail() {
                         Our visa specialists will contact you within 24 hours.
                       </p>
                       <Link to="/visas">
-                        <Button variant="outline" size="sm">Explore More Visas</Button>
+                        <Button variant="outline" size="sm">
+                          Explore More Visas
+                        </Button>
                       </Link>
                     </motion.div>
                   ) : (
@@ -883,18 +941,20 @@ export default function VisaDetail() {
                       <div className="flex justify-center gap-1 p-3 md:p-4 border-b bg-muted/30">
                         {questionnaireSteps.map((step, i) => (
                           <div key={step.id} className="flex items-center">
-                            <motion.div 
+                            <motion.div
                               animate={currentStep >= step.id ? { scale: [1, 1.1, 1] } : {}}
                               className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center text-[10px] md:text-xs font-medium transition-colors ${
-                                currentStep >= step.id 
-                                  ? "bg-accent text-accent-foreground" 
+                                currentStep >= step.id
+                                  ? "bg-accent text-accent-foreground"
                                   : "bg-muted text-muted-foreground"
                               }`}
                             >
                               {step.id}
                             </motion.div>
                             {i < questionnaireSteps.length - 1 && (
-                              <div className={`w-6 md:w-8 h-0.5 mx-0.5 md:mx-1 transition-colors ${currentStep > step.id ? "bg-accent" : "bg-muted"}`} />
+                              <div
+                                className={`w-6 md:w-8 h-0.5 mx-0.5 md:mx-1 transition-colors ${currentStep > step.id ? "bg-accent" : "bg-muted"}`}
+                              />
                             )}
                           </div>
                         ))}
@@ -911,10 +971,14 @@ export default function VisaDetail() {
                             <div className="text-center mb-4">
                               <Users className="h-7 w-7 md:h-8 md:w-8 text-accent mx-auto mb-2" />
                               <h3 className="font-semibold text-sm md:text-base">What's your name?</h3>
-                              <p className="text-[10px] md:text-xs text-muted-foreground">Let's start with the basics</p>
+                              <p className="text-[10px] md:text-xs text-muted-foreground">
+                                Let's start with the basics
+                              </p>
                             </div>
                             <div className="space-y-2">
-                              <Label htmlFor="name" className="text-xs md:text-sm">Full Name *</Label>
+                              <Label htmlFor="name" className="text-xs md:text-sm">
+                                Full Name *
+                              </Label>
                               <Input
                                 id="name"
                                 value={formData.name}
@@ -924,7 +988,11 @@ export default function VisaDetail() {
                               />
                               {errors.name && <p className="text-[10px] md:text-xs text-destructive">{errors.name}</p>}
                             </div>
-                            <Button type="button" onClick={nextStep} className="w-full h-10 md:h-11 bg-accent hover:bg-accent/90">
+                            <Button
+                              type="button"
+                              onClick={nextStep}
+                              className="w-full h-10 md:h-11 bg-accent hover:bg-accent/90"
+                            >
                               Continue
                               <ChevronRight className="h-4 w-4 ml-2" />
                             </Button>
@@ -945,7 +1013,9 @@ export default function VisaDetail() {
                             </div>
                             <div className="space-y-3">
                               <div className="space-y-2">
-                                <Label htmlFor="email" className="text-xs md:text-sm">Email Address *</Label>
+                                <Label htmlFor="email" className="text-xs md:text-sm">
+                                  Email Address *
+                                </Label>
                                 <Input
                                   id="email"
                                   type="email"
@@ -954,10 +1024,14 @@ export default function VisaDetail() {
                                   placeholder="your@email.com"
                                   className={`h-10 md:h-11 ${errors.email ? "border-destructive" : ""}`}
                                 />
-                                {errors.email && <p className="text-[10px] md:text-xs text-destructive">{errors.email}</p>}
+                                {errors.email && (
+                                  <p className="text-[10px] md:text-xs text-destructive">{errors.email}</p>
+                                )}
                               </div>
                               <div className="space-y-2">
-                                <Label htmlFor="phone" className="text-xs md:text-sm">Phone Number</Label>
+                                <Label htmlFor="phone" className="text-xs md:text-sm">
+                                  Phone Number
+                                </Label>
                                 <Input
                                   id="phone"
                                   type="tel"
@@ -969,10 +1043,19 @@ export default function VisaDetail() {
                               </div>
                             </div>
                             <div className="flex gap-2">
-                              <Button type="button" variant="outline" onClick={prevStep} className="flex-1 h-10 md:h-11">
+                              <Button
+                                type="button"
+                                variant="outline"
+                                onClick={prevStep}
+                                className="flex-1 h-10 md:h-11"
+                              >
                                 Back
                               </Button>
-                              <Button type="button" onClick={nextStep} className="flex-1 h-10 md:h-11 bg-accent hover:bg-accent/90">
+                              <Button
+                                type="button"
+                                onClick={nextStep}
+                                className="flex-1 h-10 md:h-11 bg-accent hover:bg-accent/90"
+                              >
                                 Continue
                               </Button>
                             </div>
@@ -1000,22 +1083,33 @@ export default function VisaDetail() {
                                 </div>
                               </div>
                               <div className="space-y-2">
-                                <Label htmlFor="message" className="text-xs md:text-sm">Additional Details</Label>
+                                <Label htmlFor="message" className="text-xs md:text-sm">
+                                  Additional Details
+                                </Label>
                                 <Textarea
                                   id="message"
                                   value={formData.message}
                                   onChange={(e) => handleChange("message", e.target.value)}
-                                  placeholder="Travel dates, number of travelers, special requirements..."
+                                  placeholder="Write your special requirements..."
                                   rows={3}
                                   className="resize-none text-sm"
                                 />
                               </div>
                             </div>
                             <div className="flex gap-2">
-                              <Button type="button" variant="outline" onClick={prevStep} className="flex-1 h-10 md:h-11">
+                              <Button
+                                type="button"
+                                variant="outline"
+                                onClick={prevStep}
+                                className="flex-1 h-10 md:h-11"
+                              >
                                 Back
                               </Button>
-                              <Button type="submit" disabled={submitting} className="flex-1 h-10 md:h-11 bg-accent hover:bg-accent/90">
+                              <Button
+                                type="submit"
+                                disabled={submitting}
+                                className="flex-1 h-10 md:h-11 bg-accent hover:bg-accent/90"
+                              >
                                 {submitting ? "Submitting..." : "Submit"}
                                 <Send className="h-4 w-4 ml-2" />
                               </Button>
@@ -1025,7 +1119,9 @@ export default function VisaDetail() {
 
                         <p className="text-[9px] md:text-[10px] text-center text-muted-foreground mt-4">
                           By submitting, you agree to our{" "}
-                          <Link to="/privacy" className="text-accent hover:underline">Privacy Policy</Link>
+                          <Link to="/privacy" className="text-accent hover:underline">
+                            Privacy Policy
+                          </Link>
                         </p>
                       </form>
                     </>
@@ -1033,13 +1129,21 @@ export default function VisaDetail() {
 
                   {/* Contact info */}
                   <div className="border-t p-3 md:p-4 bg-muted/30">
-                    <p className="text-[10px] md:text-xs text-center text-muted-foreground mb-2">Need immediate help?</p>
+                    <p className="text-[10px] md:text-xs text-center text-muted-foreground mb-2">
+                      Need immediate help?
+                    </p>
                     <div className="flex justify-center gap-4">
-                      <a href="tel:+919101197909" className="flex items-center gap-1.5 text-xs md:text-sm text-accent hover:underline">
+                      <a
+                        href="tel:+919101197909"
+                        className="flex items-center gap-1.5 text-xs md:text-sm text-accent hover:underline"
+                      >
                         <Phone className="h-3.5 w-3.5 md:h-4 md:w-4" />
                         Call Now
                       </a>
-                      <a href="mailto:b2b@travelidea.in" className="flex items-center gap-1.5 text-xs md:text-sm text-accent hover:underline">
+                      <a
+                        href="mailto:b2b@travelidea.in"
+                        className="flex items-center gap-1.5 text-xs md:text-sm text-accent hover:underline"
+                      >
                         <Mail className="h-3.5 w-3.5 md:h-4 md:w-4" />
                         Email
                       </a>
@@ -1095,13 +1199,13 @@ export default function VisaDetail() {
                   transition={{ delay: i * 0.1 }}
                   whileHover={{ y: -5 }}
                 >
-                  <Link 
+                  <Link
                     to={`/visas/${relVisa.countries.slug}`}
                     className="block bg-card border border-border rounded-xl overflow-hidden hover:shadow-lg transition-all"
                   >
                     <div className="relative h-24 md:h-32">
-                      <img 
-                        src={getCountryImage(relVisa.countries.slug, relVisa.countries.image_url)} 
+                      <img
+                        src={getCountryImage(relVisa.countries.slug, relVisa.countries.image_url)}
                         alt={relVisa.countries.name}
                         className="w-full h-full object-cover"
                       />
@@ -1112,7 +1216,9 @@ export default function VisaDetail() {
                     </div>
                     <div className="p-2.5 md:p-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs md:text-sm font-bold text-primary">₹{relVisa.price.toLocaleString()}</span>
+                        <span className="text-xs md:text-sm font-bold text-primary">
+                          ₹{relVisa.price.toLocaleString()}
+                        </span>
                         <span className="text-[10px] md:text-xs text-muted-foreground">{relVisa.processing_days}d</span>
                       </div>
                     </div>
@@ -1127,7 +1233,10 @@ export default function VisaDetail() {
       {/* Back button */}
       <section className="py-6 md:py-10">
         <div className="container">
-          <Link to="/visas" className="inline-flex items-center gap-2 text-xs md:text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <Link
+            to="/visas"
+            className="inline-flex items-center gap-2 text-xs md:text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
             <ArrowLeft className="h-4 w-4" />
             Back to all visas
           </Link>

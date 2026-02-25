@@ -1,16 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { ArrowRight, Shield, Clock, Award, ChevronLeft, ChevronRight, Plane, MapPin, Briefcase, Globe } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowRight, Shield, Clock, Award, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { supabase } from "@/integrations/supabase/client";
 
 // Country images imports
 import armeniaImg from "@/assets/countries/armenia.jpg";
@@ -28,13 +20,6 @@ import turkeyImg from "@/assets/countries/turkey.jpg";
 import uaeImg from "@/assets/countries/uae.jpg";
 import ukImg from "@/assets/countries/uk.jpg";
 import usaImg from "@/assets/countries/usa.jpg";
-
-const travelPurposes = [
-  { value: "tourist", label: "Tourism", icon: "🏖️" },
-  { value: "business", label: "Business", icon: "💼" },
-  { value: "transit", label: "Transit", icon: "✈️" },
-  { value: "medical", label: "Medical", icon: "🏥" },
-];
 
 // Visa cards data with images
 const visaCards = [
@@ -55,12 +40,6 @@ const visaCards = [
   { name: "Armenia", slug: "armenia", image: armeniaImg, price: "₹4,999", days: "3-5 days", flag: "🇦🇲" },
 ];
 
-interface Country {
-  id: string;
-  name: string;
-  slug: string;
-}
-
 // Animated headline words
 const headlineWords = ["Simplified", "Fast-Tracked", "Hassle-Free", "Guaranteed"];
 
@@ -71,41 +50,11 @@ const trustBadges = [
 ];
 
 export function HeroSection() {
-  const navigate = useNavigate();
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [scrollPosition, setScrollPosition] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
-  const [currentLocation, setCurrentLocation] = useState("");
-  const [destination, setDestination] = useState("");
-  const [purpose, setPurpose] = useState("");
-  const [countries, setCountries] = useState<Country[]>([]);
-  const [isLoadingCountries, setIsLoadingCountries] = useState(true);
-
-  // Fetch countries
-  useEffect(() => {
-    const fetchCountries = async () => {
-      const { data, error } = await supabase
-        .from("countries")
-        .select("id, name, slug")
-        .order("name");
-      if (!error && data) setCountries(data);
-      setIsLoadingCountries(false);
-    };
-    fetchCountries();
-  }, []);
-
-  const handleFindVisa = () => {
-    if (destination) {
-      const country = countries.find((c) => c.id === destination);
-      if (country) {
-        navigate(`/visas?search=${encodeURIComponent(country.name)}`);
-        return;
-      }
-    }
-    navigate("/visas");
-  };
 
   // Rotate headline words
   useEffect(() => {
@@ -227,99 +176,6 @@ export function HeroSection() {
               Expert visa assistance for <span className="text-primary-foreground font-semibold">100+ countries</span>.
               Fast processing, transparent pricing, guaranteed approval.
             </motion.p>
-
-            {/* Visa Finder Form */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.6 }}
-              className="max-w-3xl mx-auto mb-10"
-            >
-              <div className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 p-4 md:p-6 shadow-2xl">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 mb-4">
-                  {/* Current Location */}
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-medium text-primary-foreground/70 flex items-center gap-1.5">
-                      <Globe className="h-3 w-3 text-accent" />
-                      Your Current Location
-                    </label>
-                    <Select value={currentLocation} onValueChange={setCurrentLocation}>
-                      <SelectTrigger className="h-11 rounded-lg bg-white/15 border-white/20 text-primary-foreground text-sm placeholder:text-primary-foreground/50 [&>span]:text-primary-foreground">
-                        <SelectValue placeholder={isLoadingCountries ? "Loading..." : "Select location"} />
-                      </SelectTrigger>
-                      <SelectContent className="bg-card border-border rounded-lg max-h-60">
-                        {countries.map((country) => (
-                          <SelectItem key={country.id} value={country.id} className="text-sm py-2">
-                            {country.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Destination */}
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-medium text-primary-foreground/70 flex items-center gap-1.5">
-                      <MapPin className="h-3 w-3 text-accent" />
-                      Select Destination
-                    </label>
-                    <Select value={destination} onValueChange={setDestination}>
-                      <SelectTrigger className="h-11 rounded-lg bg-white/15 border-white/20 text-primary-foreground text-sm [&>span]:text-primary-foreground">
-                        <SelectValue placeholder={isLoadingCountries ? "Loading..." : "Where to?"} />
-                      </SelectTrigger>
-                      <SelectContent className="bg-card border-border rounded-lg max-h-60">
-                        {countries.map((country) => (
-                          <SelectItem key={country.id} value={country.id} className="text-sm py-2">
-                            {country.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Travel Purpose */}
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-medium text-primary-foreground/70 flex items-center gap-1.5">
-                      <Briefcase className="h-3 w-3 text-accent" />
-                      Travel Purpose
-                    </label>
-                    <Select value={purpose} onValueChange={setPurpose}>
-                      <SelectTrigger className="h-11 rounded-lg bg-white/15 border-white/20 text-primary-foreground text-sm [&>span]:text-primary-foreground">
-                        <SelectValue placeholder="Select purpose" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-card border-border rounded-lg">
-                        {travelPurposes.map((p) => (
-                          <SelectItem key={p.value} value={p.value} className="text-sm py-2">
-                            <span className="flex items-center gap-2">
-                              <span>{p.icon}</span>
-                              {p.label}
-                            </span>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                {/* Find My Visa Button */}
-                <Button
-                  onClick={handleFindVisa}
-                  size="lg"
-                  className="w-full h-12 text-base font-semibold bg-accent hover:bg-accent/90 text-accent-foreground shadow-xl shadow-accent/30 group rounded-xl"
-                >
-                  <Plane className="mr-2 h-5 w-5 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
-                  Find My Visa
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </div>
-
-              {/* Talk to Expert link */}
-              <div className="mt-4 text-center">
-                <Link to="/contact" className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors underline underline-offset-4">
-                  Or talk to an expert →
-                </Link>
-              </div>
-            </motion.div>
 
             {/* Trust badges */}
             <motion.div

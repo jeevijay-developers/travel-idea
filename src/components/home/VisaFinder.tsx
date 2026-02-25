@@ -3,6 +3,7 @@ import { motion, type Variants } from "framer-motion";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { MapPin, Briefcase, ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -31,6 +32,7 @@ export function VisaFinder() {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
   const [destination, setDestination] = useState("");
   const [purpose, setPurpose] = useState("");
+  const [agreed, setAgreed] = useState(false);
   const [countries, setCountries] = useState<Country[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -157,10 +159,24 @@ export function VisaFinder() {
                 </div>
               </div>
 
+              {/* Agreement checkbox */}
+              <div className="flex items-start gap-2 mb-4">
+                <Checkbox
+                  id="visa-agreement"
+                  checked={agreed}
+                  onCheckedChange={(checked) => setAgreed(checked === true)}
+                  className="mt-0.5"
+                />
+                <label htmlFor="visa-agreement" className="text-xs text-muted-foreground leading-relaxed cursor-pointer">
+                  I understand that visa charges and document requirements may vary by country.
+                </label>
+              </div>
+
               {/* Search Button */}
               <Button
                 onClick={handleSearch}
-                className="w-full h-10 text-sm font-semibold rounded-lg bg-accent hover:bg-accent/90 text-accent-foreground"
+                disabled={!agreed}
+                className="w-full h-10 text-sm font-semibold rounded-lg bg-accent hover:bg-accent/90 text-accent-foreground disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Find My Visa
                 <ArrowRight className="ml-2 h-4 w-4" />

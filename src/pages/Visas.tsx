@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Search, Filter, Clock, Zap, ArrowRight, X, MapPin, Globe } from "lucide-react";
+import { Search, Filter, Clock, Zap, ArrowRight, X, MapPin, Globe, Phone } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Layout, PageHero } from "@/components/layout";
@@ -332,15 +332,36 @@ export default function Visas() {
               ))}
             </div>
           ) : filteredVisas.length === 0 ? (
-            <div className="text-center py-16">
-              <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-                <Search className="h-8 w-8 text-muted-foreground" />
+            <div className="text-center py-16 max-w-lg mx-auto">
+              <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-5">
+                <Search className="h-8 w-8 text-accent" />
               </div>
-              <p className="text-lg font-medium mb-2">No visas found</p>
-              <p className="text-muted-foreground text-sm mb-4">Try adjusting your search or filters</p>
-              <Button onClick={clearFilters} variant="outline" size="sm">
-                Clear All Filters
-              </Button>
+              <h3 className="text-xl font-semibold mb-2">Can't find the visa you're looking for?</h3>
+              <p className="text-muted-foreground text-sm mb-6">
+                Don't worry! Even if a visa isn't listed on our website, our team can arrange it for you. 
+                Reach out to us directly and we'll help you with your visa requirements.
+              </p>
+              <div className="bg-card border rounded-xl p-6 mb-6">
+                <p className="text-sm font-medium text-muted-foreground mb-3">Contact our visa experts</p>
+                <a
+                  href="tel:+919101197909"
+                  className="inline-flex items-center gap-2 text-2xl font-bold text-accent hover:underline"
+                >
+                  <Phone className="h-6 w-6" />
+                  +91 9101197909
+                </a>
+                <p className="text-xs text-muted-foreground mt-2">Available Mon–Sat, 10 AM – 7 PM IST</p>
+              </div>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <Button onClick={clearFilters} variant="outline" size="sm">
+                  Clear All Filters
+                </Button>
+                <Link to="/contact">
+                  <Button variant="default" size="sm">
+                    Send an Enquiry
+                  </Button>
+                </Link>
+              </div>
             </div>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">

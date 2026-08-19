@@ -12,10 +12,12 @@ dist
 dist-ssr
 *.local
 
-# Env files with secrets (keep .env.example committed)
+# Env files with secrets (keep templates and public Vite keys committed)
 .env
 .env.*
 !.env.example
+!.env.development
+!.env.production
 
 # Supabase CLI
 supabase/.temp/

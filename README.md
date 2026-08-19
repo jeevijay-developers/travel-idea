@@ -15,12 +15,14 @@ B2C visa services platform for exploring destinations, visa options, and sending
 npm install
 ```
 
-Create a `.env` file in the project root (do not commit it):
+Create a `.env` file in the project root for secrets (do not commit it). Public Vite keys live in `.env.development` / `.env.production`.
 
 ```
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_PUBLISHABLE_KEY=your-anon-key
 ```
+
+On Vercel, Vite inlines `VITE_*` at **build** time. Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` in Project Settings → Environment Variables (Production, Preview, Development), or rely on the committed `.env.production` file, then redeploy.
 
 ## Scripts
 

@@ -40,7 +40,7 @@ import { useToast } from "@/hooks/use-toast";
 import { enquirySchema, EnquiryFormData } from "@/lib/validation";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
-// Country images - fallback for countries without image_url
+// Country images - bundled local files; ignore remote DB image_url
 import uaeImage from "@/assets/countries/uae.jpg";
 import usaImage from "@/assets/countries/usa.jpg";
 import japanImage from "@/assets/countries/japan.jpg";
@@ -269,8 +269,9 @@ export default function VisaDetail() {
   };
 
   const getCountryImage = (countrySlug: string, imageUrl: string | null): string => {
-    if (imageUrl) return imageUrl;
-    return countryImages[countrySlug] || uaeImage;
+    if (countryImages[countrySlug]) return countryImages[countrySlug];
+    if (imageUrl && !/^https?:\/\//i.test(imageUrl)) return imageUrl;
+    return uaeImage;
   };
 
   const handleChange = (field: keyof EnquiryFormData, value: string) => {

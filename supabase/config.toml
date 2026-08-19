@@ -1,4 +1,15 @@
-project_id = "bdiwjbkljdgzhcqrrbgz"
+project_id = "dkjygcuamamucsijzyqr"
+
+[auth]
+enabled = true
+site_url = "http://localhost:8080"
+additional_redirect_urls = [
+  "http://localhost:8080",
+  "http://localhost:8080/**",
+  "http://127.0.0.1:8080",
+  "http://127.0.0.1:8080/**",
+]
+enable_signup = true
 
 [functions.manage-staff]
 verify_jwt = false

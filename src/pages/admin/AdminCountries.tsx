@@ -356,11 +356,11 @@ export default function AdminCountries() {
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-6 rounded overflow-hidden shadow-sm border">
                         <img 
-                          src={`https://flagcdn.com/w40/${c.code.toLowerCase()}.png`}
+                          src={`/flags/${c.code.toLowerCase()}.png`}
                           alt={`${c.name} flag`}
                           className="w-full h-full object-cover"
                           onError={(e) => {
-                            (e.target as HTMLImageElement).src = "https://via.placeholder.com/40x30?text=?";
+                            (e.target as HTMLImageElement).src = "/placeholder.svg";
                           }}
                         />
                       </div>
